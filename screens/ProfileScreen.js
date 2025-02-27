@@ -13,9 +13,19 @@ export default function NoteScreen({ navigation }) {
           <View
             style={[
               ProfileScreenStyle.box,
-              { height: 150, alignSelf: "stretch" },
+              {
+                height: 150,
+                alignSelf: "stretch",
+                flexDirection: "row",
+                gap: 25,
+              },
             ]}
-          ></View>
+          >
+            <View style={[ProfileScreenStyle.profile]}></View>
+            <View>
+              <Text>Username</Text>
+            </View>
+          </View>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
             <View
               style={[ProfileScreenStyle.box, { height: 150, width: "48%" }]}

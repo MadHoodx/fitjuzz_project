@@ -16,8 +16,15 @@ const ProfileScreenStyle = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+    padding: 20
   },
- 
+ profile:{
+  width: 100,
+  height: 100,
+  backgroundColor: 'red',
+  borderRadius: 100
+  
+ }
 });
 
 export default ProfileScreenStyle;
