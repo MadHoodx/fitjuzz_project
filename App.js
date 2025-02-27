@@ -20,7 +20,6 @@ function MyTabs() {
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Note" component={NoteScreen} />
-      <Tab.Screen name="Signin" component={SigninScreen} />
       <Tab.Screen name="Timer" component={TimerScreen} />
       <Tab.Screen name="Timer" component={ProfileScreen} />
 
@@ -32,6 +31,7 @@ function MyStack() {
   return (
       <Stack.Navigator screenOptions={{ headerShown: false }} >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="Signin" component={SigninScreen} />
         <Stack.Screen name="MyTabs" component={MyTabs} />
           
       </Stack.Navigator>
