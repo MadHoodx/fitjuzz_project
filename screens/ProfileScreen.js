@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, TouchableOpacity, ScrollView } from "react-native";
 import styles from "../styles/style";
 import Header from "../components/Header";
 import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
@@ -7,22 +7,34 @@ import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
 export default function NoteScreen({ navigation }) {
   return (
     <View style={[ProfileScreenStyle.container]}>
-      <Header></Header>
-      <View style={[styles.container, { gap: 20 }]}>
-        <View
-          style={[
-            ProfileScreenStyle.box,
-            { height: 150, alignSelf: "stretch" },
-          ]}
-        >
+      <Header />
+      <ScrollView>
+        <View style={[styles.container, { gap: 20 }]}>
+          <View
+            style={[
+              ProfileScreenStyle.box,
+              { height: 150, alignSelf: "stretch" },
+            ]}
+          ></View>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+            <View
+              style={[ProfileScreenStyle.box, { height: 150, width: "48%" }]}
+            ></View>
+            <View
+              style={[ProfileScreenStyle.box, { height: 150, width: "48%" }]}
+            ></View>
+            <View
+              style={[ProfileScreenStyle.box, { height: 150, width: "48%" }]}
+            ></View>
+            <View
+              style={[ProfileScreenStyle.box, { height: 150, width: "48%" }]}
+            ></View>
+          </View>
+          <TouchableOpacity style={[styles.button, styles.buttonText]}>
+            <Text style={[styles.buttonText]}>Log out</Text>
+          </TouchableOpacity>
         </View>
-        <View
-          style={[ProfileScreenStyle.box, { height: 150, width: 150 }]}
-        ></View>
-        <View
-          style={[ProfileScreenStyle.box, { height: 150, width: 150 }]}
-        ></View>
-      </View>
+      </ScrollView>
     </View>
   );
 }

@@ -27,13 +27,8 @@ export const colors = {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 0,
-<<<<<<< Updated upstream
     paddingHorizontal: 40,
-    marginTop: Platform.OS === "android" ? sizes.size_5xl : 0
-=======
-    paddingHorizontal: 28,
     marginTop: Platform.OS === "android" ? sizes.size_5xl : 0,
->>>>>>> Stashed changes
   },
   section: {
     marginTop: 28,
