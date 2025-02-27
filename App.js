@@ -5,9 +5,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View } from 'react-native';
 import HomeScreen from './screens/HomeScreen';
+import NoteScreen from './screens/NoteScreen';
 import SigninScreen from './screens/SigninScreen';
 import WelcomeScreen from './screens/WelcomScreen';
 import TimerScreen from './screens/TimerScreen';
+import NoteScreen from './screens/NoteScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -17,8 +20,10 @@ function MyTabs() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Note" component={NoteScreen} />
       <Tab.Screen name="Signin" component={SigninScreen} />
       <Tab.Screen name="Timer" component={TimerScreen} />
+      <Tab.Screen name="Timer" component={ProfileScreen} />
 
     </Tab.Navigator>
   );

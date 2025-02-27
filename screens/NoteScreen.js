@@ -1,11 +1,11 @@
-// screens/ProfileScreen.js
+// screens/HomeScreen.js
 import * as React from 'react';
 import { View, Text, Button } from 'react-native';
 
-export default function SigninScreen({ navigation }) {
+export default function NoteScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Sign in</Text>
+      <Text>Note Page</Text>
       
     </View>
   );
