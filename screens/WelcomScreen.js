@@ -20,9 +20,15 @@ export default function WelcomeScreen({ navigation }) {
       </Text>
       <TouchableOpacity
         style={[styles.button, styles.section]}
-        onPress={() => navigation.navigate("MyTabs")}
+        onPress={() => navigation.navigate("Signin")}
       >
         <Text style={styles.buttonText}>Get Started</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, styles.section]}
+        onPress={() => navigation.navigate("MyTabs")}
+      >
+        <Text style={styles.buttonText}>Tabs</Text>
       </TouchableOpacity>
     </View>
   );

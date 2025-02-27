@@ -18,6 +18,7 @@ export const sizes = {
 
 export const colors = {
   clr_white: "#FFFFFF",
+  clr_lightgray: "#EFEFEF",
   clr_gray: "#C0C0C0",
   clr_black: "#1C2431",
   clr_slate: "#334357",
@@ -26,14 +27,10 @@ export const colors = {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginHorizontal: 0,
-<<<<<<< Updated upstream
     paddingHorizontal: 40,
     marginTop: Platform.OS === "android" ? sizes.size_5xl : 0
-=======
-    paddingHorizontal: 28,
-    marginTop: Platform.OS === "android" ? sizes.size_5xl : 0,
->>>>>>> Stashed changes
   },
   section: {
     marginTop: 28,
@@ -45,16 +42,18 @@ const styles = StyleSheet.create({
     color: colors.clr_orange,
   },
   button: {
+    width: "100%",
     backgroundColor: colors.clr_black,
     borderRadius: 20,
-    paddingVertical: 18,
-    paddingHorizontal: 120,
+    paddingVertical: 16
+  
   },
   buttonText: {
     fontSize: sizes.size_base,
     fontWeight: "bold",
     textAlign: "center",
     color: colors.clr_white,
+    
   },
 });
 
