@@ -9,7 +9,7 @@ export default function NoteScreen({ navigation }) {
     <View style={[ProfileScreenStyle.container]}>
       <Header></Header>
       <View style={[styles.container]}>
-
+      <View style={ProfileScreenStyle.profile_box}></View>
       </View>
     </View>
   );

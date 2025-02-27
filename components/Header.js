@@ -28,7 +28,7 @@ export default function Header() {
 
 const header = StyleSheet.create ({
     container: {
-        flex: 0.275,
+        flexBasis: 200,
         marginHorizontal: 0,
         paddingHorizontal: 16,
         backgroundColor: colors.clr_slate, 
