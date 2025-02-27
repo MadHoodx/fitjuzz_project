@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { rem, colors } from "../style";
+import { sizes, colors } from "../style";
 
 const WelcomeScreenStyle = StyleSheet.create({
   container: {
