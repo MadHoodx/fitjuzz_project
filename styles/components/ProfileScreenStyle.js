@@ -6,6 +6,11 @@ const ProfileScreenStyle = StyleSheet.create({
   container: {
     flex: 1
   },
+  profile_box: {
+    backgroundColor: 'red',
+    width: 50,
+    height: 400
+  }
 })
 
 

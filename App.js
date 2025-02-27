@@ -12,6 +12,7 @@ import TimerScreen from './screens/TimerScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import {colors, sizes} from './styles/style'
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,27 +27,38 @@ function MyTabs() {
           tabBarStyle: {
             ...app.tabBar,
           },
-          tabBarIcon: ({ focused, color, size }) => {
-            let home__icon = <Icon name={'notifications'} size={size} color={color}/>;
-            let note__icon;
-
-            if (route.name === 'Home') {
-              home__icon = focused ? 'home' : 'home-outline';
-            } 
-
-            // Return the appropriate icon
-            return [<Icon name={'notifications'} size={size} color={color}/>, ];
-          },
           tabBarActiveTintColor: colors.clr_orange,
           tabBarInActiveTintColor: colors.clr_gray,
         })}
         
         
       >
-      <Tab.Screen name="Home" component={HomeScreen} screenOptions={{tabBarIcon: 'home'}}/>
-      <Tab.Screen name="Note" component={NoteScreen} />
-      <Tab.Screen name="Timer" component={TimerScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{
+        title: 'Home',
+        tabBarIcon: ({ color, size }) => {
+          return <Icon name={'home'} size={size} color={color}/>;
+        },
+      }}/>
+            
+
+      <Tab.Screen name="Note" component={NoteScreen} options={{
+        title: 'Note',
+        tabBarIcon: ({ color, size }) => {
+          return <Icon name={'note'} size={size} color={color}/>;
+        },
+      }}/>
+      <Tab.Screen name="Timer" component={TimerScreen} options={{
+        title: 'Timer',
+        tabBarIcon: ({ color, size }) => {
+          return <Icon name={'timer'} size={size} color={color}/>;
+        },
+      }}/>
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{
+        title: 'Profile',
+        tabBarIcon: ({ color, size }) => {
+          return <IconAntDesign name={'profile'} size={size} color={color}/>;
+        },
+      }}/> 
 
     </Tab.Navigator>
   );
@@ -82,8 +94,10 @@ const app = StyleSheet.create({
     backgroundColor: colors.clr_white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    paddingTop: 5,
     height: 60,
-    marginBottom: 20,
+
+    //
     shadowColor: 'red',
     elevation: 5,
   
