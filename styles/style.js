@@ -1,12 +1,6 @@
 import { Platform, StyleSheet } from "react-native"
 
 
-const baseSize = 16; // This acts as the equivalent of 1rem
-
-export const rem = (value) => {
-  return baseSize * value;
-};
-
 export const sizes = {
   size_base: 16,
   size_lg: 18,
@@ -25,6 +19,7 @@ export const sizes = {
 
 export const colors = {
   clr_white: '#FFFFFF',
+  clr_gray: '#C0C0C0',
   clr_black: '#1C2431',
   clr_slate: '#334357',
   clr_orange: '#E77339'
@@ -34,7 +29,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 0,
     paddingHorizontal: 28,
-    marginTop: Platform.OS === "android" ? rem(3) : 0
+    marginTop: Platform.OS === "android" ? sizes.size_5xl : 0
   },
   section: {
     marginTop: 28
