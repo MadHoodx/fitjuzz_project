@@ -2,6 +2,8 @@ import { Platform, StyleSheet } from "react-native"
 
 
 export const sizes = {
+  size_xs: 12,
+  size_sm: 14,
   size_base: 16,
   size_lg: 18,
   size_xl: 20,
