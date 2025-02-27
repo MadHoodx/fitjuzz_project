@@ -12,6 +12,7 @@ import TimerScreen from './screens/TimerScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import {colors, sizes} from './styles/style'
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,7 +56,7 @@ function MyTabs() {
       <Tab.Screen name="Profile" component={ProfileScreen} options={{
         title: 'Profile',
         tabBarIcon: ({ color, size }) => {
-          return <Icon name={'user'} size={size} color={color}/>;
+          return <IconAntDesign name={'profile'} size={size} color={color}/>;
         },
       }}/> 
 
@@ -93,8 +94,10 @@ const app = StyleSheet.create({
     backgroundColor: colors.clr_white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    paddingTop: 5,
     height: 60,
-    marginBottom: 20,
+
+    //
     shadowColor: 'red',
     elevation: 5,
   
