@@ -11,4 +11,5 @@ npm install react-native-safe-area-context
 npm install react-native-screens
 npm install react-native-vector-icons
 
+npm i react-native-shadow-2
 
