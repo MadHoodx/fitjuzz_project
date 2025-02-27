@@ -30,7 +30,7 @@ export const colors = {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 0,
-    paddingHorizontal: 28,
+    paddingHorizontal: 40,
     marginTop: Platform.OS === "android" ? sizes.size_5xl : 0
   },
   section: {

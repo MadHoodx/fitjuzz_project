@@ -1,17 +1,14 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
 import { colors } from "../style";
-
 
 const ProfileScreenStyle = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
-  profile_box: {
-    backgroundColor: 'red',
-    width: 50,
-    height: 400
-  }
-})
-
+  box: {
+    backgroundColor: "red",
+    borderRadius: 10,
+  },
+});
 
 export default ProfileScreenStyle;
