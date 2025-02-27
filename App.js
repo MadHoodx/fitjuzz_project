@@ -9,7 +9,6 @@ import NoteScreen from './screens/NoteScreen';
 import SigninScreen from './screens/SigninScreen';
 import WelcomeScreen from './screens/WelcomScreen';
 import TimerScreen from './screens/TimerScreen';
-import NoteScreen from './screens/NoteScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
