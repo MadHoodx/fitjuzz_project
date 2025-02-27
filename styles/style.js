@@ -1,5 +1,4 @@
-import { Platform, StyleSheet } from "react-native"
-
+import { Platform, StyleSheet } from "react-native";
 
 export const sizes = {
   size_xs: 12,
@@ -15,47 +14,48 @@ export const sizes = {
   size_7xl: 72,
   size_8xl: 96,
   size_9xl: 128,
-
-
-}
+};
 
 export const colors = {
-  clr_white: '#FFFFFF',
-  clr_gray: '#C0C0C0',
-  clr_black: '#1C2431',
-  clr_slate: '#334357',
-  clr_orange: '#E77339'
-}
+  clr_white: "#FFFFFF",
+  clr_gray: "#C0C0C0",
+  clr_black: "#1C2431",
+  clr_slate: "#334357",
+  clr_orange: "#E77339",
+};
 
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 0,
+<<<<<<< Updated upstream
     paddingHorizontal: 40,
     marginTop: Platform.OS === "android" ? sizes.size_5xl : 0
+=======
+    paddingHorizontal: 28,
+    marginTop: Platform.OS === "android" ? sizes.size_5xl : 0,
+>>>>>>> Stashed changes
   },
   section: {
-    marginTop: 28
+    marginTop: 28,
   },
   whiteText: {
-    color: colors.clr_white
+    color: colors.clr_white,
   },
   orangeText: {
-    color: colors.clr_orange
+    color: colors.clr_orange,
   },
   button: {
     backgroundColor: colors.clr_black,
     borderRadius: 20,
     paddingVertical: 18,
-    paddingHorizontal: 120
-    
+    paddingHorizontal: 120,
   },
   buttonText: {
     fontSize: sizes.size_base,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: colors.clr_white
-  }
-})
-
+    fontWeight: "bold",
+    textAlign: "center",
+    color: colors.clr_white,
+  },
+});
 
 export default styles;
