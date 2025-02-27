@@ -44,6 +44,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 18,
     paddingHorizontal: 120,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 12,
+        },
+        shadowOpacity: 0.58,
+        shadowRadius: 16.0,
+      },
+      android: {
+        elevation: 24,
+      },
+    }),
   },
   buttonText: {
     fontSize: sizes.size_base,
