@@ -1,53 +1,31 @@
 import * as React from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-import styles, { sizes } from "../styles/style";
+import styles, { colors, sizes } from "../styles/style";
 import SigninScreenStyle from "../styles/components/SigninScreenStyle";
-import Icon from "react-native-vector-icons/Ionicons";
-import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import InputWithEye from "../components/InputWithEye";
 
-export default function SigninScreen({updateActiveScreen }) {
-
-  const [visible, setVisible] = useState(false)
-  const [activeIcon, setActiveIcon] = useState(true)
-
-  const navigation = useNavigation()
-
-  const handleHiddenPassword = () => {
-    setVisible(!visible);
-    setActiveIcon(!activeIcon);
-  }
-
-  const iconName =
-    activeIcon === true ? 'eye' : 'eye-off'
+export default function SigninScreen({ updateActiveScreen }) {
+  const navigation = useNavigation();
 
   return (
-    <View style={[styles.container, { borderColor: "green" }]}>
+    <View style={[styles.container]}>
       <View
         style={[
           SigninScreenStyle.input__section,
           { borderColor: "purple", paddingTop: 20 },
         ]}
       >
-        <TextInput style={SigninScreenStyle.input__box} placeholder="Email" />
-        <View style={SigninScreenStyle.input__subsection}>
-          <TextInput secureTextEntry={visible} style={SigninScreenStyle.input} placeholder="Password" />
-          <TouchableOpacity onPress={handleHiddenPassword}>
-            <Icon
-              name={iconName}
-              size={20}
-              color="#888"
-              style={{ marginRight: 20 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')}>
+        <TextInput
+          style={[styles.input__box, { color: "red" }]}
+          placeholder="Email"
+        />
+        <InputWithEye placeholder={"Password"}></InputWithEye>
+        <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
             Forget Password?
           </Text>
         </TouchableOpacity>
-        
-        
       </View>
       <View style={[SigninScreenStyle.button__section]}>
         <TouchableOpacity style={styles.button}>
@@ -83,16 +61,16 @@ export default function SigninScreen({updateActiveScreen }) {
       </View>
       <View style={SigninScreenStyle.footer__section}>
         <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>
-          if you don't have account.
+          if you don't have an account.
         </Text>
-        <TouchableOpacity onPress={() => updateActiveScreen('signup')}>
+        <TouchableOpacity onPress={() => updateActiveScreen("signup")}>
           <Text
             style={[
               styles.orangeText,
               { fontSize: sizes.size_base, fontWeight: "bold" },
             ]}
           >
-            Sign up 
+            Sign up
           </Text>
         </TouchableOpacity>
       </View>

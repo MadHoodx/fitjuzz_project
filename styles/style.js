@@ -66,9 +66,41 @@ const styles = StyleSheet.create({
     fontSize: sizes.size_base,
     fontWeight: "bold",
     textAlign: "center",
-    color: colors.clr_white,
+    color: colors.clr_lightgray,
     
   },
+  input__subsection: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 20,
+    backgroundColor: colors.clr_gray,
+    opacity: 0.7,
+    height: 60,
+  },
+  input__box: {
+    fontSize: sizes.size_base,
+    paddingLeft: 20,
+    paddingRight: 50,
+    borderRadius: 20,
+    backgroundColor: colors.clr_gray,
+    opacity: 0.7,
+    height: 60,
+  },
+  input: {
+    flex: 1,
+    fontSize: sizes.size_base,
+    paddingLeft: 20,
+    paddingRight: 10,
+  },
+  title: {
+    fontSize: sizes.size_xl,
+    fontWeight: 'bold'
+  },
+  sub__title: {
+    fontSize: sizes.size_base,
+    fontWeight: 'bold',
+    color: colors.clr_gray
+  }
 });
 
 export default styles;

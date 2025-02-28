@@ -4,56 +4,20 @@ import styles, { sizes } from "../styles/style";
 import SignupScreenStyle from "../styles/components/SignupScreenStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useState } from "react";
+import InputWithEye from "../components/InputWithEye";
 
 export default function SignupScreen({ updateActiveScreen }) {
-  const [visible, setVisible] = useState(false);
-  const [activeIcon, setActiveIcon] = useState(true);
-
-  const handleHiddenPassword = () => {
-    setVisible(!visible);
-    setActiveIcon(!activeIcon);
-  };
-
-  const iconName = activeIcon === true ? "eye" : "eye-off";
-
+  
   return (
     <View style={[styles.container]}>
       <View style={SignupScreenStyle.input__section}>
         <TextInput
-          style={SignupScreenStyle.input__box}
+          style={styles.input__box}
           placeholder="Username"
         />
-        <TextInput style={SignupScreenStyle.input__box} placeholder="Email" />
-        <View style={SignupScreenStyle.input__subsection}>
-          <TextInput
-            secureTextEntry={visible}
-            style={SignupScreenStyle.input}
-            placeholder="Password"
-          />
-          <TouchableOpacity onPress={handleHiddenPassword}>
-            <Icon
-              name={iconName}
-              size={20}
-              color="#888"
-              style={{ marginRight: 20 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={SignupScreenStyle.input__subsection}>
-          <TextInput
-            secureTextEntry={visible}
-            style={SignupScreenStyle.input}
-            placeholder="Confirm Password"
-          />
-          <TouchableOpacity onPress={handleHiddenPassword}>
-            <Icon
-              name={iconName}
-              size={20}
-              color="#888"
-              style={{ marginRight: 20 }}
-            />
-          </TouchableOpacity>
-        </View>
+        <TextInput style={styles.input__box} placeholder="Email" />
+        <InputWithEye placeholder={'Password'}></InputWithEye>
+        <InputWithEye placeholder={'Confirm Password'}></InputWithEye>
       </View>
       <View style={SignupScreenStyle.button__section}>
         <TouchableOpacity style={styles.button}>
@@ -89,7 +53,7 @@ export default function SignupScreen({ updateActiveScreen }) {
       </View>
       <View style={SignupScreenStyle.footer__section}>
         <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>
-          Already have account?
+          Already have an account?
         </Text>
         <TouchableOpacity onPress={() => updateActiveScreen("signin")}>
           <Text
