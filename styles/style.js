@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 0,
     paddingHorizontal: 40,
-    borderWidth: 5,
-    borderColor: 'red'
   },
   section: {
     marginTop: 28,

@@ -27,12 +27,12 @@ export default function VerifyEmailScreen({}) {
     }
   
   return (
-    <View style={{ flex: 1 }}>
+    <View style={VerifyEmailScreenStyle.container}>
       <HeaderAlternative isResetPasswordPage={true}></HeaderAlternative>
       <View style={[styles.container]}>
         <View
           style={[
-            ForgetPasswordScreenStyle.resetpassword__section,
+            VerifyEmailScreenStyle.verify__section,
             styles.section,
           ]}
         >
@@ -63,7 +63,7 @@ export default function VerifyEmailScreen({}) {
 
           </View>
 
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PasswordReset')}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PasswordReset', { screen: 5 })}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
 

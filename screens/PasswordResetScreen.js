@@ -8,11 +8,11 @@ import { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import InputWithEye from "../components/InputWithEye";
 
-export default function ForgetPasswordScreen({}) {
+export default function PasswordResetScreen({}) {
   const navigation = useNavigation();
   
   return (
-    <View style={{ flex: 1 }}>
+    <View style={PasswordResetScreenStyle.container}>
       <HeaderAlternative isResetPasswordPage={true}></HeaderAlternative>
       <View style={[styles.container]}>
         <View
@@ -28,7 +28,7 @@ export default function ForgetPasswordScreen({}) {
           </Text>
           <InputWithEye placeholder={"Password"}></InputWithEye>
           <InputWithEye placeholder={"Confirm Password"}></InputWithEye>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button}  onPress={() => navigation.navigate('SuccessfullyReset')} >
             <Text style={styles.buttonText}>Update Password</Text>
           </TouchableOpacity>
         </View>

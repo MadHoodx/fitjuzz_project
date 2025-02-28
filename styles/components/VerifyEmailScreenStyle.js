@@ -7,7 +7,7 @@ const VerifyEmailScreenStyle = StyleSheet.create({
       borderColor: "red",
     },
   
-    resetpassword__section: {
+    verify__section: {
       borderWidth: 2,
       borderColor: "red",
       gap: 28,
