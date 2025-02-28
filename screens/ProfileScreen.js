@@ -4,12 +4,12 @@ import styles from "../styles/style";
 import Header from "../components/Header";
 import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
 
-export default function NoteScreen({ navigation }) {
+export default function NoteScreen({}) {
   return (
     <View style={[ProfileScreenStyle.container]}>
       <Header />
-      <ScrollView>
-        <View style={[styles.container, { gap: 20 }]}>
+      <ScrollView style={[styles.container]}>
+        <View style= {{ gap: 20 }}>
           <View
             style={[
               ProfileScreenStyle.box,

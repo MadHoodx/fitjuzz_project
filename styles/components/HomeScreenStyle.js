@@ -4,7 +4,9 @@ import { colors } from "../style";
 
 const HomeScreenStyle = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    borderWidth: 2,
+    borderColor: 'red'
   },
 })
 

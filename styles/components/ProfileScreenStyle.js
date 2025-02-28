@@ -4,6 +4,8 @@ import { colors } from "../style";
 const ProfileScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
+    borderColor: 'red',
+    borderWidth: 2
   },
   box: {
     backgroundColor: "white",

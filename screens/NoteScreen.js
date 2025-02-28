@@ -5,7 +5,7 @@ import styles from '../styles/style';
 import NoteScreenStyle from '../styles/components/NoteScreenStyle';
 import Header from '../components/Header';
 
-export default function NoteScreen({ navigation }) {
+export default function NoteScreen({}) {
   return (
     <View style={[NoteScreenStyle.container]}>
       <Header></Header>

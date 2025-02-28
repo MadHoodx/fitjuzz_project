@@ -20,7 +20,7 @@ export default function WelcomeScreen({ navigation }) {
       </Text>
       <TouchableOpacity
         style={[styles.button, styles.section]}
-        onPress={() => navigation.navigate("Signin")}
+        onPress={() => navigation.navigate("Main")}
       >
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>

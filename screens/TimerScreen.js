@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import styles from '../styles/style';
 import TimerScreenStyle from '../styles/components/TimerScreenStyle';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({}) {
   return (
     
     <View style={[TimerScreenStyle.container]}>

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { Platform, StyleSheet } from "react-native"
 import { colors } from "../style";
 
 const WelcomeScreenStyle = StyleSheet.create({
@@ -6,7 +6,8 @@ const WelcomeScreenStyle = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.clr_slate 
+    backgroundColor: colors.clr_slate,
+    marginTop: Platform.OS === 'android' ? 50 : 0
   },
   placeholder: {
     maxWidth: '100%',

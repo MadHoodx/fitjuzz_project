@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import styles from '../styles/style';
 import HomeScreenStyle from '../styles/components/HomeScreenStyle';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({}) {
   return (
     
     <View style={[HomeScreenStyle.container]}>

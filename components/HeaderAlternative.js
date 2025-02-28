@@ -2,52 +2,37 @@ import * as React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import styles, { colors } from '../styles/style';
 import { sizes } from '../styles/style';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useState } from 'react';
+export default function HeaderAlternative({isResetPasswordPage, activeScreen, updateActiveScreen }) {
 
-export default function HeaderAlternative() {
-    const [isSelected, setIsSelected] = useState(1);
-    const [welcomeMessage, setWelcomeMessage] = useState('Let’s get you signed in !');
+    const headerText = activeScreen === 'signin' ? 'Let’s get you signed in !' : 'Let’s get you registered !';
+    
 
-    const handleSetIsSelected = () => {
-        setIsSelected(!isSelected);
-    };
-    const changeToSignedIn = () => {
-        setWelcomeMessage('Let’s get you signed in !');
-    };
-    const changeToRegistered = () => {
-        setWelcomeMessage('Let’s get you registered !');
-    };
-
-    const onPressHandler = () => {
-        handleSetIsSelected();
-        changeToSignedIn();
-    };
-    const onPressHandler1 = () => {
-        handleSetIsSelected();
-        changeToRegistered();
-    };
   return (
     <View style={[headerAlternative.container]}>
-        <Text style={[styles.whiteText, {fontSize: sizes.size_2xl, fontWeight: 'bold', paddingTop: 70}]}>
-            {welcomeMessage}
+        <Text style={[styles.whiteText, isResetPasswordPage === true && headerAlternative.hide, {fontSize: sizes.size_2xl, fontWeight: 'bold', paddingTop: 70}]}>
+            {headerText}
         </Text>
-
-        <View style={headerAlternative.button__section}>
+        <Text style={[styles.whiteText, isResetPasswordPage === false && headerAlternative.hide, {fontSize: sizes.size_2xl, fontWeight: 'bold', paddingTop: 90}]}>
+            Let’s reset your password!
+        </Text>
+        <View style={[headerAlternative.button__section, isResetPasswordPage === true && headerAlternative.hide]}>
             
             <TouchableOpacity
-            style={[headerAlternative.button, {left: 26}, isSelected ? headerAlternative.selected : headerAlternative.notSelected]}
-            onPress={onPressHandler}
+            style={[headerAlternative.button, {left: 26}, 
+            activeScreen === 'signin' && headerAlternative.activeButton]}
+            onPress={() => updateActiveScreen('signin')} 
             >
-                <Text style={[headerAlternative.buttonText, isSelected ? headerAlternative.selectedText : headerAlternative.notSelectedText]}>
-                    Signi In
+                <Text style={[headerAlternative.buttonText, activeScreen === 'signin' && headerAlternative.activeButtonText]}>
+                    Sign In
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-            style={[headerAlternative.button, {right: 26},isSelected ? headerAlternative.notSelected : headerAlternative.selected]}
-            onPress={onPressHandler1}
+            style={[headerAlternative.button, {right: 26},
+            activeScreen === 'signup' && headerAlternative.activeButton,]}
+            onPress={() => updateActiveScreen('signup')} 
             >
-                <Text style={[headerAlternative.buttonText, isSelected ? headerAlternative.notSelectedText : headerAlternative.selectedText]}>
+                <Text style={[headerAlternative.buttonText,  activeScreen === 'signup' && headerAlternative.activeButtonText]}>
                     Sign Up
                 </Text>
             </TouchableOpacity>
@@ -76,26 +61,22 @@ const headerAlternative = StyleSheet.create ({
     button: {
         borderRadius: 40,
         paddingVertical: 16,
-        paddingHorizontal: 66
+        paddingHorizontal: 66,
+        backgroundColor: colors.clr_white
 
     },
     buttonText: {
         fontSize: sizes.size_base,
+        fontWeight: 'bold'
     },
-    selected: {
+    activeButton: {
         backgroundColor: colors.clr_orange,
-        borderColor: colors.clr_orange,
         zIndex: 1
     },
-    notSelected: {
-        backgroundColor: colors.clr_white,
-        borderColor: colors.clr_white,
-        zIndex: 0
+    activeButtonText: {
+        color: colors.clr_white
     },
-    selectedText: {
-        color: colors.clr_white,
-    },
-    notSelectedText: {
-        color: colors.clr_black,
+    hide:{
+        display: 'none'
     }
 })

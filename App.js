@@ -6,13 +6,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import HomeScreen from './screens/HomeScreen';
 import NoteScreen from './screens/NoteScreen';
-import SigninScreen from './screens/SigninScreen';
 import WelcomeScreen from './screens/WelcomScreen';
 import TimerScreen from './screens/TimerScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import {colors, sizes} from './styles/style'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import MainScreen from './screens/MainScreen';
+import ForgetPasswordScreen from './screens/ForgetPasswordScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,7 +70,8 @@ function MyStack() {
       <Stack.Navigator screenOptions={{ headerShown: false }} 
         initialRouteName='Welcome'>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Signin" component={SigninScreen} />
+        <Stack.Screen name="Main" component={MainScreen} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
         <Stack.Screen name="MyTabs" component={MyTabs} />
           
       </Stack.Navigator>

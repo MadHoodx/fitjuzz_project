@@ -1,63 +1,101 @@
-// screens/ProfileScreen.js
-import * as React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
-import Header from '../components/Header';
-import styles, { sizes } from '../styles/style';
-import SigninScreenStyle from '../styles/components/SigninScreenStyle';
-import HeaderAlternative from '../components/HeaderAlternative';
+import * as React from "react";
+import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import styles, { sizes } from "../styles/style";
+import SigninScreenStyle from "../styles/components/SigninScreenStyle";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-export default function SigninScreen({ navigation }) {
+export default function SigninScreen({updateActiveScreen }) {
+
+  const [visible, setVisible] = useState(false)
+  const [activeIcon, setActiveIcon] = useState(true)
+
+  const navigation = useNavigation()
+
+  const handleHiddenPassword = () => {
+    setVisible(!visible);
+    setActiveIcon(!activeIcon);
+  }
+
+  const iconName =
+    activeIcon === true ? 'eye' : 'eye-off'
+
   return (
-    
-    <View style={[SigninScreenStyle.container]}>
-      <HeaderAlternative></HeaderAlternative>
-      <View style={[styles.container]}>
-          <View style={SigninScreenStyle.input__section}>
-            <TextInput
-              style={SigninScreenStyle.input}
-              placeholder="Email"
+    <View style={[styles.container, { borderColor: "green" }]}>
+      <View
+        style={[
+          SigninScreenStyle.input__section,
+          { borderColor: "purple", paddingTop: 20 },
+        ]}
+      >
+        <TextInput style={SigninScreenStyle.input__box} placeholder="Email" />
+        <View style={SigninScreenStyle.input__subsection}>
+          <TextInput secureTextEntry={visible} style={SigninScreenStyle.input} placeholder="Password" />
+          <TouchableOpacity onPress={handleHiddenPassword}>
+            <Icon
+              name={iconName}
+              size={20}
+              color="#888"
+              style={{ marginRight: 20 }}
             />
-            <TextInput
-              style={SigninScreenStyle.input}
-              placeholder="Password"
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')}>
+          <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
+            Forget Password?
+          </Text>
+        </TouchableOpacity>
+        
+        
+      </View>
+      <View style={[SigninScreenStyle.button__section]}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableOpacity>
+        <View style={SigninScreenStyle.line__section}>
+          <View style={SigninScreenStyle.line} />
+          <Text style={{ fontSize: sizes.size_xl, fontWeight: "bold" }}>
+            Or login with
+          </Text>
+          <View style={SigninScreenStyle.line} />
+        </View>
+        <View style={SigninScreenStyle.button__box}>
+          <TouchableOpacity style={SigninScreenStyle.button}>
+            <Image
+              source={require("../assets/images/facebook-logo.png")}
+              style={SigninScreenStyle.logo}
             />
-            <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword, {fontWeight: 'bold'}]}>Forget Password?</Text>
-          </View>
-          <View style={[SigninScreenStyle.section]}>
-            <TouchableOpacity
-              style={[styles.button, styles.section]}
-            >
-              <Text style={styles.buttonText}>Log In</Text>
-            </TouchableOpacity>
-            <View style={SigninScreenStyle.line__section}>
-              <View style={SigninScreenStyle.line} />
-              <Text style={{fontSize: sizes.size_xl, fontWeight: 'bold'}}>Or login with</Text>
-              <View style={SigninScreenStyle.line} />
-            </View>
-            <View style={SigninScreenStyle.button__section}>
-              <TouchableOpacity style={SigninScreenStyle.button}>
-                <Image source={require('../assets/images/facebook-logo.png')} style={SigninScreenStyle.logo} />
-              </TouchableOpacity>
-              <TouchableOpacity style={SigninScreenStyle.button}>
-                <Image source={require('../assets/images/google-logo.png')} style={SigninScreenStyle.logo} />
-              </TouchableOpacity>
-              <TouchableOpacity style={SigninScreenStyle.button}>
-                <Image source={require('../assets/images/apple-logo.png')} style={SigninScreenStyle.logo} />
-              </TouchableOpacity>
-            </View>
-          
-          </View>
-          <View style={SigninScreenStyle.footer__section}>
-            
-            <Text style={{fontSize: 16, fontWeight: 'bold'}}>if you don't have account.</Text>
-            <TouchableOpacity>
-                <Text style={[styles.orangeText, {fontSize: 16, fontWeight: 'bold'}]}>Sign up</Text>
-              </TouchableOpacity>
-          </View>
-
+          </TouchableOpacity>
+          <TouchableOpacity style={SigninScreenStyle.button}>
+            <Image
+              source={require("../assets/images/google-logo.png")}
+              style={SigninScreenStyle.logo}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={SigninScreenStyle.button}>
+            <Image
+              source={require("../assets/images/apple-logo.png")}
+              style={SigninScreenStyle.logo}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={SigninScreenStyle.footer__section}>
+        <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>
+          if you don't have account.
+        </Text>
+        <TouchableOpacity onPress={() => updateActiveScreen('signup')}>
+          <Text
+            style={[
+              styles.orangeText,
+              { fontSize: sizes.size_base, fontWeight: "bold" },
+            ]}
+          >
+            Sign up 
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
-    
-      
   );
 }
