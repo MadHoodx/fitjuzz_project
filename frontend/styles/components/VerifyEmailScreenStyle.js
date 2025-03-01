@@ -3,13 +3,11 @@ import {colors, sizes} from "../style"
 const VerifyEmailScreenStyle = StyleSheet.create({
     container: {
       flex: 1,
-      borderWidth: 2,
-      borderColor: "red",
+      
     },
   
     verify__section: {
-      borderWidth: 2,
-      borderColor: "red",
+ 
       gap: 28,
     },
     digit__section: {

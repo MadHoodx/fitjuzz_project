@@ -7,6 +7,7 @@ import {
   Image,
   Modal,
   TextInput,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -22,6 +23,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { jwtDecode } from 'jwt-decode';
 
+import axios from "axios";
+
 export default function ProfileScreen({}) {
   const [weight, setWeight] = useState(0);
   const [tempWeight, setTempWeight] = useState(0);
@@ -35,23 +38,102 @@ export default function ProfileScreen({}) {
 
   const navigation = useNavigation();
   const [username, setUsername] = useState("");
+  
 
-  const fetchUsername = async () => {  // Define fetchUsername outside useEffect
+
+
+  
+  const fetchProfileData = async () => {  // Define fetchUsername outside useEffect
     try {
       const token = await AsyncStorage.getItem('token');
+
       if (token) {
         const decodedToken = jwtDecode(token);
         setUsername(decodedToken.user.username);
-        console.log(decodedToken)
+        setWeight(decodedToken.user.weight);
+        setHeight(decodedToken.user.height);
+        setFat(decodedToken.user.fat);
+
+          
+
       }
     } catch (error) {
-      console.error('Error fetching username:', error);
+      console.error('Error fetching profile data:', error);
     }
   };
 
   useEffect(() => {
-    fetchUsername();  // Call fetchUsername inside useEffect
-  },);
+    fetchProfileData();
+  },[]);
+
+  const handleWeightUpdate = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.user.id;
+
+      const response = await axios.put(`http://192.168.221.234:5000/api/users/${userId}/weight`, {
+        weight: parseFloat(weight) // Convert weight to number
+      });
+
+
+      
+      // Alert.alert('Success', 'Weight updated successfully!');
+      setWeight(weight)
+      setModalVisibleWeight(false)
+    } catch (error) {
+      console.error('Error updating weight:', error);
+      Alert.alert('Error', 'An error occurred while updating weight.');
+    }
+  };
+
+  const handleHeightUpdate = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.user.id;
+
+      const response = await axios.put(`http://192.168.221.234:5000/api/users/${userId}/height`, {
+        height: parseFloat(height) // Convert weight to number
+      });
+
+    
+      
+      // Alert.alert('Success', 'Height updated successfully!');
+      setHeight(height)
+      setModalVisibleHeight(false)
+
+    } catch (error) {
+      console.error('Error updating height:', error);
+      Alert.alert('Error', 'An error occurred while updating height.');
+    }
+  };
+
+
+  const handleFatUpdate = async () => {
+
+    try{
+      const token = await AsyncStorage.getItem('token')
+      const decodedToken = jwtDecode(token)
+      const userId = decodedToken.user.id
+      
+      const response = await axios.put(`http://192.168.221.234:5000/api/users/${userId}/bodyfat`, {
+        fat: parseFloat(fat) // Convert weight to number
+      })
+
+      setFat(fat)
+      setModalVisibleFat(false)
+    }
+    catch (error) {
+      console.error('Error updating bodyfat:', error);
+      Alert.alert('Error', 'An error occurred while updating bodyfat.');
+    }
+  }
+
+
+
+
+
 
   const haddleLogout = async () => {
     try {
@@ -65,31 +147,31 @@ export default function ProfileScreen({}) {
 
   const handleEditWeight = () => {
     setModalVisibleWeight(true);
-    setTempWeight(weight);
+    // setTempWeight(weight);
   };
 
-  const handleSaveWeight = (newWeight) => {
-    setWeight(newWeight);
-    setModalVisibleWeight(false);
-  };
+  // const handleSaveWeight = (newWeight) => {
+  //   setWeight(newWeight);
+  //   setModalVisibleWeight(false);
+  // };
   const handleEditHeight = () => {
     setModalVisibleHeight(true);
-    setTempWeight(height);
+    // setTempWeight(height);
   };
 
-  const handleSaveHeight = (newHeight) => {
-    setHeight(newHeight);
-    setModalVisibleHeight(false);
-  };
+  // const handleSaveHeight = (newHeight) => {
+  //   setHeight(newHeight);
+  //   setModalVisibleHeight(false);
+  // };
   const handleEditFat = () => {
     setModalVisibleFat(true);
-    setTempFat(fat);
+    // setTempFat(fat);
   };
 
-  const handleSaveFat = (newFat) => {
-    setFat(newFat);
-    setModalVisibleFat(false);
-  };
+  // const handleSaveFat = (newFat) => {
+  //   setFat(newFat);
+  //   setModalVisibleFat(false);
+  // };
   return (
     <View style={[ProfileScreenStyle.container]}>
       <Header />
@@ -224,8 +306,8 @@ export default function ProfileScreen({}) {
                       marginBottom: 5,
                     }}
                     keyboardType="numeric"
-                    value={tempWeight}
-                    onChangeText={(text) => setTempWeight(text)}
+                    // value={tempWeight}
+                    onChangeText={(text) => setWeight(text)}
                   />
                   <View
                     style={{
@@ -241,7 +323,7 @@ export default function ProfileScreen({}) {
                     }}
                   >
                     <TouchableOpacity
-                      onPress={() => setModalVisible(false)}
+                      onPress={() => setModalVisibleWeight(false)}
                       style={{
                         backgroundColor: "lightgray",
                         padding: 10,
@@ -251,7 +333,7 @@ export default function ProfileScreen({}) {
                       <Text>close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => handleSaveWeight(tempWeight)}
+                      onPress={handleWeightUpdate}
                       style={{
                         backgroundColor: "green",
                         padding: 10,
@@ -336,8 +418,8 @@ export default function ProfileScreen({}) {
                       marginBottom: 5,
                     }}
                     keyboardType="numeric"
-                    value={tempHeight}
-                    onChangeText={(text) => setTempHeight(text)}
+                    // value={tempHeight}
+                    onChangeText={(text) => setHeight(text)}
                   />
                   <View
                     style={{
@@ -363,7 +445,7 @@ export default function ProfileScreen({}) {
                       <Text>close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => handleSaveHeight(tempHeight)}
+                      onPress={handleHeightUpdate}
                       style={{
                         backgroundColor: "green",
                         padding: 10,
@@ -450,8 +532,8 @@ export default function ProfileScreen({}) {
                       marginBottom: 5,
                     }}
                     keyboardType="numeric"
-                    value={tempFat}
-                    onChangeText={(text) => setTempFat(text)}
+                    // value={tempFat}
+                    onChangeText={(text) => setFat(text)}
                   />
                   <View
                     style={{
@@ -477,7 +559,7 @@ export default function ProfileScreen({}) {
                       <Text>close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => handleSaveFat(tempFat)}
+                      onPress={handleFatUpdate}
                       style={{
                         backgroundColor: "green",
                         padding: 10,

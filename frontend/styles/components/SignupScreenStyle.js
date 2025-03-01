@@ -1,25 +1,23 @@
 import { StyleSheet } from "react-native";
 import { colors, sizes } from "../style";
 
-const SigninScreenStyle = StyleSheet.create({
+const SignupScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
   input__section: {
-    borderColor: "red",
-    borderWidth: 2,
+
     marginTop: 20,
     gap: 16,
   },
   forgetPassword: {
     textAlign: "right",
-    fontWeight: "bold",
   },
   line__section: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 26,
+    marginVertical: 20,
     gap: 14,
   },
   line: {
@@ -29,8 +27,7 @@ const SigninScreenStyle = StyleSheet.create({
   },
   button__section: {
     marginVertical: 16,
-    borderColor: "red",
-    borderWidth: 2,
+
   },
   button__box: {
     flexDirection: "row",
@@ -54,11 +51,10 @@ const SigninScreenStyle = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "center",
-    borderColor: "red",
-    borderWidth: 2,
-    marginBottom: 10,
-    gap:4
+  
+    marginBottom: 10, 
+    gap: 4
   },
 });
 
-export default SigninScreenStyle;
+export default SignupScreenStyle;

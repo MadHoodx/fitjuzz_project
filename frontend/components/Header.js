@@ -16,7 +16,7 @@ export default function Header() {
       if (token) {
         const decodedToken = jwtDecode(token);
         setUsername(decodedToken.user.username);
-        console.log(decodedToken)
+        
       }
     } catch (error) {
       console.error('Error fetching username:', error);

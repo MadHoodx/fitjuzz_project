@@ -3,13 +3,11 @@ import {colors, sizes} from "../style"
 const PasswordResetScreenStyle = StyleSheet.create({
     container: {
       flex: 1,
-      borderWidth: 2,
-      borderColor: "red",
+     
     },
   
     resetpassword__section: {
-      borderWidth: 2,
-      borderColor: "red",
+      
       gap: 28,
     },
     digit__section: {

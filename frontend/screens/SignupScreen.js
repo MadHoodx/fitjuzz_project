@@ -10,10 +10,11 @@ import {
 import styles, { sizes } from "../styles/style";
 import SignupScreenStyle from "../styles/components/SignupScreenStyle";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import InputWithEye from "../components/InputWithEye";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignupScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
@@ -22,6 +23,7 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
@@ -39,7 +41,9 @@ export default function SignupScreen({ updateActiveScreen }) {
           password,
         }
       );
-      console.log("Signup response:", response.data); // Log response data
+
+
+    
       Alert.alert("Success", response.data.message);
       navigation.navigate("MyTabs");
     } catch (error) {
