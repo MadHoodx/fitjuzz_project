@@ -16,7 +16,7 @@ import MainScreen from './screens/MainScreen';
 import ForgetPasswordScreen from './screens/ForgetPasswordScreen';
 import VerifyEmailScreen from './screens/VerifyEmailScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen'
-
+import SuccessfullyResetScreen from './screens/SuccessfullyResetScreen'
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -80,17 +80,7 @@ function MyTabs() {
 
 function MyStack() {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName="Welcome"
-    >
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="Main" component={MainScreen} />
-      <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
-      <Stack.Screen name="MyTabs" component={MyTabs} />
-      <Stack.Screen name="SigninScreen" component={SigninScreen}/>
-    </Stack.Navigator>
-
+  
       <Stack.Navigator screenOptions={{ headerShown: false }} 
         initialRouteName='Welcome'>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
