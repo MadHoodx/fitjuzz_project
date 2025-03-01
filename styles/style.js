@@ -1,6 +1,8 @@
 import { Platform, StyleSheet } from "react-native";
 
 export const sizes = {
+  size_3xs: 8,
+  size_2xs: 10,
   size_xs: 12,
   size_sm: 14,
   size_base: 16,
@@ -27,9 +29,12 @@ export const colors = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginHorizontal: 0,
     paddingHorizontal: 40,
+    marginTop: Platform.OS === "android" ? sizes.size_5xl : 0,
+    // borderWidth: 2,
+    // borderColor: "red",
+
   },
   section: {
     marginTop: 28,
@@ -45,27 +50,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.clr_black,
     borderRadius: 20,
     paddingVertical: 18,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 12,
-        },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.0,
-      },
-      android: {
-        elevation: 24,
-      },
-    }),
+    elevation: 24,
   },
+
   buttonText: {
     fontSize: sizes.size_base,
     fontWeight: "bold",
     textAlign: "center",
+    color: colors.clr_white,
     color: colors.clr_lightgray,
-    
   },
   input__subsection: {
     flexDirection: "row",
