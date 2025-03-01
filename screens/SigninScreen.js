@@ -17,18 +17,11 @@ import { useEffect } from "react";
 
 // API client
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
-  const [activeIcon, setActiveIcon] = useState(true);
 
-  const handleHiddenPassword = () => {
-    setVisible(!visible);
-    setActiveIcon(!activeIcon);
-  };
-
-  const iconName = activeIcon === true ? "eye" : "eye-off";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,11 +31,11 @@ export default function SigninScreen({ updateActiveScreen }) {
       const token = await AsyncStorage.getItem("token");
       if (token) {
         // Validate token on server if needed
-        navigation.navigate("Home"); // Or your protected screen
+        navigation.navigate("MyTabs"); // Or your protected screen
       }
     };
     checkToken();
-  });
+  }, );
 
   const handleSignin = async () => {
     console.log("Sending signin request:", { email, password });
@@ -57,12 +50,14 @@ export default function SigninScreen({ updateActiveScreen }) {
       );
 
       // Store token in AsyncStorage (for persistent login)
-      // await AsyncStorage.setItem('token', response.data.token);
+      await AsyncStorage.setItem('token', response.data.token);
+      console.log("Token stored:", response.data.token); 
+      
 
       console.log("Signin response:", response.data);
       Alert.alert("Success", response.data.message);
       // Navigate to home screen or protected route
-      navigation.navigate("Profile");
+      navigation.navigate("MyTabs");
     } catch (error) {
       console.error(error);
       if (

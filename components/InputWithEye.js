@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 export default function InputWithEye({placeholder, value, onChangeText}) {
   
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [activeIcon, setActiveIcon] = useState(true);
 
   const handleHiddenPassword = () => {

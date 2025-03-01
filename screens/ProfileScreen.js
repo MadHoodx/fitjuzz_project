@@ -19,6 +19,8 @@ import IconEntypo from "react-native-vector-icons/Entypo";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import IconFontisto from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
+import { jwtDecode } from 'jwt-decode';
 
 export default function ProfileScreen({}) {
   const [weight, setWeight] = useState(0);
@@ -31,18 +33,35 @@ export default function ProfileScreen({}) {
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [username, setUsername] = useState("");
 
-  const haddleLogout  = async () => {
+  const fetchUsername = async () => {  // Define fetchUsername outside useEffect
     try {
-      await AsyncStorage.removeItem('token');
-      console.log("Successfully log out")
-      navigation.navigate("Main")
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        setUsername(decodedToken.user.username);
+        console.log(decodedToken)
+      }
+    } catch (error) {
+      console.error('Error fetching username:', error);
     }
-    catch (error) {
-      console.log("Log out failed")
+  };
+
+  useEffect(() => {
+    fetchUsername();  // Call fetchUsername inside useEffect
+  },);
+
+  const haddleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      console.log("Successfully log out");
+      navigation.navigate("Main");
+    } catch (error) {
+      console.log("Log out failed");
     }
-  }
+  };
 
   const handleEditWeight = () => {
     setModalVisibleWeight(true);
@@ -96,7 +115,7 @@ export default function ProfileScreen({}) {
             >
               <View>
                 <Text style={{ fontWeight: "bold", fontSize: sizes.size_xl }}>
-                  Username
+                  {username}
                 </Text>
               </View>
               <View style={[ProfileScreenStyle.footer_profile_box]}>
@@ -141,7 +160,7 @@ export default function ProfileScreen({}) {
                   <Text style={[ProfileScreenStyle.header_text]}>Weight</Text>
                   <TouchableOpacity
                     style={[ProfileScreenStyle.button_edit]}
-                    onPress={handleEditWeight} 
+                    onPress={handleEditWeight}
                   >
                     <Text style={[ProfileScreenStyle.button_text]}>Edit</Text>
                     <IconEntypo
@@ -251,7 +270,10 @@ export default function ProfileScreen({}) {
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>Height</Text>
-                  <TouchableOpacity style={[ProfileScreenStyle.button_edit]} onPress={handleEditHeight} >
+                  <TouchableOpacity
+                    style={[ProfileScreenStyle.button_edit]}
+                    onPress={handleEditHeight}
+                  >
                     <Text style={[ProfileScreenStyle.button_text]}>Edit</Text>
                     <IconEntypo
                       name={"edit"}
@@ -362,7 +384,10 @@ export default function ProfileScreen({}) {
                   <Text style={[ProfileScreenStyle.header_text]}>
                     Body fat %
                   </Text>
-                  <TouchableOpacity style={[ProfileScreenStyle.button_edit]} onPress={handleEditFat}>
+                  <TouchableOpacity
+                    style={[ProfileScreenStyle.button_edit]}
+                    onPress={handleEditFat}
+                  >
                     <Text style={[ProfileScreenStyle.button_text]}>Edit</Text>
                     <IconEntypo
                       name={"edit"}
@@ -503,7 +528,10 @@ export default function ProfileScreen({}) {
               </View>
             </View>
           </View>
-          <TouchableOpacity style={[styles.button, styles.buttonText]}  onPress={haddleLogout} >
+          <TouchableOpacity
+            style={[styles.button, styles.buttonText]}
+            onPress={haddleLogout}
+          >
             <Text style={[styles.buttonText]}>Log out</Text>
           </TouchableOpacity>
         </View>

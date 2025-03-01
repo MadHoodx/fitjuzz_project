@@ -41,7 +41,7 @@ export default function SignupScreen({ updateActiveScreen }) {
       );
       console.log("Signup response:", response.data); // Log response data
       Alert.alert("Success", response.data.message);
-      navigation.navigate("Profile");
+      navigation.navigate("MyTabs");
     } catch (error) {
       console.error("Signup error:", error); // Log error
       Alert.alert("Error", "An error occurred during signup.");
