@@ -98,6 +98,12 @@ const styles = StyleSheet.create({
     fontSize: sizes.size_base,
     fontWeight: 'bold',
     color: colors.clr_gray
+  },
+  message__box: {
+    borderWidth: 2,
+    borderColor: 'black',
+    width: 20,
+    height: 20
   }
 });
 

@@ -33,7 +33,7 @@ const header = StyleSheet.create ({
         paddingHorizontal: 16,
         backgroundColor: colors.clr_slate, 
         borderRadius: 20,
-        marginTop: -10, 
+        marginTop: -20, 
     },
     header__section: {
         flexDirection: 'row',

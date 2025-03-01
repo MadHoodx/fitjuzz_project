@@ -35,7 +35,7 @@ const SigninScreenStyle = StyleSheet.create({
   button__box: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 12,
+    gap: 20,
   },
   button: {
     paddingVertical: 14,

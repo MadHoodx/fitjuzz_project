@@ -51,7 +51,7 @@ const headerAlternative = StyleSheet.create ({
         paddingHorizontal: 40,
         backgroundColor: colors.clr_slate, 
         borderRadius: 20,
-        marginTop: -10, 
+        marginTop: -20, 
     },
     button__section: {
         flexDirection: 'row',
