@@ -29,6 +29,7 @@ export const colors = {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginHorizontal: 0,
     paddingHorizontal: 40,
     marginTop: Platform.OS === "android" ? sizes.size_5xl : 0,
