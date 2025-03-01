@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-import "react-native-gesture-handler";
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet } from "react-native";
-import HomeScreen from "./screens/HomeScreen";
-import NoteScreen from "./screens/NoteScreen";
-import WelcomeScreen from "./screens/WelcomScreen";
-import TimerScreen from "./screens/TimerScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import { colors, sizes } from "./styles/style";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import IconAntDesign from "react-native-vector-icons/AntDesign";
-import MainScreen from "./screens/MainScreen";
-import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
-import SigninScreen from "./screens/SigninScreen";
-=======
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
