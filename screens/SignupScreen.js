@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import styles, { sizes } from "../styles/style";
 import SignupScreenStyle from "../styles/components/SignupScreenStyle";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -14,22 +21,30 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
     try {
-      console.log('Sending signup request:', { username, email, password }); // Log request data
-      const response = await axios.post('http://192.168.221.234:5000/api/signup', {
-        username,
-        email,
-        password,
-      });
-      console.log('Signup response:', response.data); // Log response data
-      Alert.alert('Success', response.data.message);
-      navigation.navigate("Welcome")
-      
+      console.log("Sending signup request:", { username, email, password }); // Log request data
+      const response = await axios.post(
+        "http://192.168.221.234:5000/api/signup",
+        {
+          username,
+          email,
+          password,
+        }
+      );
+      console.log("Signup response:", response.data); // Log response data
+      Alert.alert("Success", response.data.message);
+      navigation.navigate("Profile");
     } catch (error) {
-      console.error('Signup error:', error); // Log error
-      Alert.alert('Error', 'An error occurred during signup.');
+      console.error("Signup error:", error); // Log error
+      Alert.alert("Error", "An error occurred during signup.");
       // ... error handling ...
     }
   };
@@ -55,7 +70,11 @@ export default function SignupScreen({ updateActiveScreen }) {
           value={password}
           onChangeText={setPassword}
         ></InputWithEye>
-        <InputWithEye placeholder={"Confirm Password"}></InputWithEye>
+        <InputWithEye
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder={"Confirm Password"}
+        ></InputWithEye>
       </View>
       <View style={SignupScreenStyle.button__section}>
         <TouchableOpacity style={styles.button} onPress={handleSignup}>

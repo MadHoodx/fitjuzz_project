@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 import SigninScreenStyle from "../styles/components/SigninScreenStyle";
 import { useNavigation } from "@react-navigation/native";
@@ -23,49 +30,52 @@ export default function SigninScreen({ updateActiveScreen }) {
 
   const iconName = activeIcon === true ? "eye" : "eye-off";
 
-
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const checkToken = async () => {
-        const token = await AsyncStorage.getItem('token');
-        if (token) {
-            // Validate token on server if needed
-            navigation.navigate('Home'); // Or your protected screen
-        }
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        // Validate token on server if needed
+        navigation.navigate("Home"); // Or your protected screen
+      }
     };
     checkToken();
-  },)
+  });
 
   const handleSignin = async () => {
-    console.log('Sending signin request:', {email, password});
+    console.log("Sending signin request:", { email, password });
     try {
-      const response =  await axios.post('http://192.168.221.234:5000/api/signin', { // Replace with your server IP
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://192.168.221.234:5000/api/signin",
+        {
+          // Replace with your server IP
+          email,
+          password,
+        }
+      );
 
       // Store token in AsyncStorage (for persistent login)
       // await AsyncStorage.setItem('token', response.data.token);
 
-      console.log('Signin response:', response.data);
-      Alert.alert('Success', response.data.message);
+      console.log("Signin response:", response.data);
+      Alert.alert("Success", response.data.message);
       // Navigate to home screen or protected route
-      navigation.navigate("Profile")
-      
+      navigation.navigate("Profile");
     } catch (error) {
       console.error(error);
-      if (error.response && error.response.data && error.response.data.message) {
-        Alert.alert('Error', error.response.data.message);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        Alert.alert("Error", error.response.data.message);
       } else {
-        Alert.alert('Error', 'An error occurred during signin.');
+        Alert.alert("Error", "An error occurred during signin.");
       }
     }
   };
-
-
 
   return (
     <View style={[styles.container]}>
@@ -75,8 +85,6 @@ export default function SigninScreen({ updateActiveScreen }) {
           { borderColor: "purple", paddingTop: 20 },
         ]}
       >
-
-
         <TextInput
           style={[styles.input__box]}
           placeholder="Email"
@@ -84,30 +92,13 @@ export default function SigninScreen({ updateActiveScreen }) {
           onChangeText={setEmail}
         />
 
-        <View style={styles.input__subsection}>
-          <TextInput
-            secureTextEntry={visible}
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TouchableOpacity onPress={handleHiddenPassword}
-           placeholder={"Password"}>
-            <Icon
-              name={iconName}
-              size={20}
-              color="#888"
-              style={{ marginRight: 20 }}
-            />
-          </TouchableOpacity>
-        </View>
+        <InputWithEye
+          value={password}
+          onChangeText={setPassword}
+          placeholder={"Password"}
+        ></InputWithEye>
 
-        {/* <InputWithEye 
-        value={password}
-        onChangeText={setPassword} placeholder={"Password"}></InputWithEye> */}
-
-        <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')}>
+        <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
             Forget Password?
           </Text>

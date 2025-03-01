@@ -5,7 +5,7 @@ import { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 
 
-export default function InputWithEye({placeholder}) {
+export default function InputWithEye({placeholder, value, onChangeText}) {
   
   const [visible, setVisible] = useState(false);
   const [activeIcon, setActiveIcon] = useState(true);
@@ -25,6 +25,8 @@ export default function InputWithEye({placeholder}) {
               secureTextEntry={visible}
               style={styles.input}
               placeholder={placeholder}
+              value={value}
+              onChangeText={onChangeText}
             />
             <TouchableOpacity onPress={handleHiddenPassword}>
               <Icon
