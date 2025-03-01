@@ -18,8 +18,9 @@ import IconIonIcons from "react-native-vector-icons/Ionicons";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import IconFontisto from "react-native-vector-icons/Fontisto";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function ProfileScreen({updateActiveScreen}) {
+export default function ProfileScreen({}) {
   const [weight, setWeight] = useState(0);
   const [tempWeight, setTempWeight] = useState(0);
   const [height, setHeight] = useState(0);
@@ -31,6 +32,17 @@ export default function ProfileScreen({updateActiveScreen}) {
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
 
   const navigation = useNavigation()
+
+  const haddleLogout  = async () => {
+    try {
+      await AsyncStorage.removeItem('token');
+      console.log("Successfully log out")
+      navigation.navigate("Main")
+    }
+    catch (error) {
+      console.log("Log out failed")
+    }
+  }
 
   const handleEditWeight = () => {
     setModalVisibleWeight(true);
@@ -491,7 +503,7 @@ export default function ProfileScreen({updateActiveScreen}) {
               </View>
             </View>
           </View>
-          <TouchableOpacity style={[styles.button, styles.buttonText]}  onPress={() => navigation.navigate("SigninScreen")} >
+          <TouchableOpacity style={[styles.button, styles.buttonText]}  onPress={haddleLogout} >
             <Text style={[styles.buttonText]}>Log out</Text>
           </TouchableOpacity>
         </View>
