@@ -199,7 +199,9 @@ export default function ProfileScreen({}) {
                 source={require("../assets/images/profileplaceholder.jpeg")}
                 style={{ width: 100, height: 100 }}
               />
+              
             </View>
+            
             <View
               style={{
                 justifyContent: "space-between",

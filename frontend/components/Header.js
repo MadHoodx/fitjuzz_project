@@ -20,10 +20,11 @@ export default function Header({}) {
   const [emoji, setEmoji] = useState("");
 
   const motivationalQuote = [
-    "As twilight paints the sky, let your spirit take flight.",
-    "The worldis a stage, and your workout is your spotlight.",
-    "As stars begin to gleam, chase the dreams that shimmer within.",
-    "Let your workout be a dance of dedication.",
+    " As twilight paints the sky, let your spirit take flight.",
+    " The worldis a stage, and your workout is your spotlight.",
+    " As stars begin to gleam, chase the dreams that shimmer within.",
+    " Let your workout be a dance of dedication.",
+    " เกินเที่ยงคืนแล้วไปนอนอย่าเบียว"
   ];
 
   useEffect(() => {
@@ -58,7 +59,11 @@ export default function Header({}) {
       setGreeting("Good night");
       setQuote(motivationalQuote[3]);
       setEmoji("moon");
-    } 
+    } else{
+      setGreeting("ไปนอนไอสัส");
+      setQuote(motivationalQuote[4]);
+      setEmoji('battery-charging')
+    }
   };
 
   const fetchUsername = async () => {
@@ -122,7 +127,7 @@ export default function Header({}) {
               width: 250,
             }}
           >
-            Motavaltional quote:
+            Motavaltional quote : 
             <Text
               style={[
                 styles.whiteText,
@@ -138,7 +143,7 @@ export default function Header({}) {
           name={emoji}
           size={35}
           color={colors.clr_white}
-        ></IconFeather>
+        />
       </View>
     </View>
   );

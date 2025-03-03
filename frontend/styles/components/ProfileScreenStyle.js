@@ -48,6 +48,10 @@ const ProfileScreenStyle = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center'
   },
+  edit_profile_image:{
+width:50, height:50, backgroundColor:'red'
+
+  },
   footer_profile_box: {
     justifyContent: "space-between",
     flexDirection: "row",
