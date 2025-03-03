@@ -12,7 +12,6 @@ import SigninScreenStyle from "../styles/components/SigninScreenStyle";
 import { useNavigation } from "@react-navigation/native";
 import InputWithEye from "../components/InputWithEye";
 import { useState } from "react";
-import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect } from "react";
 
 // API client
@@ -30,8 +29,7 @@ export default function SigninScreen({ updateActiveScreen }) {
     const checkToken = async () => {
       token = await AsyncStorage.getItem("token");
       if (token) {
-        // Validate token on server if needed
-        navigation.navigate("MyTabs"); // Or your protected screen
+        navigation.navigate("MyTabs");
       }
     };
     checkToken();
@@ -58,15 +56,7 @@ export default function SigninScreen({ updateActiveScreen }) {
       navigation.navigate("MyTabs");
     } catch (error) {
       console.error(error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        Alert.alert("Error", error.response.data.message);
-      } else {
-        Alert.alert("Error", "An error occurred during signin.");
-      }
+      Alert.alert("Error", "An error occurred during signin.", error);
     }
   };
 

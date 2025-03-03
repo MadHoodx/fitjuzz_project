@@ -13,30 +13,77 @@ import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Header() {
+
+export default function Header({}) {
   const [username, setUsername] = useState("");
   const [greeting, setGreeting] = useState("");
+  const [quote, setQuote] = useState("qd");
+
+
+
+  const motivationalQuote = [
+    "As twilight paints the sky, let your spirit take flight.",
+    "The worldis a stage, and your workout is your spotlight.",
+    "As stars begin to gleam, chase the dreams that shimmer within.",
+    "Let your workout be a dance of dedication.",
+    
+  ];
+
+
+
+
+
+
+
+  useEffect(() => {
+  
+    fetchUsername();
+    calGreeting();
+    // randomMotivationalQuote()
+ 
+    
+  },);
+
+  const randomMotivationalQuote = () => {
+    const randomIndex = Math.floor(Math.random() * motivationalQuote.length);
+
+    const item = motivationalQuote[randomIndex];
+
+    setQuote(item)
+  
+
+  
+  };
+
+ 
+
 
   const calGreeting = () => {
     const date = new Date();
     const todayHours = date.getHours();
-    console.log(date);
-    console.log(todayHours);
 
+ 
     if (todayHours >= 6 && todayHours < 12) {
       setGreeting("Good morning");
+      setQuote(motivationalQuote[0])
     } else if (todayHours >= 12 && todayHours < 15) {
       setGreeting("Good afternoon");
+      setQuote(motivationalQuote[1])
     } else if (todayHours >= 15 && todayHours < 19) {
       setGreeting("Good evening");
-    } else if (todayHours >= 19) {
-      setGreeting("Good night");
-    }
+      setQuote(motivationalQuote[2])
+    } 
+    else if (todayHours >= 19 && todayHours < 23) {
+      setGreeting("Good evening");
+      setQuote(motivationalQuote[3])
+    } 
+
   };
 
   const fetchUsername = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
+     
       if (token) {
         const decodedToken = jwtDecode(token);
         setUsername(decodedToken.user.username);
@@ -46,10 +93,7 @@ export default function Header() {
     }
   };
 
-  useEffect(() => {
-    fetchUsername();
-    calGreeting();
-  }, );
+
 
   return (
     <View style={[header.container]}>
@@ -66,7 +110,9 @@ export default function Header() {
       >
         Myapp
       </Text>
-      <View style={header.header__section}>
+      <View
+        style={[header.header__section, { borderColor: "red", borderWidth: 2 }]}
+      >
         <View style={header.header__details}>
           <Text
             style={[
@@ -76,12 +122,21 @@ export default function Header() {
           >
             {greeting}: {username}
           </Text>
-          <Text style={{ color: colors.clr_gray }}>
-            Today, your program are :
-            <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
-              {" "}
-              (leg)
+          <Text
+            style={{
+              color: colors.clr_gray,
+              borderColor: "red",
+              borderWidth: 2,
+            
+              width: 320,
+        
+            }}
+          >
+            Motavaltional quote: 
+            <Text style={[styles.whiteText, { fontWeight: "bold", borderWidth: 2, borderColor: 'blue'}]}>
+              {quote}
             </Text>
+      
           </Text>
         </View>
         <TouchableOpacity>
