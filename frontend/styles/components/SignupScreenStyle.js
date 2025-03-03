@@ -55,6 +55,12 @@ const SignupScreenStyle = StyleSheet.create({
     marginBottom: 10, 
     gap: 4
   },
+  error: {
+    textAlign: 'left',
+    paddingLeft: 16,
+    color: 'red',
+    fontSize: sizes.size_base
+  }
 });
 
 export default SignupScreenStyle;

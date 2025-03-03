@@ -24,6 +24,8 @@ export default function SigninScreen({ updateActiveScreen }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(0)
 
   useEffect(() => {
     const checkToken = async () => {
@@ -38,7 +40,7 @@ export default function SigninScreen({ updateActiveScreen }) {
   const handleSignin = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.221.234:5000/api/user/signin",
+        "http://192.168.69.13:5000/api/user/signin",
         {
           email,
           password,
@@ -56,7 +58,10 @@ export default function SigninScreen({ updateActiveScreen }) {
       navigation.navigate("MyTabs");
     } catch (error) {
       console.error(error);
+      setLoading(1)
+      setError('placeholder')
       Alert.alert("Error", "An error occurred during signin.", error);
+
     }
   };
 
@@ -80,7 +85,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           onChangeText={setPassword}
           placeholder={"Password"}
         ></InputWithEye>
-
+        { loading ? <Text style={SigninScreenStyle.error}> Sorry, looks like that’s the wrong email or password. {error}</Text> : null}
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
             Forget Password?
