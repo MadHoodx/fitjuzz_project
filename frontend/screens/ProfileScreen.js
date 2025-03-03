@@ -202,7 +202,7 @@ export default function ProfileScreen({}) {
               }}
             >
               <View>
-                <Text style={{ fontWeight: "bold", fontSize: sizes.size_xl }}>
+                <Text style={{ fontWeight: "bold", fontSize: sizes.size_3xl }}>
                   {username}
                 </Text>
               </View>
