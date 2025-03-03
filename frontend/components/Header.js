@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   Platform,
 } from "react-native";
@@ -31,13 +30,11 @@ export default function Header({}) {
     fetchUsername();
     calGreeting();
     // randomMotivationalQuote()
-  });
+  },);
 
   const randomMotivationalQuote = () => {
     const randomIndex = Math.floor(Math.random() * motivationalQuote.length);
-
     const item = motivationalQuote[randomIndex];
-
     setQuote(item);
   };
 
@@ -57,17 +54,16 @@ export default function Header({}) {
       setGreeting("Good evening");
       setQuote(motivationalQuote[2]);
       setEmoji("sunset");
-    } else if (todayHours >= 19 && todayHours < 23) {
+    } else if (todayHours >= 19 && todayHours < 24) {
       setGreeting("Good night");
       setQuote(motivationalQuote[3]);
       setEmoji("moon");
-    }
+    } 
   };
 
   const fetchUsername = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-
       if (token) {
         const decodedToken = jwtDecode(token);
         setUsername(decodedToken.user.username);
