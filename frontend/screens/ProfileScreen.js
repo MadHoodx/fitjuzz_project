@@ -27,7 +27,7 @@ import axios from "axios";
 
 export default function ProfileScreen({}) {
   const [weight, setWeight] = useState(0);
-  const [tempWeight, setTempWeight] = useState(0);
+  const [tempWeight, setTempWeight] = useState('');
   const [height, setHeight] = useState(0);
   const [tempHeight, setTempHeight] = useState(0);
   const [fat, setFat] = useState(0);
@@ -35,44 +35,70 @@ export default function ProfileScreen({}) {
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
-
+  
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
+
+  // const { userId } = route.params;
   
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token');
+  //       console.log(token)
+  //       if (token) {
+          
+  //         const response = await axios.get(`http://192.168.221.234:5000/api/user/${userId}`);
+  //         setWeight(String(response.data.weight)); // Initialize weight input
 
+  //       }
+  //        // Replace with your server IP
+        
+  //       setWeight(String(response.data.weight)); // Initialize weight input
 
+  //     } catch (error) {
+  //       console.error('Error fetching user:', error);
+        
+  //     }
+  //   };
 
+  //   fetchUser();
+  // }, [userId]);
   
-  const fetchProfileData = async () => {  // Define fetchUsername outside useEffect
-    try {
-      const token = await AsyncStorage.getItem('token');
-
-      if (token) {
-        const decodedToken = jwtDecode(token);
-        setUsername(decodedToken.user.username);
-        setWeight(decodedToken.user.weight);
-        setHeight(decodedToken.user.height);
-        setFat(decodedToken.user.fat);
+  // const fetchProfileData = async () => {  // Define fetchUsername outside useEffect
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     console.log(token)
+  //     if (token) {
+  //       const decodedToken = jwtDecode(token);
+  //       setUsername(decodedToken.user.username);
+  //       setWeight(decodedToken.user.weight);
+  //       setHeight(decodedToken.user.height);
+  //       setFat(decodedToken.user.fat);
 
           
 
-      }
-    } catch (error) {
-      console.error('Error fetching profile data:', error);
-    }
-  };
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching profile data:', error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchProfileData();
-  },[]);
+  // useEffect(() => {
+  //   fetchProfileData();
+  // },[]);
 
   const handleWeightUpdate = async () => {
+
+    
     try {
       const token = await AsyncStorage.getItem('token');
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.user.id;
 
-      const response = await axios.put(`http://192.168.221.234:5000/api/users/${userId}/weight`, {
+      console.log(decodedToken.user.id)
+
+
+      await axios.post(`http://192.168.221.234:5000/api/user/${userId}/updateWeight`, {
         weight: parseFloat(weight) // Convert weight to number
       });
 
@@ -82,7 +108,8 @@ export default function ProfileScreen({}) {
       setWeight(weight)
       setModalVisibleWeight(false)
     } catch (error) {
-      console.error('Error updating weight:', error);
+     
+     
       Alert.alert('Error', 'An error occurred while updating weight.');
     }
   };
@@ -197,7 +224,7 @@ export default function ProfileScreen({}) {
             >
               <View>
                 <Text style={{ fontWeight: "bold", fontSize: sizes.size_xl }}>
-                  {username}
+                  username
                 </Text>
               </View>
               <View style={[ProfileScreenStyle.footer_profile_box]}>
@@ -306,8 +333,8 @@ export default function ProfileScreen({}) {
                       marginBottom: 5,
                     }}
                     keyboardType="numeric"
-                    // value={tempWeight}
-                    onChangeText={(text) => setWeight(text)}
+                    value={tempWeight}
+                    onChangeText={(text) => setTempWeight(text)}
                   />
                   <View
                     style={{

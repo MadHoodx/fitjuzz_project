@@ -21,14 +21,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
-
+  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
+      token = await AsyncStorage.getItem("token");
       if (token) {
         // Validate token on server if needed
         navigation.navigate("MyTabs"); // Or your protected screen
@@ -38,26 +38,22 @@ export default function SigninScreen({ updateActiveScreen }) {
   }, );
 
   const handleSignin = async () => {
-    console.log("Sending signin request:", { email, password });
+    
     try {
       const response = await axios.post(
-        "http://192.168.221.234:5000/api/signin",
+        "http://192.168.221.234:5000/api/user/signin",
         {
-          // Replace with your server IP
           email,
           password,
         }
       );
 
-      // Store token in AsyncStorage (for persistent login)
-      await AsyncStorage.setItem('token', response.data.token);
-      console.log("Token stored:", response.data.token); 
-      
-
-      console.log("Signin response:", response.data);
+      console.log("Sending signin request:", { email, password });
+      await AsyncStorage.setItem("token", response.data.token);
+      console.log("Token stored: ", response.data.token)
       Alert.alert("Success", response.data.message);
-      // Navigate to home screen or protected route
       navigation.navigate("MyTabs");
+
     } catch (error) {
       console.error(error);
       if (

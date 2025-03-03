@@ -59,7 +59,7 @@ const header = StyleSheet.create ({
     header__section: {
         flexDirection: 'row',
         marginTop: 28,
-        gap: 40,
+        justifyContent: 'space-between'
 
     },
     header__details: {
