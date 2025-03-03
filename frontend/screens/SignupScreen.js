@@ -10,11 +10,12 @@ import {
 import styles, { sizes } from "../styles/style";
 import SignupScreenStyle from "../styles/components/SignupScreenStyle";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import InputWithEye from "../components/InputWithEye";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 export default function SignupScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
@@ -23,7 +24,6 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
@@ -35,6 +35,7 @@ export default function SignupScreen({ updateActiveScreen }) {
       console.log("Sending signup request:", { username, email, password }); // Log request data
       const response = await axios.post(
         "http://192.168.221.234:5000/api/user/signup",
+
         {
           username,
           email,
@@ -42,9 +43,13 @@ export default function SignupScreen({ updateActiveScreen }) {
         }
       );
 
+      await AsyncStorage.setItem("token", response.data.token);
+      const decodedToken = jwtDecode(response.data.token);
 
-    
+      console.log(decodedToken);
+
       Alert.alert("Success", response.data.message);
+
       navigation.navigate("MyTabs");
     } catch (error) {
       console.error("Signup error:", error); // Log error

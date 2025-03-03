@@ -1,4 +1,4 @@
-const user = require("../models/user");
+const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -8,13 +8,13 @@ const userController = {
 
     try {
       // Check if user exists
-      const checkUser = await user.findOne({ email });
-      if (!checkUser) {
+      const user = await userModel.findOne({ email });
+      if (!user) {
         return res.status(400).json({ message: "Invalid credentials" });
       }
 
       // Check password
-      const isMatch = await bcrypt.compare(password, checkUser.password);
+      const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(400).json({ message: "Invalid credentials" });
       }
@@ -48,29 +48,27 @@ const userController = {
     const { username, email, password } = req.body;
 
     try {
-      const checkUser = await user.findOne({ $or: [{ username }, { email }] });
+      const user = await userModel.findOne({ $or: [{ username }, { email }] });
 
-      if (checkUser) {
+      if (user) {
         return res.status(200).json({ message: "User already exist" });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 12)
+      const hashedPassword = await bcrypt.hash(password, 12);
 
-      const newUser = new user({
+      const newUser = new userModel({
         username,
         email,
         password: hashedPassword,
       });
 
       await newUser.save();
+      console.log(newUser);
 
       const payload = {
         user: {
           id: newUser.id,
           username: newUser.username,
-          weight: newUser.weight,
-          height: newUser.height,
-          fat: newUser.fat,
         },
       };
 
@@ -83,33 +81,26 @@ const userController = {
           res.json({ token, message: "Signup successful" }); //send token and success message
         }
       );
-
-
     } catch (error) {
       return error;
     }
   },
   profile: async (req, res) => {
-    try {
+    const userId = req.params.id;
 
-        
-      
-     
-  
-      const user = await user.findById(req.params.id).select('-password'); // Exclude password from response
-  
+    try {
+      const user = await userModel.findById(userId).select("-password"); // Exclude password from response
+
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: "User not found" });
       }
-  
+
       res.json(user);
     } catch (error) {
-      console.error('Error fetching profile:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error("Error fetching profile:", error);
+      res.status(500).json({ message: "Server error" });
     }
-  }
-  
+  },
 };
 
 module.exports = userController;
-

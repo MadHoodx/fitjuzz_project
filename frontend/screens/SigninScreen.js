@@ -18,10 +18,10 @@ import { useEffect } from "react";
 // API client
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
-  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,10 +35,9 @@ export default function SigninScreen({ updateActiveScreen }) {
       }
     };
     checkToken();
-  }, );
+  });
 
   const handleSignin = async () => {
-    
     try {
       const response = await axios.post(
         "http://192.168.221.234:5000/api/user/signin",
@@ -50,10 +49,13 @@ export default function SigninScreen({ updateActiveScreen }) {
 
       console.log("Sending signin request:", { email, password });
       await AsyncStorage.setItem("token", response.data.token);
-      console.log("Token stored: ", response.data.token)
+      const decodedToken = jwtDecode(response.data.token);
+
+      console.log(decodedToken);
+
+      console.log("Token stored: ", response.data.token);
       Alert.alert("Success", response.data.message);
       navigation.navigate("MyTabs");
-
     } catch (error) {
       console.error(error);
       if (

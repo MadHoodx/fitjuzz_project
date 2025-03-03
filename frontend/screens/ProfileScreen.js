@@ -25,6 +25,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 export default function ProfileScreen({}) {
+  const [username, setUsername] = useState("");
   const [weight, setWeight] = useState(0);
   const [tempWeight, setTempWeight] = useState(0);
   const [height, setHeight] = useState(0);
@@ -38,75 +39,30 @@ export default function ProfileScreen({}) {
 
   const navigation = useNavigation();
 
-  // const { userId } = route.params;
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const token = await AsyncStorage.getItem('token');
-  //       console.log(token)
-  //       if (token) {
-
-  //         const response = await axios.get(`http://192.168.221.234:5000/api/user/${userId}`);
-  //         setWeight(String(response.data.weight)); // Initialize weight input
-
-  //       }
-  //        // Replace with your server IP
-
-  //       setWeight(String(response.data.weight)); // Initialize weight input
-
-  //     } catch (error) {
-  //       console.error('Error fetching user:', error);
-
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, [userId]);
-
-  // const fetchProfileData = async () => {  // Define fetchUsername outside useEffect
-  //   try {
-  //     const token = await AsyncStorage.getItem('token');
-  //     console.log(token)
-  //     if (token) {
-  //       const decodedToken = jwtDecode(token);
-  //       setUsername(decodedToken.user.username);
-  //       setWeight(decodedToken.user.weight);
-  //       setHeight(decodedToken.user.height);
-  //       setFat(decodedToken.user.fat);
-
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching profile data:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchProfileData();
-  // },[]);
-
-  const [username, setUsername] = useState("");
-
-  const fetchProfileData = async () => {
-    // Define fetchUsername outside useEffect
-    try {
-      const token = await AsyncStorage.getItem("token");
-
-      if (token) {
-        const decodedToken = jwtDecode(token);
-        setUsername(decodedToken.user.username);
-        setWeight(decodedToken.user.weight);
-        setHeight(decodedToken.user.height);
-        setFat(decodedToken.user.fat);
-      }
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchProfileData();
-  }, []);
+    const fetchUser = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.user.id;
+
+        if (token) {
+          const response = await axios.get(
+            `http://192.168.221.234:5000/api/user/${userId}/profile`
+          );
+          setUsername(response.data.username);
+
+          setWeight(response.data.weight);
+          setHeight(response.data.height);
+          setFat(response.data.fat);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchUser();
+  });
 
   const handleWeightUpdate = async () => {
     try {
@@ -116,26 +72,16 @@ export default function ProfileScreen({}) {
 
       console.log(decodedToken.user.id);
 
-      await axios.post(
+      await axios.put(
         `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
         {
-          weight: parseFloat(weight), // Convert weight to number
+          weight: parseFloat(tempWeight),
         }
       );
 
-      const response = await axios.put(
-        `http://192.168.221.234:5000/api/users/${userId}/weight`,
-        {
-          weight: parseFloat(weight), // Convert weight to number
-        }
-      );
-
-      // Alert.alert('Success', 'Weight updated successfully!');
-      setWeight(weight);
+      setWeight(tempWeight);
       setModalVisibleWeight(false);
     } catch (error) {
-      Alert.alert("Error", "An error occurred while updating weight.");
-
       console.error("Error updating weight:", error);
       Alert.alert("Error", "An error occurred while updating weight.");
     }
@@ -147,15 +93,14 @@ export default function ProfileScreen({}) {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.user.id;
 
-      const response = await axios.put(
-        `http://192.168.221.234:5000/api/users/${userId}/height`,
+      await axios.put(
+        `http://192.168.221.234:5000/api/user/${userId}/updateHeight`,
         {
-          height: parseFloat(height), // Convert weight to number
+          height: parseFloat(tempHeight),
         }
       );
 
-      // Alert.alert('Success', 'Height updated successfully!');
-      setHeight(height);
+      setHeight(tempHeight);
       setModalVisibleHeight(false);
     } catch (error) {
       console.error("Error updating height:", error);
@@ -169,14 +114,14 @@ export default function ProfileScreen({}) {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.user.id;
 
-      const response = await axios.put(
-        `http://192.168.221.234:5000/api/users/${userId}/bodyfat`,
+      await axios.put(
+        `http://192.168.221.234:5000/api/user/${userId}/updateFat`,
         {
-          fat: parseFloat(fat), // Convert weight to number
+          fat: parseFloat(tempFat), // Convert weight to number
         }
       );
 
-      setFat(fat);
+      setFat(tempFat);
       setModalVisibleFat(false);
     } catch (error) {
       console.error("Error updating bodyfat:", error);
@@ -196,31 +141,16 @@ export default function ProfileScreen({}) {
 
   const handleEditWeight = () => {
     setModalVisibleWeight(true);
-    // setTempWeight(weight);
   };
 
-  // const handleSaveWeight = (newWeight) => {
-  //   setWeight(newWeight);
-  //   setModalVisibleWeight(false);
-  // };
   const handleEditHeight = () => {
     setModalVisibleHeight(true);
-    // setTempWeight(height);
   };
 
-  // const handleSaveHeight = (newHeight) => {
-  //   setHeight(newHeight);
-  //   setModalVisibleHeight(false);
-  // };
   const handleEditFat = () => {
     setModalVisibleFat(true);
-    // setTempFat(fat);
   };
 
-  // const handleSaveFat = (newFat) => {
-  //   setFat(newFat);
-  //   setModalVisibleFat(false);
-  // };
   const calBmi = () => {
     if (height > 0) {
       const calculatedBmi = fat / Math.pow(height / 100, 2);
@@ -240,7 +170,7 @@ export default function ProfileScreen({}) {
   const getPointerPosition = (value) => {
     if (value < 0) return 0;
     if (value > 40) return 100;
-  
+
     if (value < 18) {
       return (value / 18) * 20; // 0-20%
     } else if (value < 23) {
@@ -273,7 +203,7 @@ export default function ProfileScreen({}) {
             >
               <View>
                 <Text style={{ fontWeight: "bold", fontSize: sizes.size_xl }}>
-                  username
+                  {username}
                 </Text>
               </View>
               <View style={[ProfileScreenStyle.footer_profile_box]}>
@@ -356,7 +286,6 @@ export default function ProfileScreen({}) {
                   <TextInput
                     style={[ProfileScreenStyle.modal_text_input]}
                     keyboardType="numeric"
-                    value={tempWeight}
                     onChangeText={(text) => setTempWeight(text)}
                   />
                   <View style={[ProfileScreenStyle.modal_input_box]} />
@@ -434,8 +363,7 @@ export default function ProfileScreen({}) {
                   <TextInput
                     style={[ProfileScreenStyle.modal_text_input]}
                     keyboardType="numeric"
-                    // value={tempHeight}
-                    onChangeText={(text) => setHeight(text)}
+                    onChangeText={(text) => setTempHeight(text)}
                   />
                   <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
@@ -514,8 +442,7 @@ export default function ProfileScreen({}) {
                   <TextInput
                     style={[ProfileScreenStyle.modal_text_input]}
                     keyboardType="numeric"
-                    // value={tempFat}
-                    onChangeText={(text) => setFat(text)}
+                    onChangeText={(text) => setTempFat(text)}
                   />
                   <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
@@ -555,32 +482,41 @@ export default function ProfileScreen({}) {
                     <View style={[ProfileScreenStyle.header_box_bmi]}>
                       <Text style={[ProfileScreenStyle.bmi_text]}>BMI</Text>
                       <View style={ProfileScreenStyle.textContainer}>
-                        {calculatedBmi < 18 && <IconMaterialCommunityIcons
-                          name={"emoticon-sad"}
-                          size={30}
-                          color={bmiColor}
-                        />}
-                        {(calculatedBmi >= 18 && calculatedBmi < 23) && <IconMaterialCommunityIcons
-                          name={"emoticon-happy"}
-                          size={30}
-                          color={bmiColor}
-                        />}
-                        {(calculatedBmi >= 23 && calculatedBmi < 25) && <IconMaterialCommunityIcons
-                          name={"emoticon-confused"}
-                          size={30}
-                          color={bmiColor}
-                        />}
-                        {(calculatedBmi >= 25 && calculatedBmi < 30) && <IconMaterialCommunityIcons
-                          name={"emoticon-angry"}
-                          size={30}
-                          color={bmiColor}
-                        />}
-                        {calculatedBmi >= 30 && <IconMaterialCommunityIcons
-                          name={"emoticon-dead"}
-                          size={30}
-                          color={bmiColor}
-                        />}
-                        
+                        {calculatedBmi < 18 && (
+                          <IconMaterialCommunityIcons
+                            name={"emoticon-sad"}
+                            size={30}
+                            color={bmiColor}
+                          />
+                        )}
+                        {calculatedBmi >= 18 && calculatedBmi < 23 && (
+                          <IconMaterialCommunityIcons
+                            name={"emoticon-happy"}
+                            size={30}
+                            color={bmiColor}
+                          />
+                        )}
+                        {calculatedBmi >= 23 && calculatedBmi < 25 && (
+                          <IconMaterialCommunityIcons
+                            name={"emoticon-confused"}
+                            size={30}
+                            color={bmiColor}
+                          />
+                        )}
+                        {calculatedBmi >= 25 && calculatedBmi < 30 && (
+                          <IconMaterialCommunityIcons
+                            name={"emoticon-angry"}
+                            size={30}
+                            color={bmiColor}
+                          />
+                        )}
+                        {calculatedBmi >= 30 && (
+                          <IconMaterialCommunityIcons
+                            name={"emoticon-dead"}
+                            size={30}
+                            color={bmiColor}
+                          />
+                        )}
                       </View>
                     </View>
                     <>
