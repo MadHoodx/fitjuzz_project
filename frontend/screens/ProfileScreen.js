@@ -48,10 +48,9 @@ export default function ProfileScreen({}) {
 
         if (token) {
           const response = await axios.get(
-            `http://192.168.221.234:5000/api/user/${userId}/profile`
+            `http://192.168.69.13:5000/api/user/${userId}/profile`
           );
           setUsername(response.data.username);
-
           setWeight(response.data.weight);
           setHeight(response.data.height);
           setFat(response.data.fat);

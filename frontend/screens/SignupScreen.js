@@ -20,6 +20,8 @@ import { jwtDecode } from "jwt-decode";
 export default function SignupScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
 
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(1)
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,13 +30,15 @@ export default function SignupScreen({ updateActiveScreen }) {
   const handleSignup = async () => {
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match");
+      setLoading(1)
+      setError('Passwords do not match')
       return;
     }
 
     try {
       console.log("Sending signup request:", { username, email, password }); // Log request data
       const response = await axios.post(
-        "http://192.168.221.234:5000/api/user/signup",
+        "http://192.168.69.13:5000/api/user/signup",
 
         {
           username,
@@ -52,6 +56,8 @@ export default function SignupScreen({ updateActiveScreen }) {
 
       navigation.navigate("MyTabs");
     } catch (error) {
+           setLoading(1)
+      setError('placeholder')
       console.error("Signup error:", error); // Log error
       Alert.alert("Error", "An error occurred during signup.");
       // ... error handling ...
@@ -84,6 +90,8 @@ export default function SignupScreen({ updateActiveScreen }) {
           onChangeText={setConfirmPassword}
           placeholder={"Confirm Password"}
         ></InputWithEye>
+
+        {loading ? <Text style={SignupScreenStyle.error}> {error} </Text> : null}
       </View>
       <View style={SignupScreenStyle.button__section}>
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
