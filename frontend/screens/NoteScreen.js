@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View, Text, ScrollView } from "react-native";
 import styles, { colors } from "../styles/style";
 import NoteScreenStyle from "../styles/components/NoteScreenStyle";
 import Header from "../components/Header";
@@ -43,7 +43,7 @@ export default function NoteScreen({}) {
         <TouchableOpacity style={[styles.button, { marginBottom: 35 }]}>
           <Text style={[styles.buttonText]}>Start</Text>
         </TouchableOpacity>
-
+        <ScrollView>
         {exercises.map((exercise) => (
           <View
             key={exercise.id}
@@ -66,7 +66,9 @@ export default function NoteScreen({}) {
             + add exercise box
           </Text>
         </TouchableOpacity>
+        </ScrollView>
       </View>
     </View>
   );
 }
+
