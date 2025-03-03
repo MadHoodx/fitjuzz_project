@@ -1,11 +1,10 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../style";
+import { colors, sizes } from "../style";
 
 const TimerScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
- 
   time: {
     fontSize: 60,
     fontWeight: "bold",
@@ -25,41 +24,40 @@ const TimerScreenStyle = StyleSheet.create({
     gap:100
   },
   lapButton: {
-    backgroundColor: "lightgray",
+    backgroundColor: 'lightgray',
     width:60,
     height:60,
     borderRadius: 100,
     justifyContent:'center',
-    
   },
   line:{
     width:300,
-    height:3,
+    height:2,
     backgroundColor:colors.clr_slate,
-    
+    marginTop:3
   },
   startButton: {
-    backgroundColor: "orange",
+    backgroundColor:colors.clr_orange,
     width:60,
     height:60,
     borderRadius: 100,
     justifyContent:'center',
-    
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: sizes.size_base,
     fontWeight: "bold",
     color: "white",
     textAlign:'center'
   },
   lapsContainer: {
     width: "80%",
-    
     alignItems:'center'
   },
   lapText: {
-    fontSize: 18,
+    fontSize: sizes.size_lg,
     marginBottom: 5,
+    marginTop:5,
+    color:'gray'
   },
 });
 
