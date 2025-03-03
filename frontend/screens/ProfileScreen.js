@@ -26,11 +26,12 @@ import axios from "axios";
 
 export default function ProfileScreen({}) {
   const [weight, setWeight] = useState(0);
-  const [tempWeight, setTempWeight] = useState("");
+  const [tempWeight, setTempWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [tempHeight, setTempHeight] = useState(0);
   const [fat, setFat] = useState(0);
   const [tempFat, setTempFat] = useState(0);
+  const [bmi, setBmi] = useState(0);
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
@@ -220,6 +221,43 @@ export default function ProfileScreen({}) {
   //   setFat(newFat);
   //   setModalVisibleFat(false);
   // };
+  const calBmi = () => {
+    if (height > 0) {
+      const calculatedBmi = fat / Math.pow(height / 100, 2);
+      return calculatedBmi.toFixed(2);
+    } else {
+      return "0.00";
+    }
+  };
+  const getBMIColor = (value) => {
+    if (value < 18) return "lightgreen";
+    if (value >= 18 && value < 23) return "green";
+    if (value >= 23 && value < 25) return "pink";
+    if (value >= 25 && value < 30) return "orange";
+    if (value >= 30) return "red";
+  };
+
+  const getPointerPosition = (value) => {
+    if (value < 0) return 0;
+    if (value > 40) return 100;
+  
+    if (value < 18) {
+      return (value / 18) * 20; // 0-20%
+    } else if (value < 23) {
+      return 20 + ((value - 18) / (23 - 18)) * 20; // 20-40%
+    } else if (value < 25) {
+      return 40 + ((value - 23) / (25 - 23)) * 20; // 40-60%
+    } else if (value < 30) {
+      return 60 + ((value - 25) / (30 - 25)) * 20; // 60-80%
+    } else {
+      return 80 + ((value - 30) / (40 - 30)) * 20; // 80-100%
+    }
+  };
+
+  const calculatedBmi = parseFloat(calBmi());
+  const pointerPosition = getPointerPosition(calculatedBmi);
+  const bmiColor = getBMIColor(calculatedBmi);
+
   return (
     <View style={[ProfileScreenStyle.container]}>
       <Header />
@@ -512,36 +550,95 @@ export default function ProfileScreen({}) {
               style={[ProfileScreenStyle.box, { height: 130, width: "48%" }]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
-                <View style={[ProfileScreenStyle.header_box_bmi]}>
-                  <View style>
-                    <Text
-                      style={{
-                        color: colors.clr_slate,
-                        fontSize: sizes.size_2xl,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      BMI
-                    </Text>
-                    <Text
-                      style={{
-                        color: colors.clr_slate,
-                        fontSize: sizes.size_2xl,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      32
-                    </Text>
+                <View>
+                  <View>
+                    <View style={[ProfileScreenStyle.header_box_bmi]}>
+                      <Text style={[ProfileScreenStyle.bmi_text]}>BMI</Text>
+                      <View style={ProfileScreenStyle.textContainer}>
+                        {calculatedBmi < 18 && <IconMaterialCommunityIcons
+                          name={"emoticon-sad"}
+                          size={30}
+                          color={bmiColor}
+                        />}
+                        {(calculatedBmi >= 18 && calculatedBmi < 23) && <IconMaterialCommunityIcons
+                          name={"emoticon-happy"}
+                          size={30}
+                          color={bmiColor}
+                        />}
+                        {(calculatedBmi >= 23 && calculatedBmi < 25) && <IconMaterialCommunityIcons
+                          name={"emoticon-confused"}
+                          size={30}
+                          color={bmiColor}
+                        />}
+                        {(calculatedBmi >= 25 && calculatedBmi < 30) && <IconMaterialCommunityIcons
+                          name={"emoticon-angry"}
+                          size={30}
+                          color={bmiColor}
+                        />}
+                        {calculatedBmi >= 30 && <IconMaterialCommunityIcons
+                          name={"emoticon-dead"}
+                          size={30}
+                          color={bmiColor}
+                        />}
+                        
+                      </View>
+                    </View>
+                    <>
+                      <Text style={[ProfileScreenStyle.bmi_text]}>
+                        {calBmi()}
+                      </Text>
+                    </>
                   </View>
-
-                  <IconMaterialCommunityIcons
-                    name={"emoticon-angry"}
-                    size={30}
-                    color={"red"}
-                  />
                 </View>
-                <View style={[ProfileScreenStyle.body_box_bmi]}>
-                  <View style={[ProfileScreenStyle.bmi_bar]}></View>
+
+                <View style={ProfileScreenStyle.bmiRange}>
+                  <View style={ProfileScreenStyle.rangeLabels}>
+                    <Text style={ProfileScreenStyle.rangeLabel}>0</Text>
+                    <Text style={ProfileScreenStyle.rangeLabel}>18</Text>
+                    <Text style={ProfileScreenStyle.rangeLabel}>23</Text>
+                    <Text style={ProfileScreenStyle.rangeLabel}>25</Text>
+                    <Text style={ProfileScreenStyle.rangeLabel}>30</Text>
+                    <Text style={ProfileScreenStyle.rangeLabel}>40</Text>
+                  </View>
+                  <View style={ProfileScreenStyle.barColors}>
+                    <View
+                      style={[
+                        ProfileScreenStyle.colorBlock,
+                        { backgroundColor: "lightgreen" },
+                      ]}
+                    />
+
+                    <View
+                      style={[
+                        ProfileScreenStyle.colorBlock,
+                        { backgroundColor: "green" },
+                      ]}
+                    />
+                    <View
+                      style={[
+                        ProfileScreenStyle.colorBlock,
+                        { backgroundColor: "pink" },
+                      ]}
+                    />
+                    <View
+                      style={[
+                        ProfileScreenStyle.colorBlock,
+                        { backgroundColor: "orange" },
+                      ]}
+                    />
+                    <View
+                      style={[
+                        ProfileScreenStyle.colorBlock,
+                        { backgroundColor: "red" },
+                      ]}
+                    />
+                    <View
+                      style={[
+                        ProfileScreenStyle.pointer,
+                        { left: `${pointerPosition}%` },
+                      ]}
+                    />
+                  </View>
                 </View>
               </View>
             </View>

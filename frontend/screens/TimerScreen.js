@@ -6,16 +6,17 @@ import styles from "../styles/style";
 import TimerScreenStyle from "../styles/components/TimerScreenStyle";
 
 export default function HomeScreen({}) {
-  const [time, setTime] = useState(0); 
-  const [isRunning, setIsRunning] = useState(false); 
-  const [laps, setLaps] = useState([]); 
-  const intervalRef = useRef(null); 
+  const [time, setTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [laps, setLaps] = useState([]);
+  const intervalRef = useRef(null);
   const startTimeRef = useRef(null);
   const previousTimeRef = useRef(0);
 
   useEffect(() => {
     if (isRunning) {
-      startTimeRef.current = startTimeRef.current ?? Date.now() - previousTimeRef.current;
+      startTimeRef.current =
+        startTimeRef.current ?? Date.now() - previousTimeRef.current;
       intervalRef.current = setInterval(() => {
         setTime(Date.now() - startTimeRef.current);
       }, 10);
@@ -33,7 +34,7 @@ export default function HomeScreen({}) {
 
   const handleReset = () => {
     setTime(0);
-    setLaps([]); 
+    setLaps([]);
     previousTimeRef.current = 0;
   };
 
@@ -58,14 +59,16 @@ export default function HomeScreen({}) {
     <View style={[TimerScreenStyle.container]}>
       <Header />
       <ScrollView style={[TimerScreenStyle.all]}>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: "center" }}>
           <Text style={TimerScreenStyle.time}>{formatTime(time)}</Text>
           <View style={TimerScreenStyle.buttonContainer}>
             <TouchableOpacity
               style={TimerScreenStyle.lapButton}
               onPress={handleLap}
             >
-              <Text style={TimerScreenStyle.buttonText}>{isRunning ? "Lap" : "Reset"}</Text>
+              <Text style={TimerScreenStyle.buttonText}>
+                {isRunning ? "Lap" : "Reset"}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={TimerScreenStyle.startButton}
@@ -77,7 +80,7 @@ export default function HomeScreen({}) {
             </TouchableOpacity>
           </View>
           <View style={[TimerScreenStyle.line]} />
-          
+
           <View style={TimerScreenStyle.lapsContainer}>
             {laps.map((lap, index) => (
               <View key={index}>
