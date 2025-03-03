@@ -153,7 +153,7 @@ export default function ProfileScreen({}) {
 
   const calBmi = () => {
     if (height > 0) {
-      const calculatedBmi = fat / Math.pow(height / 100, 2);
+      const calculatedBmi = weight / Math.pow(height / 100, 2);
       return calculatedBmi.toFixed(2);
     } else {
       return "0.00";
