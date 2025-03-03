@@ -109,10 +109,47 @@ const ProfileScreenStyle = StyleSheet.create({
     gap: 10,
     alignItems: "center",
   },
-  bmi_bar: {
-    width: 105,
+  bmi_text: {
+    color: colors.clr_slate,
+    fontSize: sizes.size_2xl,
+    fontWeight: "bold",
+  },
+  textContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  text: {
+    fontSize: sizes.size_3xs,
+    marginRight: 5,
+  },
+  pointer: {
+    borderLeftWidth: 3,
+    borderRightWidth: 5,
+    borderBottomWidth: 10,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "black",
+    position: "absolute",
+    transform: [{ translateX: -5 }],
+    marginTop: 4,
+  },
+
+  rangeLabels: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  rangeLabel: {
+    fontSize: sizes.size_3xs,
+  },
+  barColors: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 2,
+  },
+  colorBlock: {
+    width: "20%",
     height: 5,
-    backgroundColor: "red",
   },
   box_modal: {
     flex: 1,
