@@ -32,7 +32,7 @@ const TimerScreenStyle = StyleSheet.create({
   },
   line:{
     width:300,
-    height:2,
+    height:1,
     backgroundColor:colors.clr_slate,
     marginTop:3
   },

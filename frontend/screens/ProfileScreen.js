@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   Alert,
+  Image,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -32,7 +33,6 @@ export default function ProfileScreen({}) {
   const [tempHeight, setTempHeight] = useState(0);
   const [fat, setFat] = useState(0);
   const [tempFat, setTempFat] = useState(0);
-  const [bmi, setBmi] = useState(0);
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
@@ -154,6 +154,7 @@ export default function ProfileScreen({}) {
   const calBmi = () => {
     if (height > 0) {
       const calculatedBmi = weight / Math.pow(height / 100, 2);
+
       return calculatedBmi.toFixed(2);
     } else {
       return "0.00";
@@ -194,7 +195,12 @@ export default function ProfileScreen({}) {
       <ScrollView style={[styles.container]}>
         <View style={{ gap: 20 }}>
           <View style={[ProfileScreenStyle.profile_box]}>
-            <View style={[ProfileScreenStyle.profile]}></View>
+            <View style={[ProfileScreenStyle.profile]}>
+              <Image
+                source={require("../assets/images/profileplaceholder.jpeg")}
+                style={{ width: 100, height: 100 }}
+              />
+            </View>
             <View
               style={{
                 justifyContent: "space-between",

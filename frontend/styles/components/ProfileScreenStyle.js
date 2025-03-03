@@ -44,12 +44,13 @@ const ProfileScreenStyle = StyleSheet.create({
     height: 100,
     backgroundColor: "red",
     borderRadius: 100,
+    overflow: 'hidden',
+    justifyContent:'center',
+    alignItems:'center'
   },
   footer_profile_box: {
     justifyContent: "space-between",
-
     flexDirection: "row",
-
     width: 150,
   },
   footer_profile_box_text: {
@@ -131,7 +132,7 @@ const ProfileScreenStyle = StyleSheet.create({
     borderRightColor: "transparent",
     borderBottomColor: "black",
     position: "absolute",
-    transform: [{ translateX: -5 }],
+    transform: [{ translateX: -3 }],
     marginTop: 4,
   },
 
@@ -164,7 +165,7 @@ const ProfileScreenStyle = StyleSheet.create({
     width: "80%",
   },
   modal_header_text_: {
-    fontSize: 20,
+    fontSize: sizes.size_xl,
     fontWeight: "bold",
     marginBottom: 10,
   },
@@ -174,7 +175,7 @@ const ProfileScreenStyle = StyleSheet.create({
     marginBottom: 20,
   },
   modal_text_input: {
-    fontSize: 24,
+    fontSize: sizes.size_2xl,
     fontWeight: "bold",
     marginBottom: 5,
   },
