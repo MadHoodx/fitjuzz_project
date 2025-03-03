@@ -201,7 +201,13 @@ export default function ProfileScreen({}) {
               />
               
             </View>
-            
+            <TouchableOpacity style={[ProfileScreenStyle.edit_profile_image]}>
+            <IconEntypo
+                      name={"edit"}
+                      size={10}
+                      color={colors.clr_gray}
+                    />
+              </TouchableOpacity>
             <View
               style={{
                 justifyContent: "space-between",

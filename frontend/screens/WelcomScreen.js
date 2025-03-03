@@ -8,7 +8,7 @@ export default function WelcomeScreen({ navigation }) {
   return (
     <View style={[styles.container, WelcomeScreenStyle.container]}>
       <Image
-        source={require("../assets/images/placeholder.jpg")}
+        source={require("../assets/images/Welcomimage.png")}
         style={WelcomeScreenStyle.placeholder}
       />
       <Text style={styles.section}></Text>

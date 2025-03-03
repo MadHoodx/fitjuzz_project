@@ -10,7 +10,9 @@ export default function NoteScreen({}) {
     <View style={[NoteScreenStyle.container]}>
       <Header></Header>
       <View style={[styles.container]}>
-
+      <View>
+        <Text>Arm</Text>
+      </View>
       </View>
     </View>
   );

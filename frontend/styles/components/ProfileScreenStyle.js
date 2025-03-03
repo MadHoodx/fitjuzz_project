@@ -44,13 +44,21 @@ const ProfileScreenStyle = StyleSheet.create({
     height: 100,
     backgroundColor: "red",
     borderRadius: 100,
-    overflow: 'hidden',
-    justifyContent:'center',
-    alignItems:'center'
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  edit_profile_image:{
-width:50, height:50, backgroundColor:'red'
-
+  edit_profile_image: {
+    position: "absolute",
+    width: 25,
+    height: 20,
+    backgroundColor: colors.clr_slate,
+    zIndex: 1,
+    top:100,
+    right:195,
+    borderRadius: 20,
+    alignItems:'center',
+    justifyContent:'center'
   },
   footer_profile_box: {
     justifyContent: "space-between",
