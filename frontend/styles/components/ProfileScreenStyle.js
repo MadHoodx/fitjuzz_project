@@ -4,7 +4,6 @@ import { colors, sizes } from "../style";
 const ProfileScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
- 
   },
   box: {
     backgroundColor: "white",
@@ -19,6 +18,8 @@ const ProfileScreenStyle = StyleSheet.create({
     elevation: 8,
     paddingHorizontal: 15,
     paddingVertical: 13,
+    height: 130,
+    width: "48%",
   },
 
   profile_box: {
@@ -33,6 +34,10 @@ const ProfileScreenStyle = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
     padding: 20,
+    height: 150,
+    alignSelf: "stretch",
+    flexDirection: "row",
+    gap: 25,
   },
   profile: {
     width: 100,
@@ -108,6 +113,37 @@ const ProfileScreenStyle = StyleSheet.create({
     width: 105,
     height: 5,
     backgroundColor: "red",
+  },
+  box_modal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  inside_box_modal: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+  },
+  modal_header_text_: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modal_input_box: {
+    borderBottomWidth: 1,
+    borderColor: "gray",
+    marginBottom: 20,
+  },
+  modal_text_input: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  modal_button: {
+    padding: 10,
+    borderRadius: 5,
   },
 });
 

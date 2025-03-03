@@ -21,13 +21,13 @@ import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommun
 import IconFontisto from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 import axios from "axios";
 
 export default function ProfileScreen({}) {
   const [weight, setWeight] = useState(0);
-  const [tempWeight, setTempWeight] = useState('');
+  const [tempWeight, setTempWeight] = useState("");
   const [height, setHeight] = useState(0);
   const [tempHeight, setTempHeight] = useState(0);
   const [fat, setFat] = useState(0);
@@ -35,35 +35,35 @@ export default function ProfileScreen({}) {
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
-  
+
   const navigation = useNavigation();
 
   // const { userId } = route.params;
-  
+
   // useEffect(() => {
   //   const fetchUser = async () => {
   //     try {
   //       const token = await AsyncStorage.getItem('token');
   //       console.log(token)
   //       if (token) {
-          
+
   //         const response = await axios.get(`http://192.168.221.234:5000/api/user/${userId}`);
   //         setWeight(String(response.data.weight)); // Initialize weight input
 
   //       }
   //        // Replace with your server IP
-        
+
   //       setWeight(String(response.data.weight)); // Initialize weight input
 
   //     } catch (error) {
   //       console.error('Error fetching user:', error);
-        
+
   //     }
   //   };
 
   //   fetchUser();
   // }, [userId]);
-  
+
   // const fetchProfileData = async () => {  // Define fetchUsername outside useEffect
   //   try {
   //     const token = await AsyncStorage.getItem('token');
@@ -75,8 +75,6 @@ export default function ProfileScreen({}) {
   //       setHeight(decodedToken.user.height);
   //       setFat(decodedToken.user.fat);
 
-          
-
   //     }
   //   } catch (error) {
   //     console.error('Error fetching profile data:', error);
@@ -87,80 +85,104 @@ export default function ProfileScreen({}) {
   //   fetchProfileData();
   // },[]);
 
-  const handleWeightUpdate = async () => {
+  const [username, setUsername] = useState("");
 
-    
+  const fetchProfileData = async () => {
+    // Define fetchUsername outside useEffect
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
+
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        setUsername(decodedToken.user.username);
+        setWeight(decodedToken.user.weight);
+        setHeight(decodedToken.user.height);
+        setFat(decodedToken.user.fat);
+      }
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
+
+  const handleWeightUpdate = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.user.id;
 
-      console.log(decodedToken.user.id)
+      console.log(decodedToken.user.id);
 
+      await axios.post(
+        `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
+        {
+          weight: parseFloat(weight), // Convert weight to number
+        }
+      );
 
-      await axios.post(`http://192.168.221.234:5000/api/user/${userId}/updateWeight`, {
-        weight: parseFloat(weight) // Convert weight to number
-      });
+      const response = await axios.put(
+        `http://192.168.221.234:5000/api/users/${userId}/weight`,
+        {
+          weight: parseFloat(weight), // Convert weight to number
+        }
+      );
 
-
-      
       // Alert.alert('Success', 'Weight updated successfully!');
-      setWeight(weight)
-      setModalVisibleWeight(false)
+      setWeight(weight);
+      setModalVisibleWeight(false);
     } catch (error) {
-     
-     
-      Alert.alert('Error', 'An error occurred while updating weight.');
+      Alert.alert("Error", "An error occurred while updating weight.");
+
+      console.error("Error updating weight:", error);
+      Alert.alert("Error", "An error occurred while updating weight.");
     }
   };
 
   const handleHeightUpdate = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.user.id;
 
-      const response = await axios.put(`http://192.168.221.234:5000/api/users/${userId}/height`, {
-        height: parseFloat(height) // Convert weight to number
-      });
+      const response = await axios.put(
+        `http://192.168.221.234:5000/api/users/${userId}/height`,
+        {
+          height: parseFloat(height), // Convert weight to number
+        }
+      );
 
-    
-      
       // Alert.alert('Success', 'Height updated successfully!');
-      setHeight(height)
-      setModalVisibleHeight(false)
-
+      setHeight(height);
+      setModalVisibleHeight(false);
     } catch (error) {
-      console.error('Error updating height:', error);
-      Alert.alert('Error', 'An error occurred while updating height.');
+      console.error("Error updating height:", error);
+      Alert.alert("Error", "An error occurred while updating height.");
     }
   };
 
-
   const handleFatUpdate = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.user.id;
 
-    try{
-      const token = await AsyncStorage.getItem('token')
-      const decodedToken = jwtDecode(token)
-      const userId = decodedToken.user.id
-      
-      const response = await axios.put(`http://192.168.221.234:5000/api/users/${userId}/bodyfat`, {
-        fat: parseFloat(fat) // Convert weight to number
-      })
+      const response = await axios.put(
+        `http://192.168.221.234:5000/api/users/${userId}/bodyfat`,
+        {
+          fat: parseFloat(fat), // Convert weight to number
+        }
+      );
 
-      setFat(fat)
-      setModalVisibleFat(false)
+      setFat(fat);
+      setModalVisibleFat(false);
+    } catch (error) {
+      console.error("Error updating bodyfat:", error);
+      Alert.alert("Error", "An error occurred while updating bodyfat.");
     }
-    catch (error) {
-      console.error('Error updating bodyfat:', error);
-      Alert.alert('Error', 'An error occurred while updating bodyfat.');
-    }
-  }
-
-
-
-
-
+  };
 
   const haddleLogout = async () => {
     try {
@@ -204,17 +226,7 @@ export default function ProfileScreen({}) {
       <Header />
       <ScrollView style={[styles.container]}>
         <View style={{ gap: 20 }}>
-          <View
-            style={[
-              ProfileScreenStyle.profile_box,
-              {
-                height: 150,
-                alignSelf: "stretch",
-                flexDirection: "row",
-                gap: 25,
-              },
-            ]}
-          >
+          <View style={[ProfileScreenStyle.profile_box]}>
             <View style={[ProfileScreenStyle.profile]}></View>
             <View
               style={{
@@ -261,9 +273,7 @@ export default function ProfileScreen({}) {
             </View>
           </View>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-            <View
-              style={[ProfileScreenStyle.box, { height: 130, width: "48%" }]}
-            >
+            <View style={[ProfileScreenStyle.box]}>
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>Weight</Text>
@@ -301,48 +311,18 @@ export default function ProfileScreen({}) {
               animationType="slide"
               transparent={true}
             >
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    padding: 20,
-                    width: "80%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      marginBottom: 10,
-                    }}
-                  >
+              <View style={[ProfileScreenStyle.box_modal]}>
+                <View style={[ProfileScreenStyle.inside_box_modal]}>
+                  <Text style={[ProfileScreenStyle.modal_header_text_]}>
                     Edit Weight.
                   </Text>
                   <TextInput
-                    style={{
-                      fontSize: 24,
-                      fontWeight: "bold",
-                      marginBottom: 5,
-                    }}
+                    style={[ProfileScreenStyle.modal_text_input]}
                     keyboardType="numeric"
                     value={tempWeight}
                     onChangeText={(text) => setTempWeight(text)}
                   />
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      borderColor: "gray",
-                      marginBottom: 20,
-                    }}
-                  />
+                  <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
                     style={{
                       flexDirection: "row",
@@ -351,21 +331,19 @@ export default function ProfileScreen({}) {
                   >
                     <TouchableOpacity
                       onPress={() => setModalVisibleWeight(false)}
-                      style={{
-                        backgroundColor: "lightgray",
-                        padding: 10,
-                        borderRadius: 5,
-                      }}
+                      style={[
+                        ProfileScreenStyle.modal_button,
+                        { backgroundColor: "lightgray" },
+                      ]}
                     >
                       <Text>close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={handleWeightUpdate}
-                      style={{
-                        backgroundColor: "green",
-                        padding: 10,
-                        borderRadius: 5,
-                      }}
+                      style={[
+                        ProfileScreenStyle.modal_button,
+                        { backgroundColor: "green" },
+                      ]}
                     >
                       <Text style={{ color: "white" }}>Save</Text>
                     </TouchableOpacity>
@@ -373,9 +351,7 @@ export default function ProfileScreen({}) {
                 </View>
               </View>
             </Modal>
-            <View
-              style={[ProfileScreenStyle.box, { height: 130, width: "48%" }]}
-            >
+            <View style={[ProfileScreenStyle.box]}>
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>Height</Text>
@@ -413,48 +389,18 @@ export default function ProfileScreen({}) {
               animationType="slide"
               transparent={true}
             >
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    padding: 20,
-                    width: "80%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      marginBottom: 10,
-                    }}
-                  >
+              <View style={[ProfileScreenStyle.box_modal]}>
+                <View style={[ProfileScreenStyle.inside_box_modal]}>
+                  <Text style={[ProfileScreenStyle.modal_header_text_]}>
                     Edit Height.
                   </Text>
                   <TextInput
-                    style={{
-                      fontSize: 24,
-                      fontWeight: "bold",
-                      marginBottom: 5,
-                    }}
+                    style={[ProfileScreenStyle.modal_text_input]}
                     keyboardType="numeric"
                     // value={tempHeight}
                     onChangeText={(text) => setHeight(text)}
                   />
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      borderColor: "gray",
-                      marginBottom: 20,
-                    }}
-                  />
+                  <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
                     style={{
                       flexDirection: "row",
@@ -463,21 +409,19 @@ export default function ProfileScreen({}) {
                   >
                     <TouchableOpacity
                       onPress={() => setModalVisibleHeight(false)}
-                      style={{
-                        backgroundColor: "lightgray",
-                        padding: 10,
-                        borderRadius: 5,
-                      }}
+                      style={[
+                        ProfileScreenStyle.modal_button,
+                        { backgroundColor: "lightgray" },
+                      ]}
                     >
                       <Text>close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={handleHeightUpdate}
-                      style={{
-                        backgroundColor: "green",
-                        padding: 10,
-                        borderRadius: 5,
-                      }}
+                      style={[
+                        ProfileScreenStyle.modal_button,
+                        { backgroundColor: "green" },
+                      ]}
                     >
                       <Text style={{ color: "white" }}>Save</Text>
                     </TouchableOpacity>
@@ -485,9 +429,7 @@ export default function ProfileScreen({}) {
                 </View>
               </View>
             </Modal>
-            <View
-              style={[ProfileScreenStyle.box, { height: 130, width: "48%" }]}
-            >
+            <View style={[ProfileScreenStyle.box]}>
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>
@@ -527,48 +469,18 @@ export default function ProfileScreen({}) {
               animationType="slide"
               transparent={true}
             >
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    padding: 20,
-                    width: "80%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      marginBottom: 10,
-                    }}
-                  >
+              <View style={[ProfileScreenStyle.box_modal]}>
+                <View style={[ProfileScreenStyle.inside_box_modal]}>
+                  <Text style={[ProfileScreenStyle.modal_header_text_]}>
                     Edit Body Fat %.
                   </Text>
                   <TextInput
-                    style={{
-                      fontSize: 24,
-                      fontWeight: "bold",
-                      marginBottom: 5,
-                    }}
+                    style={[ProfileScreenStyle.modal_text_input]}
                     keyboardType="numeric"
                     // value={tempFat}
                     onChangeText={(text) => setFat(text)}
                   />
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      borderColor: "gray",
-                      marginBottom: 20,
-                    }}
-                  />
+                  <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
                     style={{
                       flexDirection: "row",
@@ -577,21 +489,19 @@ export default function ProfileScreen({}) {
                   >
                     <TouchableOpacity
                       onPress={() => setModalVisibleFat(false)}
-                      style={{
-                        backgroundColor: "lightgray",
-                        padding: 10,
-                        borderRadius: 5,
-                      }}
+                      style={[
+                        ProfileScreenStyle.modal_button,
+                        { backgroundColor: "lightgray" },
+                      ]}
                     >
                       <Text>close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={handleFatUpdate}
-                      style={{
-                        backgroundColor: "green",
-                        padding: 10,
-                        borderRadius: 5,
-                      }}
+                      style={[
+                        ProfileScreenStyle.modal_button,
+                        { backgroundColor: "green" },
+                      ]}
                     >
                       <Text style={{ color: "white" }}>Save</Text>
                     </TouchableOpacity>
