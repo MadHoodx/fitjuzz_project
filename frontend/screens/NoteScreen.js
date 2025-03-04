@@ -1,10 +1,11 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { TouchableOpacity, View, Text, ScrollView } from "react-native";
+import { TouchableOpacity, View, Text, ScrollView, Modal } from "react-native";
 import styles, { colors } from "../styles/style";
 import NoteScreenStyle from "../styles/components/NoteScreenStyle";
 import Header from "../components/Header";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import ExerciseCard from "../components/ExerciseCard";
 
 export default function NoteScreen({}) {
   const [currentDate, setCurrentDate] = useState("");
@@ -13,6 +14,8 @@ export default function NoteScreen({}) {
     { id: 2, name: "Ex.2" },
     { id: 3, name: "Ex.3" },
   ]);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All"); // กำหนดค่าเริ่มต้นเป็น 'All'
 
   useEffect(() => {
     const date = new Date();
@@ -31,44 +34,244 @@ export default function NoteScreen({}) {
 
   const handleAddExercise = () => {
     console.log("Add exercise pressed");
+    setModalVisible(true);
   };
-
-
+  const handleCategoryPress = (category) => {
+    setSelectedCategory(category);
+  };
   return (
     <View style={[NoteScreenStyle.container]}>
       <Header />
       <View style={[styles.container]}>
         <Text style={[NoteScreenStyle.dateText]}>{currentDate}</Text>
-
         <TouchableOpacity style={[styles.button, { marginBottom: 35 }]}>
           <Text style={[styles.buttonText]}>Start</Text>
         </TouchableOpacity>
         <ScrollView>
-        {exercises.map((exercise) => (
-          <View
-            key={exercise.id}
-            style={[NoteScreenStyle.input__section, { marginBottom: 17 }]}
+          {exercises.map((exercise) => (
+            <View
+              key={exercise.id}
+              style={[NoteScreenStyle.input__section, { marginBottom: 17 }]}
+            >
+              <Text style={[NoteScreenStyle.addButtonText]}>
+                {exercise.name}
+              </Text>
+              <TouchableOpacity onPress={handleAddExercise}>
+                <AntDesign
+                  name="pluscircle"
+                  size={24}
+                  color="#4CAF50"
+                  style={NoteScreenStyle.icon}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
+          <Modal
+            visible={isModalVisible}
+            animationType="slide"
+            transparent={true}
           >
-            <Text style={[NoteScreenStyle.addButtonText]}>{exercise.name}</Text>
-            <TouchableOpacity onPress={handleAddExercise}>
-              <AntDesign
-                name="pluscircle"
-                size={24}
-                color="#4CAF50"
-                style={NoteScreenStyle.icon}
-              />
-            </TouchableOpacity>
-          </View>
-        ))}
-
-        <TouchableOpacity onPress={handleAddBox}>
-          <Text style={[NoteScreenStyle.addExerciseBoxText]}>
-            + add exercise box
-          </Text>
-        </TouchableOpacity>
+            <View style={[NoteScreenStyle.box_modal]}>
+              <View style={[NoteScreenStyle.inside_box_modal]}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={[NoteScreenStyle.modal_header_text_]}>
+                    Your{"\n"}Exercise
+                  </Text>
+                  <AntDesign
+                    name={"closecircle"}
+                    size={20}
+                    color={colors.clr_gray}
+                    style={{ paddingVertical: 10 }}
+                  ></AntDesign>
+                </View>
+                <View style={[NoteScreenStyle.modal_category_box]}>
+                  <TouchableOpacity
+                    style={[
+                      NoteScreenStyle.modal_category_inside,
+                      { width: 50 },
+                      {
+                        backgroundColor:
+                          selectedCategory === "All"
+                            ? colors.clr_slate
+                            : colors.clr_gray,
+                      },
+                    ]}
+                    onPress={() => handleCategoryPress("All")}
+                  >
+                    <Text
+                      style={[
+                        NoteScreenStyle.modal_category_inside_text,
+                        {
+                          color:
+                            selectedCategory === "All"
+                              ? colors.clr_white
+                              : colors.clr_black,
+                        },
+                      ]}
+                    >
+                      All
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      NoteScreenStyle.modal_category_inside,
+                      { width: 50 },
+                      {
+                        backgroundColor:
+                          selectedCategory === "Leg"
+                            ? colors.clr_slate
+                            : colors.clr_gray,
+                      },
+                    ]}
+                    onPress={() => handleCategoryPress("Leg")}
+                  >
+                    <Text
+                      style={[
+                        NoteScreenStyle.modal_category_inside_text,
+                        {
+                          color:
+                            selectedCategory === "Leg"
+                              ? colors.clr_white
+                              : colors.clr_black,
+                        },
+                      ]}
+                    >
+                      Leg
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      NoteScreenStyle.modal_category_inside,
+                      { width: 50 },
+                      {
+                        backgroundColor:
+                          selectedCategory === "ABS"
+                            ? colors.clr_slate
+                            : colors.clr_gray,
+                      },
+                    ]}
+                    onPress={() => handleCategoryPress("ABS")}
+                  >
+                    <Text
+                      style={[
+                        NoteScreenStyle.modal_category_inside_text,
+                        {
+                          color:
+                            selectedCategory === "ABS"
+                              ? colors.clr_white
+                              : colors.clr_black,
+                        },
+                      ]}
+                    >
+                      ABS
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      NoteScreenStyle.modal_category_inside,
+                      { width: 65 },
+                      {
+                        backgroundColor:
+                          selectedCategory === "Back"
+                            ? colors.clr_slate
+                            : colors.clr_gray,
+                      },
+                    ]}
+                    onPress={() => handleCategoryPress("Back")}
+                  >
+                    <Text
+                      style={[
+                        NoteScreenStyle.modal_category_inside_text,
+                        {
+                          color:
+                            selectedCategory === "Back"
+                              ? colors.clr_white
+                              : colors.clr_black,
+                        },
+                      ]}
+                    >
+                      Back
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      NoteScreenStyle.modal_category_inside,
+                      { width: 65 },
+                      {
+                        backgroundColor:
+                          selectedCategory === "Chest"
+                            ? colors.clr_slate
+                            : colors.clr_gray,
+                      },
+                    ]}
+                    onPress={() => handleCategoryPress("Chest")}
+                  >
+                    <Text
+                      style={[
+                        NoteScreenStyle.modal_category_inside_text,
+                        {
+                          color:
+                            selectedCategory === "Chest"
+                              ? colors.clr_white
+                              : colors.clr_black,
+                        },
+                      ]}
+                    >
+                      Chest
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      NoteScreenStyle.modal_category_inside,
+                      { width: 65 },
+                      {
+                        backgroundColor:
+                          selectedCategory === "Arms"
+                            ? colors.clr_slate
+                            : colors.clr_gray,
+                      },
+                    ]}
+                    onPress={() => handleCategoryPress("Arms")}
+                  >
+                    <Text
+                      style={[
+                        NoteScreenStyle.modal_category_inside_text,
+                        {
+                          color:
+                            selectedCategory === "Arms"
+                              ? colors.clr_white
+                              : colors.clr_black,
+                        },
+                      ]}
+                    >
+                      Arms
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={[NoteScreenStyle.modal_body]}>
+                  <ExerciseCard
+                    name="Bench Press"
+                    des="dkgjnifjuhbuhybhubuhbhbuhbhubhbuhbuhbuhbuhbdหกหดกหดกดกดกไดghefuihgefiff"
+                  ></ExerciseCard>
+                  <ExerciseCard></ExerciseCard>
+                  <ExerciseCard></ExerciseCard>
+                  <ExerciseCard></ExerciseCard>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <TouchableOpacity onPress={handleAddBox}>
+            <Text style={[NoteScreenStyle.addExerciseBoxText]}>
+              + add exercise box
+            </Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
   );
 }
-
