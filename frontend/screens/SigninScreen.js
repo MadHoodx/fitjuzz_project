@@ -13,11 +13,15 @@ import { useNavigation } from "@react-navigation/native";
 import InputWithEye from "../components/InputWithEye";
 import { useState } from "react";
 import { useEffect } from "react";
-
-// API client
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
+
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
+
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
@@ -26,6 +30,54 @@ export default function SigninScreen({ updateActiveScreen }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(0)
+
+
+
+  const [userInfo, setUserInfo] = useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: 'YOUR_ANDROID_CLIENT_ID', // Replace with your Android client ID
+    iosClientId: 'YOUR_IOS_CLIENT_ID', // Replace with your iOS client ID
+    webClientId: '266250464994-dlv1g51j6mn2sqvko1ioo431m7gjjktc.apps.googleusercontent.com', // Replace with your Web client ID
+  });
+
+  useEffect(() => {
+    handleSignInWithGoogle();
+  }, [response]);
+
+  async function handleSignInWithGoogle() {
+    const user = await AsyncStorage.getItem('@user');
+    if (!user) {
+      if (response?.type === 'success') {
+        getUserInfo(response.authentication.accessToken);
+      }
+    } else {
+      setUserInfo(JSON.parse(user));
+    }
+  }
+
+  const getUserInfo = async (token) => {
+    if (!token) return;
+    try {
+      const response = await fetch(
+        'https://www.googleapis.com/userinfo/v2/me',
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const user = await response.json();
+      await AsyncStorage.setItem('@user', JSON.stringify(user));
+      setUserInfo(user);
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      Alert.alert('Error', 'Could not retrieve user info.');
+    }
+  };
+
+
+
+
+
 
   useEffect(() => {
     const checkToken = async () => {
@@ -85,7 +137,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           onChangeText={setPassword}
           placeholder={"Password"}
         ></InputWithEye>
-        { loading ? <Text style={SigninScreenStyle.error}>Sorry, looks like that’s the wrong email or password. {error}</Text> : null}
+        {loading ? <Text style={SigninScreenStyle.error}>Sorry, looks like that’s the wrong email or password. {error}</Text> : null}
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
             Forget Password?
@@ -110,7 +162,10 @@ export default function SigninScreen({ updateActiveScreen }) {
               style={SigninScreenStyle.logo}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={SigninScreenStyle.button}>
+          <TouchableOpacity 
+            style={SigninScreenStyle.button}
+            disabled={!request}
+            onPress={() => promptAsync()}>
             <Image
               source={require("../assets/images/google-logo.png")}
               style={SigninScreenStyle.logo}

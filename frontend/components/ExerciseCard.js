@@ -9,7 +9,8 @@ const ExerciseCard = (props) => {
     <View style={[ExerciseCardstyles.box]}>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Image
-          source={require("../assets/images/profileplaceholder.jpeg")}
+          // source={require("../assets/images/Welcomimage.png")}
+          source={props.pathImage}
           style={{ width: 70, height: 50 }}
         />
       </View>

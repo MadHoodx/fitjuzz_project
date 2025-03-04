@@ -47,8 +47,6 @@ const NoteScreenStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderWidth: 2,
-    borderColor: "red",
   },
   inside_box_modal: {
     backgroundColor: colors.clr_lightgray,
@@ -88,9 +86,30 @@ const NoteScreenStyle = StyleSheet.create({
     paddingTop:20,
     flexWrap:"wrap"
   },
-  removeExerciseBoxText: {
-   
-  }
+  dumbbell_top: {
+    position: "absolute",
+    top: 5,
+    right: 30,
+    opacity: 0.1,
+    zIndex: 0,
+    transform: [{ rotate: "-55deg" }],
+  },
+  dumbbell_middle: {
+    position: "absolute",
+    top: 40,
+    right: 100,
+    opacity: 0.2,
+    zIndex: 0,
+    transform: [{ rotate: "45deg" }],
+  },
+  dumbbell_bottom: {
+    position: "absolute",
+    top: 80,
+    right: 45,
+    opacity: 0.2,
+    zIndex: 0,
+    transform: [{ rotate: "-50deg" }],
+  },
 });
 
 export default NoteScreenStyle;
