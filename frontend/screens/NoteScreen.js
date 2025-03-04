@@ -82,12 +82,14 @@ export default function NoteScreen({}) {
                   <Text style={[NoteScreenStyle.modal_header_text_]}>
                     Your{"\n"}Exercise
                   </Text>
+                  <TouchableOpacity onPress={() => setModalVisible(false)}>
                   <AntDesign
                     name={"closecircle"}
                     size={20}
                     color={colors.clr_gray}
                     style={{ paddingVertical: 10 }}
                   ></AntDesign>
+                  </TouchableOpacity>
                 </View>
                 <View style={[NoteScreenStyle.modal_category_box]}>
                   <TouchableOpacity

@@ -40,7 +40,7 @@ export default function SigninScreen({ updateActiveScreen }) {
   const handleSignin = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.69.13:5000/api/user/signin",
+        "http://192.168.221.234:5000/api/user/signin",
         {
           email,
           password,

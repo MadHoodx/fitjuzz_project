@@ -112,11 +112,11 @@ export default function Header({}) {
         Myapp
       </Text>
       <View style={[header.header__section]}>
-        <View style={header.header__details}>
+        <View style={[header.header__details, {borderColor: 'red', borderWidth: 2}]}>
           <Text
             style={[
               styles.whiteText,
-              { fontSize: sizes.size_lg, fontWeight: "bold" },
+              { fontSize: sizes.size_lg, fontWeight: "bold", borderBlockColor: 'red', borderWidth: 2 },
             ]}
           >
             {greeting} {username}
@@ -127,11 +127,11 @@ export default function Header({}) {
               width: 250,
             }}
           >
-            Motavaltional quote : 
+            Motavaltional quote: 
             <Text
               style={[
                 styles.whiteText,
-                { fontWeight: "bold", borderWidth: 2, borderColor: "blue" },
+                { fontWeight: "bold" },
               ]}
             >
               {quote}
@@ -159,35 +159,42 @@ const header = StyleSheet.create({
     marginTop: -20,
   },
   header__section: {
+    flex: 1,
     flexDirection: "row",
-    marginTop: 17,
+    marginTop: 16,
     justifyContent: "space-between",
+    borderWidth: 2,
+    borderColor: 'red'
   },
   header__details: {
-    gap: 5,
+    flex: 1,
+    gap: 4,
+
   },
   dumbbell_top: {
+    
     position: "absolute",
     top: 15,
     right: 35,
     opacity: 0.1,
-    zIndex: 1,
+    zIndex: 0,
     transform: [{ rotate: "-55deg" }],
+  
   },
   dumbbell_middle: {
     position: "absolute",
     top: 60,
     right: 120,
     opacity: 0.2,
-    zIndex: 1,
+    zIndex: 0,
     transform: [{ rotate: "45deg" }],
   },
   dumbbell_bottom: {
     position: "absolute",
     top: 130,
     right: 50,
-    opacity: 0.3,
-    zIndex: 1,
+    opacity: 0.2,
+    zIndex: 0,
     transform: [{ rotate: "-50deg" }],
   },
 });

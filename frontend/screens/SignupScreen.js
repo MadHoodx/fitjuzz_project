@@ -38,7 +38,7 @@ export default function SignupScreen({ updateActiveScreen }) {
     try {
       console.log("Sending signup request:", { username, email, password }); // Log request data
       const response = await axios.post(
-        "http://192.168.69.13:5000/api/user/signup",
+        "http://192.168.221.234:5000/api/user/signup",
 
         {
           username,

@@ -142,7 +142,7 @@ const headerAlternative = StyleSheet.create({
     top: 15,
     right: 35,
     opacity: 0.1,
-    zIndex: 1,
+    zIndex: 0,
     transform: [{ rotate: "-55deg" }],
   },
   dumbbell_middle: {
@@ -150,7 +150,7 @@ const headerAlternative = StyleSheet.create({
     top: 60,
     right: 120,
     opacity: 0.2,
-    zIndex: 1,
+    zIndex: 0,
     transform: [{ rotate: "45deg" }],
   },
   dumbbell_bottom: {
@@ -158,7 +158,7 @@ const headerAlternative = StyleSheet.create({
     top: 130,
     right: 50,
     opacity: 0.3,
-    zIndex: 1,
+    zIndex: 0,
     transform: [{ rotate: "-50deg" }],
   },
 });
