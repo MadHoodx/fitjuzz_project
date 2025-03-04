@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-} from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import styles, { colors } from "../styles/style";
 import { sizes } from "../styles/style";
 import { jwtDecode } from "jwt-decode";
@@ -24,14 +19,14 @@ export default function Header({}) {
     " The worldis a stage, and your workout is your spotlight.",
     " As stars begin to gleam, chase the dreams that shimmer within.",
     " Let your workout be a dance of dedication.",
-    " เกินเที่ยงคืนแล้วไปนอนอย่าเบียว"
+    " เกินเที่ยงคืนแล้วไปนอนอย่าเบียว",
   ];
 
   useEffect(() => {
     fetchUsername();
     calGreeting();
     // randomMotivationalQuote()
-  },);
+  });
 
   const randomMotivationalQuote = () => {
     const randomIndex = Math.floor(Math.random() * motivationalQuote.length);
@@ -59,10 +54,10 @@ export default function Header({}) {
       setGreeting("Good night");
       setQuote(motivationalQuote[3]);
       setEmoji("moon");
-    } else{
+    } else {
       setGreeting("ไปนอนไอสัส");
       setQuote(motivationalQuote[4]);
-      setEmoji('battery-charging')
+      setEmoji("battery-charging");
     }
   };
 
@@ -85,19 +80,19 @@ export default function Header({}) {
         size={60}
         color={colors.clr_white}
         style={[header.dumbbell_top]}
-      ></IconFontAwesome5>
+      />
       <IconFontAwesome5
         name={"dumbbell"}
         size={40}
         color={colors.clr_white}
         style={[header.dumbbell_middle]}
-      ></IconFontAwesome5>
+      />
       <IconFontAwesome5
         name={"dumbbell"}
         size={80}
         color={colors.clr_white}
         style={[header.dumbbell_bottom]}
-      ></IconFontAwesome5>
+      />
       <Text
         style={[
           styles.orangeText,
@@ -116,7 +111,7 @@ export default function Header({}) {
           <Text
             style={[
               styles.whiteText,
-              { fontSize: sizes.size_lg, fontWeight: "bold"},
+              { fontSize: sizes.size_lg, fontWeight: "bold" },
             ]}
           >
             {greeting} {username}
@@ -124,26 +119,17 @@ export default function Header({}) {
           <Text
             style={{
               color: colors.clr_gray,
-              width: 270,
+              width: 300,
             }}
           >
-            Motavaltional quote: 
-            <Text
-              style={[
-                styles.whiteText,
-                { fontWeight: "bold" },
-              ]}
-            >
+            Motavaltional quote:
+            <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
               {quote}
             </Text>
           </Text>
         </View>
 
-        <IconFeather
-          name={emoji}
-          size={35}
-          color={colors.clr_white}
-        />
+        <IconFeather name={emoji} size={35} color={colors.clr_white} />
       </View>
     </View>
   );
@@ -167,17 +153,14 @@ const header = StyleSheet.create({
   header__details: {
     flex: 1,
     gap: 4,
-
   },
   dumbbell_top: {
-    
     position: "absolute",
     top: 15,
     right: 35,
     opacity: 0.1,
     zIndex: 0,
     transform: [{ rotate: "-55deg" }],
-  
   },
   dumbbell_middle: {
     position: "absolute",

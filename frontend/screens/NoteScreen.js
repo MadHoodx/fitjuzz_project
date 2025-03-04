@@ -6,6 +6,8 @@ import NoteScreenStyle from "../styles/components/NoteScreenStyle";
 import Header from "../components/Header";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import ExerciseCard from "../components/ExerciseCard";
+import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import myImage from "../assets/images/Welcomimage.png"
 
 export default function NoteScreen({}) {
   const [currentDate, setCurrentDate] = useState("");
@@ -72,8 +74,28 @@ export default function NoteScreen({}) {
             animationType="slide"
             transparent={true}
           >
+            
             <View style={[NoteScreenStyle.box_modal]}>
+              
               <View style={[NoteScreenStyle.inside_box_modal]}>
+              <IconFontAwesome5
+                      name={"dumbbell"}
+                      size={50}
+                      color={colors.clr_slate}
+                      style={[NoteScreenStyle.dumbbell_top]}
+                    />
+                    <IconFontAwesome5
+                      name={"dumbbell"}
+                      size={30}
+                      color={colors.clr_slate}
+                      style={[NoteScreenStyle.dumbbell_middle]}
+                    />
+                    <IconFontAwesome5
+                      name={"dumbbell"}
+                      size={55}
+                      color={colors.clr_slate}
+                      style={[NoteScreenStyle.dumbbell_bottom]}
+                    />
                 <View
                   style={{
                     flexDirection: "row",
@@ -261,6 +283,7 @@ export default function NoteScreen({}) {
                   <ExerciseCard
                     name="Bench Press"
                     des="dkgjnifjuhbuhybhubuhbhbuhbhubhbuhbuhbuhbuhbdหกหดกหดกดกดกไดghefuihgefiff"
+                    pathImage={myImage}
                   ></ExerciseCard>
                   <ExerciseCard></ExerciseCard>
                   <ExerciseCard></ExerciseCard>
