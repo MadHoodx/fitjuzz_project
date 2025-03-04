@@ -112,11 +112,11 @@ export default function Header({}) {
         Myapp
       </Text>
       <View style={[header.header__section]}>
-        <View style={[header.header__details, {borderColor: 'red', borderWidth: 2}]}>
+        <View style={[header.header__details]}>
           <Text
             style={[
               styles.whiteText,
-              { fontSize: sizes.size_lg, fontWeight: "bold", borderBlockColor: 'red', borderWidth: 2 },
+              { fontSize: sizes.size_lg, fontWeight: "bold"},
             ]}
           >
             {greeting} {username}
@@ -124,7 +124,7 @@ export default function Header({}) {
           <Text
             style={{
               color: colors.clr_gray,
-              width: 250,
+              width: 270,
             }}
           >
             Motavaltional quote: 
@@ -163,8 +163,6 @@ const header = StyleSheet.create({
     flexDirection: "row",
     marginTop: 16,
     justifyContent: "space-between",
-    borderWidth: 2,
-    borderColor: 'red'
   },
   header__details: {
     flex: 1,
