@@ -14,9 +14,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './screens/MainScreen';
 import ForgetPasswordScreen from './screens/ForgetPasswordScreen';
-import VerifyEmailScreen from './screens/VerifyEmailScreen';
-import PasswordResetScreen from './screens/PasswordResetScreen'
-import SuccessfullyResetScreen from './screens/SuccessfullyResetScreen'
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -87,9 +84,6 @@ function MyStack() {
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
-        <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
-        <Stack.Screen name="PasswordReset" component={PasswordResetScreen} />
-        <Stack.Screen name="SuccessfullyReset" component={SuccessfullyResetScreen} />
         <Stack.Screen name="MyTabs" component={MyTabs} />
           
       </Stack.Navigator>
