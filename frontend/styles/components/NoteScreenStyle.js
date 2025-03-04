@@ -87,6 +87,9 @@ const NoteScreenStyle = StyleSheet.create({
     gap:10,
     paddingTop:20,
     flexWrap:"wrap"
+  },
+  removeExerciseBoxText: {
+   
   }
 });
 

@@ -32,6 +32,13 @@ export default function NoteScreen({}) {
     ]);
   };
 
+  const handleRemoveBox = () => {
+    setExercises([
+      ...exercises,
+      { id: exercises.length -1 , name: `Ex ${exercises.length -1}` },
+    ]);
+  };
+
   const handleAddExercise = () => {
     console.log("Add exercise pressed");
     setModalVisible(true);
@@ -270,6 +277,11 @@ export default function NoteScreen({}) {
           <TouchableOpacity onPress={handleAddBox}>
             <Text style={[NoteScreenStyle.addExerciseBoxText]}>
               + add exercise box
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleRemoveBox}>
+            <Text style={[NoteScreenStyle.removeExerciseBoxText]}>
+              - remove exercise box
             </Text>
           </TouchableOpacity>
         </ScrollView>

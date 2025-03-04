@@ -85,7 +85,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           onChangeText={setPassword}
           placeholder={"Password"}
         ></InputWithEye>
-        { loading ? <Text style={SigninScreenStyle.error}> Sorry, looks like that’s the wrong email or password. {error}</Text> : null}
+        { loading ? <Text style={SigninScreenStyle.error}>Sorry, looks like that’s the wrong email or password. {error}</Text> : null}
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
             Forget Password?

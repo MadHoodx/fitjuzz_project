@@ -58,7 +58,7 @@ const SigninScreenStyle = StyleSheet.create({
   },
   error: {
     textAlign: 'left',
-    paddingLeft: 16,
+    paddingHorizontal: 16,
     color: 'red',
     fontSize: sizes.size_base
   }

@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const userRoute = require('./routes/userRoute');
 const userUpdate = require('./routes/userUpdate');
-const userController = require('./controllers/userController');
+const otpRoute = require('./routes/otpRoute')
 
 
 const app = express();
@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 
 app.use('/api/user', userRoute,userUpdate)
-
+app.use('/api/user', otpRoute)
 
 
 
