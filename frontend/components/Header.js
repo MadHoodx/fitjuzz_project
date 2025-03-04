@@ -114,7 +114,7 @@ export default function Header({}) {
               { fontSize: sizes.size_lg, fontWeight: "bold" },
             ]}
           >
-            {greeting} {username}
+            {greeting}: {username}
           </Text>
           <Text
             style={{

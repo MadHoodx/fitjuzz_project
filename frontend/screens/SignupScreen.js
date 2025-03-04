@@ -20,23 +20,34 @@ import { jwtDecode } from "jwt-decode";
 export default function SignupScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
 
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(1)
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(0);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
-    if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match");
-      setLoading(1)
-      setError('Passwords do not match')
-      return;
+    if (username == "" && email !== "" && password !== "") {
+      setError("Please enter your username");
+    } else if (username !== "" && email == "" && password !== "") {
+      setError("Please enter your email");
+    } else if (username == "" && email == "" && password !== "") {
+      setError("Please enter your username and email");
+    } else if (username == "" && email !== "" && password == "") {
+      setError("Please enter your username and password");
+    } else if (username !== "" && email !== "" && password == "") {
+      setError("Please enter your password");
+    } else if (username !== "" && email == "" && password == "") {
+      setError("Please enter your email and password");
+    } else if (username == "" && email == "" && password == "") {
+      setError("Please enter your incredentials");
+    } else if (password !== confirmPassword) {
+      setLoading(1);
+      setError("Passwords do not match");
     }
 
     try {
-      console.log("Sending signup request:", { username, email, password }); // Log request data
       const response = await axios.post(
         "http://192.168.221.234:5000/api/user/signup",
 
@@ -48,19 +59,16 @@ export default function SignupScreen({ updateActiveScreen }) {
       );
 
       await AsyncStorage.setItem("token", response.data.token);
-      const decodedToken = jwtDecode(response.data.token);
-
-      console.log(decodedToken);
-
-      Alert.alert("Success", response.data.message);
-
       navigation.navigate("MyTabs");
+     
+
     } catch (error) {
-           setLoading(1)
-      setError('placeholder')
-      console.error("Signup error:", error); // Log error
-      Alert.alert("Error", "An error occurred during signup.");
-      // ... error handling ...
+      setLoading(1);
+      if (error.status == 409) {
+        setError("User already exists");
+      } else {
+        setError("Signup failed. Please try again.");
+      }
     }
   };
 
@@ -91,7 +99,7 @@ export default function SignupScreen({ updateActiveScreen }) {
           placeholder={"Confirm Password"}
         ></InputWithEye>
 
-        {loading ? <Text style={SignupScreenStyle.error}> {error} </Text> : null}
+        {loading ? <Text style={SignupScreenStyle.error}>{error} </Text> : null}
       </View>
       <View style={SignupScreenStyle.button__section}>
         <TouchableOpacity style={styles.button} onPress={handleSignup}>

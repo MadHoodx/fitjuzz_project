@@ -17,27 +17,26 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
+import HeaderAlternative from "../components/HeaderAlternative";
 
 WebBrowser.maybeCompleteAuthSession();
-
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(0)
-
-
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(0);
 
   const [userInfo, setUserInfo] = useState(null);
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: 'YOUR_ANDROID_CLIENT_ID', // Replace with your Android client ID
-    iosClientId: 'YOUR_IOS_CLIENT_ID', // Replace with your iOS client ID
-    webClientId: '266250464994-dlv1g51j6mn2sqvko1ioo431m7gjjktc.apps.googleusercontent.com', // Replace with your Web client ID
+    androidClientId: "YOUR_ANDROID_CLIENT_ID", // Replace with your Android client ID
+    iosClientId: "YOUR_IOS_CLIENT_ID", // Replace with your iOS client ID
+    webClientId:
+      "266250464994-dlv1g51j6mn2sqvko1ioo431m7gjjktc.apps.googleusercontent.com", // Replace with your Web client ID
   });
 
   useEffect(() => {
@@ -45,9 +44,9 @@ export default function SigninScreen({ updateActiveScreen }) {
   }, [response]);
 
   async function handleSignInWithGoogle() {
-    const user = await AsyncStorage.getItem('@user');
+    const user = await AsyncStorage.getItem("@user");
     if (!user) {
-      if (response?.type === 'success') {
+      if (response?.type === "success") {
         getUserInfo(response.authentication.accessToken);
       }
     } else {
@@ -59,25 +58,20 @@ export default function SigninScreen({ updateActiveScreen }) {
     if (!token) return;
     try {
       const response = await fetch(
-        'https://www.googleapis.com/userinfo/v2/me',
+        "https://www.googleapis.com/userinfo/v2/me",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       const user = await response.json();
-      await AsyncStorage.setItem('@user', JSON.stringify(user));
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
       setUserInfo(user);
     } catch (error) {
-      console.error('Error fetching user info:', error);
-      Alert.alert('Error', 'Could not retrieve user info.');
+      console.error("Error fetching user info:", error);
+      Alert.alert("Error", "Could not retrieve user info.");
     }
   };
-
-
-
-
-
 
   useEffect(() => {
     const checkToken = async () => {
@@ -99,21 +93,19 @@ export default function SigninScreen({ updateActiveScreen }) {
         }
       );
 
-      console.log("Sending signin request:", { email, password });
+   
       await AsyncStorage.setItem("token", response.data.token);
-      const decodedToken = jwtDecode(response.data.token);
-
-      console.log(decodedToken);
-
-      console.log("Token stored: ", response.data.token);
-      Alert.alert("Success", response.data.message);
       navigation.navigate("MyTabs");
-    } catch (error) {
-      console.error(error);
-      setLoading(1)
-      setError('placeholder')
-      Alert.alert("Error", "An error occurred during signin.", error);
 
+    } catch (error) {
+      setLoading(1);
+    
+      if (error.status == 400) {
+        setError("Sorry, looks like that’s the wrong email or password.");
+      }
+      else {
+        setError("An unexpected error occurred");
+      }
     }
   };
 
@@ -137,7 +129,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           onChangeText={setPassword}
           placeholder={"Password"}
         ></InputWithEye>
-        {loading ? <Text style={SigninScreenStyle.error}>Sorry, looks like that’s the wrong email or password. {error}</Text> : null}
+        {loading ? <Text style={SigninScreenStyle.error}>{error}</Text> : null}
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
             Forget Password?
@@ -162,10 +154,11 @@ export default function SigninScreen({ updateActiveScreen }) {
               style={SigninScreenStyle.logo}
             />
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={SigninScreenStyle.button}
             disabled={!request}
-            onPress={() => promptAsync()}>
+            onPress={() => promptAsync()}
+          >
             <Image
               source={require("../assets/images/google-logo.png")}
               style={SigninScreenStyle.logo}

@@ -7,19 +7,19 @@ const userController = {
     const { email, password } = req.body;
 
     try {
-      // Check if user exists
+     
       const user = await userModel.findOne({ email });
+     
       if (!user) {
-        return res.status(400).json({ message: "Invalid credentials" });
+        return res.status(400).json({ message: "Sorry, looks like that’s the wrong email or password. "});
       }
 
-      // Check password
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ message: "Invalid credentials" });
+        return res.status(400).json({ message: "Sorry, looks like that’s the wrong email or password. "} );
       }
 
-      // Create JWT token (optional, but recommended for authentication)
+     
       const payload = {
         user: {
           id: user.id,
@@ -33,15 +33,17 @@ const userController = {
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }, // Token expires in 1 hour
+        { expiresIn: "1h" }, 
         (err, token) => {
           if (err) throw err;
-          res.json({ token, message: "Signin successful" }); //send token and success message
+          res.json({ token, message: "Signin successful" }); 
         }
       );
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
+      console.log(error.code)
+      if (error.code === 11000) { // MongoDB duplicate key error
+        return res.status(400 ).json({ error: "User already exists" });}
+       res.status(500).json({ message: "Server error" });
     }
   },
   signup: async (req, res) => {
@@ -49,9 +51,10 @@ const userController = {
 
     try {
       const user = await userModel.findOne({ $or: [{ username }, { email }] });
-
+      
       if (user) {
-        return res.status(200).json({ message: "User already exist" });
+        
+        return res.status(409).json({   message: "User already exist" });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -63,7 +66,6 @@ const userController = {
       });
 
       await newUser.save();
-      console.log(newUser);
 
       const payload = {
         user: {
@@ -75,14 +77,14 @@ const userController = {
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }, // Token expires in 1 hour
+        { expiresIn: "1h" }, 
         (err, token) => {
           if (err) throw err;
-          res.json({ token, message: "Signup successful" }); //send token and success message
+          res.json({ token, message: "Signup successful" }); 
         }
       );
     } catch (error) {
-      return error;
+       res.status(500).json({ message: "Server error" });
     }
   },
   profile: async (req, res) => {
@@ -97,7 +99,7 @@ const userController = {
 
       res.json(user);
     } catch (error) {
-      console.error("Error fetching profile:", error);
+      
       res.status(500).json({ message: "Server error" });
     }
   },

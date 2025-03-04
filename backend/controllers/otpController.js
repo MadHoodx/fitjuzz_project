@@ -23,11 +23,11 @@ const otpController = {
     try {
       
       if (!isValidEmail(email)) {
-        return res.status(300).json({ error: 'Invalid email format' });
+        return res.status(400).json({ error: 'Invalid email format' });
       }
       const user = await userModel.findOne({ email });
       if (!user) {
-        return res.status(400).json({ error: 'Email not found' });
+        return res.status(401).json({ error: 'Email not found' });
       }
 
       const otp = generateOTP();

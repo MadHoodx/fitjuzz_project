@@ -14,6 +14,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './screens/MainScreen';
 import ForgetPasswordScreen from './screens/ForgetPasswordScreen';
+import SigninScreen from './screens/SigninScreen';
+import SignupScreen from './screens/SignupScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
