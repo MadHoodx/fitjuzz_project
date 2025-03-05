@@ -32,10 +32,8 @@ const ExerciseCardstyles = StyleSheet.create({
   box: {
     width: 125,
     height: 180,
-    backgroundColor: colors.clr_white,
     borderRadius: 20,
     paddingHorizontal: 15,
-
     gap: 10,
     paddingVertical: 20,
   },

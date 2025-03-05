@@ -107,7 +107,7 @@ const app = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 5,
-    height: 90,
+    height: 70,
 
     //
     shadowColor: "red",

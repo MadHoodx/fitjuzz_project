@@ -10,25 +10,27 @@ const NoteScreenStyle = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 15,
     borderRadius: 20,
-    backgroundColor: colors.clr_gray,
-    opacity: 0.7,
+    backgroundColor: '#E0E0E0',
     height: 60,
+    width: '100%',
     flexDirection: "row", 
     justifyContent: "space-between", 
-    alignItems: "center", 
+    alignItems: "center",
+    marginBottom: 6,
   },
 
   dateText: {
     color: colors.clr_gray,
     fontSize: sizes.size_base,
-    marginTop: 28,
+    marginTop: 0,
     textAlign: "center",
     marginBottom: 30,
   },
 
   addButtonText: {
     fontSize: sizes.size_base,
-    color: "grey",
+    color: '#424242',
+    fontWeight: '500',
   },
   icon: {
     marginLeft: 10,
@@ -39,7 +41,8 @@ const NoteScreenStyle = StyleSheet.create({
     fontSize: sizes.size_base,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 15,
+    marginTop: 0,
+    marginBottom: 0,
     textDecorationLine: "underline",
   },
 
@@ -48,7 +51,7 @@ const NoteScreenStyle = StyleSheet.create({
     fontSize: sizes.size_base,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 15,
+    marginTop: 0,
     textDecorationLine: "underline",
   },
   
