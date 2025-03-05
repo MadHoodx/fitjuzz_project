@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "454956318236",
-    "project_id": "cpe451-project-bcb7f",
-    "storage_bucket": "cpe451-project-bcb7f.firebasestorage.app"
+    "project_number": "1037073815546",
+    "project_id": "fitjuzzproject",
+    "storage_bucket": "fitjuzzproject.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:454956318236:android:a5d0d1b0f880357c3ae9d9",
+        "mobilesdk_app_id": "1:1037073815546:android:af3417dcdaa83a1ddd7643",
         "android_client_info": {
           "package_name": "com.fitjuzzcompany.fitjuzz"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "454956318236-c9d53mermtvfs4kvshp486iski00qcjl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fitjuzzcompany.fitjuzz",
-            "certificate_hash": "5260172e515f8d7736225b15076d8080eec92949"
-          }
-        },
-        {
-          "client_id": "454956318236-r74tnuhirt1fm42kq2dfvl5633blni4r.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBiNiXUgLxKBgWS57AHw_rjLgvaiht6ACY"
+          "current_key": "AIzaSyBrotwVEFpOzwdohTQDwoFW8GPApVqiKy0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "454956318236-r74tnuhirt1fm42kq2dfvl5633blni4r.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

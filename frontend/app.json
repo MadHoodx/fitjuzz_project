@@ -2,7 +2,7 @@
   "expo": {
     "name": "fitjuzz",
     "slug": "fitjuzz",
-    "scheme": "com.fitjuzzcompayny.fitjuzz",
+    "scheme": "com.fitjuzzcompany.fitjuzz",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,6 +17,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.fitjuzzcompany.fitjuzz",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -25,7 +26,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "be343713-6a85-47b6-9aeb-a8c816e43405"
+      }
     }
-
   }
 }
