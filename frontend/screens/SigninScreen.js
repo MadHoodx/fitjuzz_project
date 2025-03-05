@@ -17,10 +17,9 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 
-
-
+import * as WebBrowser from 'expo-web-browser'
+WebBrowser.maybeCompleteAuthSession();
 import * as Google from 'expo-auth-session/providers/google'
-import * as AuthSession from 'expo-auth-session';
 
 const GOOGLE_ANDROID_CLIENT_ID = "308302070658-jfv4i7e2ibs2ks2n5dmdlp8h5qp4ln5c.apps.googleusercontent.com"
 const WEB_CLIENT_ID = "308302070658-95rdvd7ldo3bi9vee4ehlom7rqeqil5a.apps.googleusercontent.com"
@@ -63,7 +62,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           })
 
           const user = await response.json();
-
+          await AsyncStorage.setItem('@user', JSON.stringify(user))
           console.log(user)
           setUserInfo(user)
       } catch (e) {
@@ -143,6 +142,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           { borderColor: "purple", paddingTop: 20 },
         ]}
       >
+        <Text>{JSON.stringify(userInfo)}</Text>
         <TextInput
           style={[styles.input__box]}
           placeholder="Email"

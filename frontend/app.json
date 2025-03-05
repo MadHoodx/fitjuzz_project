@@ -2,7 +2,6 @@
   "expo": {
     "name": "fitjuzz",
     "slug": "fitjuzz",
-    "scheme": "com.fitjuzzcompany.fitjuzz",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,6 +29,7 @@
       "eas": {
         "projectId": "be343713-6a85-47b6-9aeb-a8c816e43405"
       }
-    }
+    },
+    "scheme": "fitjuzz"
   }
 }
