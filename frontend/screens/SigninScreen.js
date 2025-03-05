@@ -19,6 +19,10 @@ import { jwtDecode } from "jwt-decode";
 
 
 
+import * as Google from 'expo-auth-session/providers/google'
+import * as AuthSession from 'expo-auth-session';
+
+const GOOGLE_ANDROID_CLIENT_ID = "308302070658-jfv4i7e2ibs2ks2n5dmdlp8h5qp4ln5c.apps.googleusercontent.com"
 
 
 export default function SigninScreen({ updateActiveScreen }) {
@@ -28,6 +32,69 @@ export default function SigninScreen({ updateActiveScreen }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState();
   const [loading, setLoading] = useState(0);
+
+
+
+
+
+
+  const [userInfo, setUserInfo] = useState('')
+
+  /******************** Google SignIn *********************/
+  const [request, response, promptAsync] = Google.useAuthRequest({
+      androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+      
+  })
+
+  useEffect(() => {
+      handleSignInWithGoogle();
+  }, [response])
+
+  const handleSignInWithGoogle = async () => {
+      if (response?.type === "success") {
+          await getUserInfo(response.authentication.accessToken);
+      }
+  }
+
+  const getUserInfo = async (token) => {
+      try {
+          const response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+              headers: { Authorization: `Bearer ${token}` }
+          })
+
+          const user = await response.json();
+
+          console.log(user)
+          setUserInfo(user)
+      } catch (e) {
+          console.log(e)
+      }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -115,8 +182,8 @@ export default function SigninScreen({ updateActiveScreen }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={SigninScreenStyle.button}
-            disabled={!request}
-            onPress={{}}
+           
+            onPress={() => { promptAsync() }}
           >
             <Image
               source={require("../assets/images/google-logo.png")}
