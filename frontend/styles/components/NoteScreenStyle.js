@@ -13,9 +13,9 @@ const NoteScreenStyle = StyleSheet.create({
     backgroundColor: colors.clr_gray,
     opacity: 0.7,
     height: 60,
-    flexDirection: "row", // จัดวางในแนวนอน
-    justifyContent: "space-between", // จัดวางให้ icon อยู่ทางขวา
-    alignItems: "center", // จัดวางกึ่งกลางแนวตั้ง
+    flexDirection: "row", 
+    justifyContent: "space-between", 
+    alignItems: "center", 
   },
 
   dateText: {
@@ -42,6 +42,16 @@ const NoteScreenStyle = StyleSheet.create({
     marginTop: 15,
     textDecorationLine: "underline",
   },
+
+  removeExerciseBoxText:{
+    color: colors.clr_orange,
+    fontSize: sizes.size_base,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 15,
+    textDecorationLine: "underline",
+  },
+  
   box_modal: {
     flex: 1,
     justifyContent: "center",

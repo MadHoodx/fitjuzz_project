@@ -35,10 +35,7 @@ export default function NoteScreen({}) {
   };
 
   const handleRemoveBox = () => {
-    setExercises([
-      ...exercises,
-      { id: exercises.length -1 , name: `Ex ${exercises.length -1}` },
-    ]);
+    setExercises(exercises.slice(0, -1));
   };
 
   const handleAddExercise = () => {
