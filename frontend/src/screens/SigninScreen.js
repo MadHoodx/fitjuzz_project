@@ -52,6 +52,8 @@ export default function SigninScreen({ updateActiveScreen }) {
   const handleSignInWithGoogle = async () => {
       if (response?.type === "success") {
           await getUserInfo(response.authentication.accessToken);
+          console.log("Successfully log out");
+          // navigation.navigate('MyTabs')
       }
   }
 
@@ -183,7 +185,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           <TouchableOpacity
             style={SigninScreenStyle.button}
            
-            onPress={() => { promptAsync() }}
+            onPress={() =>  promptAsync() }
           >
             <Image
               source={require("../assets/images/google-logo.png")}

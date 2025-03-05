@@ -133,6 +133,7 @@ export default function ProfileScreen({}) {
   const haddleLogout = async () => {
     try {
       await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("@user");
       console.log("Successfully log out");
       navigation.navigate("Main");
     } catch (error) {

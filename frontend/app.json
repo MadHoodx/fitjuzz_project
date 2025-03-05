@@ -16,14 +16,10 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.fitjuzzcompany.fitjuzz",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "package": "com.fitjuzzcompany.fitjuzz"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      
     },
     "extra": {
       "eas": {

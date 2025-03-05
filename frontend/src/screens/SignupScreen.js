@@ -66,9 +66,7 @@ export default function SignupScreen({ updateActiveScreen }) {
       setLoading(1);
       if (error.status == 409) {
         setError("User already exists");
-      } else {
-        setError("Signup failed. Please try again.");
-      }
+      } 
     }
   };
 

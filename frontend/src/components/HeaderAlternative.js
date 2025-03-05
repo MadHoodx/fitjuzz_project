@@ -6,8 +6,7 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import styles, { colors } from "../styles/style";
-import { sizes } from "../styles/style";
+import styles, { colors,sizes } from "../styles/style";
 import { useState } from "react";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 export default function HeaderAlternative({

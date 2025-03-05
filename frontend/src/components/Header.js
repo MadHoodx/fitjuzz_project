@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
-import styles, { colors } from "../styles/style";
-import { sizes } from "../styles/style";
+import styles, { colors, sizes } from "../styles/style";
+
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
