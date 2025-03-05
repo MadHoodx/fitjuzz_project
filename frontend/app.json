@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Myapp",
-    "slug": "Myapp",
-    "scheme": "com.yourcompany.Myapp",
+    "name": "fitjuzz",
+    "slug": "fitjuzz",
+    "scheme": "com.fitjuzzcompayny.fitjuzz",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,6 +17,7 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -25,5 +26,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+
   }
 }
