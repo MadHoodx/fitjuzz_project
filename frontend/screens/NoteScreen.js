@@ -12,12 +12,85 @@ import myImage from "../assets/images/Welcomimage.png"
 export default function NoteScreen({}) {
   const [currentDate, setCurrentDate] = useState("");
   const [exercises, setExercises] = useState([
-    { id: 1, name: "Ex.1" },
-    { id: 2, name: "Ex.2" },
-    { id: 3, name: "Ex.3" },
+    { id: 1, name: "Exercise", exercises: [] },
+    { id: 2, name: "Exercise", exercises: [] },
+    { id: 3, name: "Exercise", exercises: [] },
   ]);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All"); // กำหนดค่าเริ่มต้นเป็น 'All'
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [currentExerciseId, setCurrentExerciseId] = useState(null);
+
+  const allExercises = [
+    {
+      name: "Bench Press",
+      des: "Bench Press is a compound exercise that targets the chest, shoulders, and triceps. It involves lying on a bench with a barbell, and pressing the barbell straight up to the chest.",
+      pathImage: myImage,
+      category: "Chest"
+    },
+    {
+      name: "Push Up",
+      des: "A bodyweight exercise that works your chest, shoulders, triceps, and core. Start in a plank position and lower your body until your chest nearly touches the ground, then push back up.",
+      pathImage: myImage,
+      category: "Chest"
+    },
+    {
+      name: "Squat",
+      des: "A fundamental lower body exercise that targets quadriceps, hamstrings, glutes, and core. Stand with feet shoulder-width apart, lower your body by bending your knees, then return to standing.",
+      pathImage: myImage,
+      category: "Leg"
+    },
+    {
+      name: "Deadlift",
+      des: "A compound exercise that works multiple muscle groups including back, legs, and core. With a barbell in front of you, hinge at your hips to lift the weight while keeping your back straight.",
+      pathImage: myImage,
+      category: "Back"
+    },
+    {
+      name: "Pull Up",
+      des: "An upper body exercise that targets your back, biceps, and shoulders. Hang from a bar with palms facing away, then pull yourself up until your chin is over the bar.",
+      pathImage: myImage,
+      category: "Back"
+    },
+    {
+      name: "Shoulder Press",
+      des: "Also known as overhead press, this exercise targets your shoulders and triceps. Press a barbell or dumbbells from shoulder level to overhead.",
+      pathImage: myImage,
+      category: "Arms"
+    },
+    {
+      name: "Bicep Curl",
+      des: "An isolation exercise for the biceps. Hold dumbbells with palms facing up, keep your upper arms still, and curl the weights toward your shoulders.",
+      pathImage: myImage,
+      category: "Arms"
+    },
+    {
+      name: "Plank",
+      des: "A core strengthening exercise. Hold a push-up position with your body forming a straight line from head to heels, engaging your core muscles.",
+      pathImage: myImage,
+      category: "ABS"
+    },
+    {
+      name: "Leg Press",
+      des: "A machine exercise that targets your legs. Sit in the leg press machine, place your feet on the platform, and push the weight away by extending your legs.",
+      pathImage: myImage,
+      category: "Leg"
+    },
+    {
+      name: "Lat Pulldown",
+      des: "A back exercise performed on a cable machine. Grip the bar with hands wider than shoulder-width, then pull it down to your upper chest while keeping your back straight.",
+      pathImage: myImage,
+      category: "Back"
+    }
+  ];
+
+  const getAvailableExercises = () => {
+    const selectedExercises = exercises.map(ex => ex.name);
+    const filteredExercises = allExercises.filter(ex => 
+      (!selectedExercises.includes(ex.name) || ex.name === "Exercise") &&
+      (selectedCategory === "All" || ex.category === selectedCategory)
+    );
+    return filteredExercises;
+  };
 
   useEffect(() => {
     const date = new Date();
@@ -30,22 +103,36 @@ export default function NoteScreen({}) {
   const handleAddBox = () => {
     setExercises([
       ...exercises,
-      { id: exercises.length + 1, name: `Ex ${exercises.length + 1}` },
+      { id: exercises.length + 1, name: "Exercise", exercises: [] },
     ]);
   };
 
   const handleRemoveBox = () => {
-    setExercises(exercises.slice(0, -1));
+    setExercises([]);
   };
 
-  const handleAddExercise = () => {
-    console.log("Add exercise pressed");
+  const handleAddExercise = (exerciseId) => {
+    setCurrentExerciseId(exerciseId);
     setModalVisible(true);
   };
+
+  const handleSelectExercise = (exerciseName) => {
+    setExercises(exercises.map(exercise => 
+      exercise.id === currentExerciseId 
+        ? { ...exercise, name: exerciseName }
+        : exercise
+    ));
+    setModalVisible(false);
+  };
+
   const handleCategoryPress = (category) => {
     setSelectedCategory(category);
   };
-  
+
+  const handleRemoveExercise = (id) => {
+    setExercises(exercises.filter(exercise => exercise.id !== id));
+  };
+
   return (
     <View style={[NoteScreenStyle.container]}>
       <Header />
@@ -54,23 +141,42 @@ export default function NoteScreen({}) {
         <TouchableOpacity style={[styles.button, { marginBottom: 35 }]}>
           <Text style={[styles.buttonText]}>Start</Text>
         </TouchableOpacity>
-        <ScrollView>
+        <ScrollView style={{ paddingTop: 12, paddingRight: 12 }}>
           {exercises.map((exercise) => (
-            <View
-              key={exercise.id}
-              style={[NoteScreenStyle.input__section, { marginBottom: 17 }]}
-            >
-              <Text style={[NoteScreenStyle.addButtonText]}>
-                {exercise.name}
-              </Text>
-              <TouchableOpacity onPress={handleAddExercise}>
-                <AntDesign
-                  name="pluscircle"
-                  size={24}
-                  color="#4CAF50"
-                  style={NoteScreenStyle.icon}
-                />
-              </TouchableOpacity>
+            <View key={exercise.id} style={{ marginBottom: 17, position: 'relative', width: '100%' }}>
+              <View style={[NoteScreenStyle.input__section]}>
+                <View style={{ flex: 1 }}>
+                  <Text style={[NoteScreenStyle.addButtonText]}>
+                    {exercise.name}
+                  </Text>
+                </View>
+                <View style={{ position: 'absolute', right: 15, height: '100%', justifyContent: 'center' }}>
+                  <TouchableOpacity onPress={() => handleAddExercise(exercise.id)}>
+                    <AntDesign
+                      name="pluscircle"
+                      size={24}
+                      color="#4CAF50"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{ position: 'absolute', top: -10, right: -4, zIndex: 1 }}>
+                <TouchableOpacity onPress={() => handleRemoveExercise(exercise.id)}>
+                  <View style={{ 
+                    borderRadius: 12,
+                    width: 24,
+                    height: 24,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <AntDesign
+                      name="minuscircle"
+                      size={15}
+                      color="#FF6B6B"
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           ))}
           <Modal
@@ -78,32 +184,31 @@ export default function NoteScreen({}) {
             animationType="slide"
             transparent={true}
           >
-            
             <View style={[NoteScreenStyle.box_modal]}>
-              
               <View style={[NoteScreenStyle.inside_box_modal]}>
-              <IconFontAwesome5
-                      name={"dumbbell"}
-                      size={50}
-                      color={colors.clr_slate}
-                      style={[NoteScreenStyle.dumbbell_top]}
-                    />
-                    <IconFontAwesome5
-                      name={"dumbbell"}
-                      size={30}
-                      color={colors.clr_slate}
-                      style={[NoteScreenStyle.dumbbell_middle]}
-                    />
-                    <IconFontAwesome5
-                      name={"dumbbell"}
-                      size={55}
-                      color={colors.clr_slate}
-                      style={[NoteScreenStyle.dumbbell_bottom]}
-                    />
+                <IconFontAwesome5
+                  name={"dumbbell"}
+                  size={50}
+                  color={colors.clr_slate}
+                  style={[NoteScreenStyle.dumbbell_top]}
+                />
+                <IconFontAwesome5
+                  name={"dumbbell"}
+                  size={30}
+                  color={colors.clr_slate}
+                  style={[NoteScreenStyle.dumbbell_middle]}
+                />
+                <IconFontAwesome5
+                  name={"dumbbell"}
+                  size={55}
+                  color={colors.clr_slate}
+                  style={[NoteScreenStyle.dumbbell_bottom]}
+                />
                 <View
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
+                    marginBottom: 15
                   }}
                 >
                   <Text style={[NoteScreenStyle.modal_header_text_]}>
@@ -116,7 +221,7 @@ export default function NoteScreen({}) {
                       size={20}
                       color={colors.clr_gray}
                       style={{ paddingVertical: 10 }}
-                    ></AntDesign>
+                    />
                   </TouchableOpacity>
                 </View>
                 <View style={[NoteScreenStyle.modal_category_box]}>
@@ -283,16 +388,42 @@ export default function NoteScreen({}) {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View style={[NoteScreenStyle.modal_body]}>
-                  <ExerciseCard
-                    name="Bench Press"
-                    des="dkgjnifjuhbuhybhubuhbhbuhbhubhbuhbuhbuhbuhbdหกหดกหดกดกดกไดghefuihgefiff"
-                    pathImage={myImage}
-                  ></ExerciseCard>
-                  <ExerciseCard></ExerciseCard>
-                  <ExerciseCard></ExerciseCard>
-                  <ExerciseCard></ExerciseCard>
-                </View>
+                <ScrollView 
+                  style={{ marginTop: 20, flex: 1 }}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <View style={{ 
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 5
+                  }}>
+                    {getAvailableExercises().map((exercise, index) => (
+                      <TouchableOpacity 
+                        key={index} 
+                        onPress={() => handleSelectExercise(exercise.name)}
+                        style={{ 
+                          width: '48%',
+                          marginBottom: 15,
+                          backgroundColor: '#fff',
+                          borderRadius: 10,
+                          padding: 10,
+                          elevation: 2,
+                          shadowColor: '#000',
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.25,
+                          shadowRadius: 3.84,
+                        }}
+                      >
+                        <ExerciseCard
+                          name={exercise.name}
+                          des={exercise.des}
+                          pathImage={exercise.pathImage}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
               </View>
             </View>
           </Modal>
@@ -303,7 +434,7 @@ export default function NoteScreen({}) {
           </TouchableOpacity>
           <TouchableOpacity onPress={handleRemoveBox}>
             <Text style={[NoteScreenStyle.removeExerciseBoxText]}>
-              - remove exercise box
+              - remove all exercise box
             </Text>
           </TouchableOpacity>
         </ScrollView>
