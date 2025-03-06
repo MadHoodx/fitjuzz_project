@@ -21,8 +21,8 @@ import * as WebBrowser from 'expo-web-browser'
 WebBrowser.maybeCompleteAuthSession();
 import * as Google from 'expo-auth-session/providers/google'
 
-const GOOGLE_ANDROID_CLIENT_ID = "308302070658-jfv4i7e2ibs2ks2n5dmdlp8h5qp4ln5c.apps.googleusercontent.com"
-const WEB_CLIENT_ID = "308302070658-95rdvd7ldo3bi9vee4ehlom7rqeqil5a.apps.googleusercontent.com"
+
+
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
@@ -39,60 +39,50 @@ export default function SigninScreen({ updateActiveScreen }) {
 
   const [userInfo, setUserInfo] = useState('')
 
-  /******************** Google SignIn *********************/
+
   const [request, response, promptAsync] = Google.useAuthRequest({
-      androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-      webClientId: WEB_CLIENT_ID,
+      androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+      webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
   })
 
   useEffect(() => {
-      handleSignInWithGoogle();
+      handleSigninWithGoogle();
   }, [response])
 
-  const handleSignInWithGoogle = async () => {
+  const handleSigninWithGoogle = async () => {
       if (response?.type === "success") {
-          await getUserInfo(response.authentication.accessToken);
-          console.log("Successfully log out");
-          // navigation.navigate('MyTabs')
+          await getGoogleUserInfo(response.authentication.accessToken);
+          
+        
+          navigation.navigate('MyTabs')
       }
   }
 
-  const getUserInfo = async (token) => {
+  const getGoogleUserInfo = async (token) => {
       try {
           const response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
               headers: { Authorization: `Bearer ${token}` }
           })
 
           const user = await response.json();
-          await AsyncStorage.setItem('@user', JSON.stringify(user))
+          await AsyncStorage.setItem('user', JSON.stringify(user))
+          Alert.alert("Sign in with Google", JSON.stringify(user))
+          if(user) {
+              const response = await axios.post("http://192.168.221.234:5000/api/user/signinGoogle",  {
+              username : user.name,
+              email : user.email,
+              picture : user.picture
+            })
+
+            console.log(response)
+          }
+
           console.log(user)
           setUserInfo(user)
-      } catch (e) {
-          console.log(e)
+      } catch (error) {
+          console.log(error)
       }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -103,7 +93,8 @@ export default function SigninScreen({ updateActiveScreen }) {
   useEffect(() => {
     const checkToken = async () => {
       token = await AsyncStorage.getItem("token");
-      if (token) {
+      // user = await AsyncStorage.getItem("@user")
+      if (token || user) {
         navigation.navigate("MyTabs");
       }
     };
@@ -144,7 +135,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           { borderColor: "purple", paddingTop: 20 },
         ]}
       >
-        <Text>{JSON.stringify(userInfo)}</Text>
+        <Text>{JSON.stringify(userInfo, null, 2)}</Text>
         <TextInput
           style={[styles.input__box]}
           placeholder="Email"

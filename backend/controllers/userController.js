@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const userGoogleModel = require("../models/userGoogleModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -7,19 +8,21 @@ const userController = {
     const { email, password } = req.body;
 
     try {
-     
       const user = await userModel.findOne({ email });
-     
+
       if (!user) {
-        return res.status(400).json({ message: "Sorry, looks like that’s the wrong email or password. "});
+        return res.status(400).json({
+          message: "Sorry, looks like that’s the wrong email or password. ",
+        });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ message: "Sorry, looks like that’s the wrong email or password. "} );
+        return res.status(400).json({
+          message: "Sorry, looks like that’s the wrong email or password. ",
+        });
       }
 
-     
       const payload = {
         user: {
           id: user.id,
@@ -33,17 +36,14 @@ const userController = {
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }, 
+        { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, message: "Signin successful" }); 
+          res.json({ token, message: "Signin successful" });
         }
       );
     } catch (error) {
-      console.log(error.code)
-      if (error.code === 11000) { // MongoDB duplicate key error
-        return res.status(400 ).json({ error: "User already exists" });}
-       res.status(500).json({ message: "Server error" });
+      res.status(500).json({ message: "Server error" });
     }
   },
   signup: async (req, res) => {
@@ -51,10 +51,8 @@ const userController = {
 
     try {
       const user = await userModel.findOne({ $or: [{ username }, { email }] });
-      
       if (user) {
-        
-        return res.status(409).json({   message: "User already exist" });
+        return res.status(409).json({ message: "User already exist" });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -77,14 +75,14 @@ const userController = {
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }, 
+        { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, message: "Signup successful" }); 
+          res.json({ token, message: "Signup successful" });
         }
       );
     } catch (error) {
-       res.status(500).json({ message: "Server error" });
+      res.status(500).json({ message: "Server error" });
     }
   },
   profile: async (req, res) => {
@@ -99,11 +97,48 @@ const userController = {
 
       res.json(user);
     } catch (error) {
-      
       res.status(500).json({ message: "Server error" });
     }
   },
-  
+  signinGoogle: async (req, res) => {
+    const { username, email, picture } = req.body;
+
+    try {
+      const user = await userGoogleModel.findOne({ email });
+
+      if (user) {
+        return res.status(200).json({ message: "Sign in successful" });
+      }
+
+   
+      const newUser = new userGoogleModel({
+        username,
+        email,
+        picture,
+      });
+
+      await newUser.save();
+
+      const payload = {
+        user: {
+          username: newUser.username,
+          picture: newUser.picture,
+        },
+      };
+
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token, message: "Successful" });
+        }
+      );
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  },
 };
 
 module.exports = userController;
