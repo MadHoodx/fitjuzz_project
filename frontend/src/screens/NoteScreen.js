@@ -432,18 +432,7 @@ export default function NoteScreen({}) {
                       <TouchableOpacity 
                         key={index} 
                         onPress={() => handleSelectExercise(exercise.name)}
-                        style={{ 
-                          width: '47%',
-                          marginBottom: 15,
-                          backgroundColor: '#fff',
-                          borderRadius: 10,
-                          padding: 10,
-                          elevation: 2,
-                          shadowColor: '#000',
-                          shadowOffset: { width: 0, height: 2 },
-                          shadowOpacity: 0.25,
-                          shadowRadius: 3.84,
-                        }}
+                        style={[NoteScreenStyle.exercisecard]}
                       >
                         <ExerciseCard
                           name={exercise.name}

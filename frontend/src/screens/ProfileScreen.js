@@ -22,6 +22,7 @@ import IconFontisto from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { launchImageLibrary } from 'react-native-image-picker';
 
 import axios from "axios";
 
@@ -37,6 +38,7 @@ export default function ProfileScreen({}) {
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const navigation = useNavigation();
 
@@ -79,7 +81,7 @@ export default function ProfileScreen({}) {
     };
 
     fetchUser();
-  });
+  },[]);
 
   const handleWeightUpdate = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -219,6 +221,24 @@ export default function ProfileScreen({}) {
   const calculatedBmi = parseFloat(calBmi());
   const pointerPosition = getPointerPosition(calculatedBmi);
   const bmiColor = getBMIColor(calculatedBmi);
+ 
+  const handleImagePicker = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = { uri: response.assets[0].uri };
+        setSelectedImage(source);
+      }
+    });
+  }
+  
 
   return (
     <View style={[ProfileScreenStyle.container]}>
@@ -228,11 +248,11 @@ export default function ProfileScreen({}) {
           <View style={[ProfileScreenStyle.profile_box]}>
             <View style={[ProfileScreenStyle.profile]}>
               <Image
-                source={require("../assets/images/profileplaceholder.jpeg")}
+                source={selectedImage}
                 style={{ width: 100, height: 100 }}
               />
             </View>
-            <TouchableOpacity style={[ProfileScreenStyle.edit_profile_image]}>
+            <TouchableOpacity style={[ProfileScreenStyle.edit_profile_image]} onPress={handleImagePicker}>
               <IconEntypo name={"edit"} size={10} color={colors.clr_gray} />
             </TouchableOpacity>
             <View
