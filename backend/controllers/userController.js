@@ -89,40 +89,60 @@ const userController = {
     const userId = req.params.id;
 
     try {
-      const user = await userModel.findById(userId).select("-password"); // Exclude password from response
+      const user = await userModel.findById(userId).select("-password");
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-
       res.json(user);
     } catch (error) {
       res.status(500).json({ message: "Server error" });
     }
   },
   signinGoogle: async (req, res) => {
-    const { username, email, picture } = req.body;
+    const { googleid, name, username, email, picture } = req.body;
 
     try {
       const user = await userGoogleModel.findOne({ email });
 
-      if (user) {
-        return res.status(200).json({ message: "Sign in successful" });
+      if (!user) {
+        const newUser = new userGoogleModel({
+          googleid,
+          name,
+          username,
+          email,
+          picture,
+        });
+
+        await newUser.save();
+
+        const payload = {
+          user: {
+            id: newUser.id,
+            name: newUser.name,
+            username: newUser.username,
+            picture: newUser.picture,
+          },
+        };
+
+        jwt.sign(
+          payload,
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" },
+          (err, token) => {
+            if (err) throw err;
+
+            res.json({ token, message: "Sign up successful" });
+          }
+        );
       }
-
-   
-      const newUser = new userGoogleModel({
-        username,
-        email,
-        picture,
-      });
-
-      await newUser.save();
 
       const payload = {
         user: {
-          username: newUser.username,
-          picture: newUser.picture,
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          picture: user.picture,
         },
       };
 
@@ -132,9 +152,25 @@ const userController = {
         { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, message: "Successful" });
+
+          res.json({ token, message: "Sign in successful" });
         }
       );
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+  profileGoogle: async (req, res) => {
+    const userGoogleId = req.params.id;
+
+    try {
+      const userGoogle = await userGoogleModel.findById(userGoogleId);
+
+      if (!userGoogle) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json(userGoogle);
     } catch (error) {
       res.status(500).json({ message: "Server error" });
     }

@@ -17,12 +17,9 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 
-import * as WebBrowser from 'expo-web-browser'
+import * as WebBrowser from "expo-web-browser";
 WebBrowser.maybeCompleteAuthSession();
-import * as Google from 'expo-auth-session/providers/google'
-
-
-
+import * as Google from "expo-auth-session/providers/google";
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
@@ -32,69 +29,63 @@ export default function SigninScreen({ updateActiveScreen }) {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(0);
 
-
-
-
-
-
-  const [userInfo, setUserInfo] = useState('')
-
+  const [userInfo, setUserInfo] = useState("");
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-      androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
-      webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-  })
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
+  });
 
   useEffect(() => {
-      handleSigninWithGoogle();
-  }, [response])
+    handleSigninWithGoogle();
+  }, [response]);
 
   const handleSigninWithGoogle = async () => {
-      if (response?.type === "success") {
-          await getGoogleUserInfo(response.authentication.accessToken);
-          
-        
-          navigation.navigate('MyTabs')
-      }
-  }
+    if (response?.type === "success") {
+      await getGoogleUserInfo(response.authentication.accessToken);
+
+      navigation.navigate("MyTabs");
+    }
+  };
 
   const getGoogleUserInfo = async (token) => {
-      try {
-          const response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-              headers: { Authorization: `Bearer ${token}` }
-          })
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-          const user = await response.json();
-          await AsyncStorage.setItem('user', JSON.stringify(user))
-          Alert.alert("Sign in with Google", JSON.stringify(user))
-          if(user) {
-              const response = await axios.post("http://192.168.221.234:5000/api/user/signinGoogle",  {
-              username : user.name,
-              email : user.email,
-              picture : user.picture
-            })
+      const user = await response.json();
 
-            console.log(response)
+      if (user) {
+        const response = await axios.post(
+          "http://192.168.221.234:5000/api/user/signinGoogle",
+          {
+            googleid: user.id,
+            name: user.given_name,
+            username: user.name,
+            email: user.email,
+            picture: user.picture,
           }
+        );
 
-          console.log(user)
-          setUserInfo(user)
-      } catch (error) {
-          console.log(error)
+        await AsyncStorage.setItem("userGoogle", response.data.token);
       }
-  }
-
-
-
-
-
-
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const checkToken = async () => {
       token = await AsyncStorage.getItem("token");
-      // user = await AsyncStorage.getItem("@user")
-      if (token || user) {
+      userGoogle = await AsyncStorage.getItem("userGoogle");
+      if (token) {
+        navigation.navigate("MyTabs");
+      }
+      else if (userGoogle) {
         navigation.navigate("MyTabs");
       }
     };
@@ -111,17 +102,14 @@ export default function SigninScreen({ updateActiveScreen }) {
         }
       );
 
-   
       await AsyncStorage.setItem("token", response.data.token);
       navigation.navigate("MyTabs");
-
     } catch (error) {
       setLoading(1);
-    
+
       if (error.status == 400) {
         setError("Sorry, looks like that’s the wrong email or password.");
-      }
-      else {
+      } else {
         setError("An unexpected error occurred");
       }
     }
@@ -135,7 +123,6 @@ export default function SigninScreen({ updateActiveScreen }) {
           { borderColor: "purple", paddingTop: 20 },
         ]}
       >
-        <Text>{JSON.stringify(userInfo, null, 2)}</Text>
         <TextInput
           style={[styles.input__box]}
           placeholder="Email"
@@ -175,8 +162,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={SigninScreenStyle.button}
-           
-            onPress={() =>  promptAsync() }
+            onPress={() => promptAsync()}
           >
             <Image
               source={require("../assets/images/google-logo.png")}

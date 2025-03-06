@@ -25,8 +25,7 @@ import { jwtDecode } from "jwt-decode";
 
 import axios from "axios";
 
-
- // อาม
+// อาม
 export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
   const [weight, setWeight] = useState(0);
@@ -43,16 +42,33 @@ export default function ProfileScreen({}) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken.user.id;
+      const token = await AsyncStorage.getItem("token");
+      const userGoogle = await AsyncStorage.getItem("userGoogle");
 
+      try {
         if (token) {
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken.user.id;
+          console.log(decodedToken);
+
           const response = await axios.get(
             `http://192.168.221.234:5000/api/user/${userId}/profile`
           );
+          console.log(response);
           setUsername(response.data.username);
+          setWeight(response.data.weight);
+          setHeight(response.data.height);
+          setFat(response.data.fat);
+        } else if (userGoogle) {
+          const decodedUserGoogle = jwtDecode(userGoogle);
+          const userGoogleId = decodedUserGoogle.user.id;
+          console.log(decodedUserGoogle);
+
+          const response = await axios.get(
+            `http://192.168.221.234:5000/api/user/${userGoogleId}/profileGoogle`
+          );
+          console.log(response);
+          setUsername(response.data.name);
           setWeight(response.data.weight);
           setHeight(response.data.height);
           setFat(response.data.fat);
@@ -66,22 +82,35 @@ export default function ProfileScreen({}) {
   });
 
   const handleWeightUpdate = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const userGoogle = await AsyncStorage.getItem("userGoogle");
+
     try {
-      const token = await AsyncStorage.getItem("token");
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.user.id;
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.user.id;
+        await axios.put(
+          `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
+          {
+            weight: parseFloat(tempWeight),
+          }
+        );
 
-      console.log(decodedToken.user.id);
+        setWeight(tempWeight);
+        setModalVisibleWeight(false);
+      } else if (userGoogle) {
+        const decodedUserGoole = jwtDecode(userGoogle);
+        const userGoogleId = decodedUserGoole.user.id;
 
-      await axios.put(
-        `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
-        {
-          weight: parseFloat(tempWeight),
-        }
-      );
-
-      setWeight(tempWeight);
-      setModalVisibleWeight(false);
+        await axios.put(
+          `http://192.168.221.234:5000/api/user/${userGoogleId}/updateWeightGoogle`,
+          {
+            weight: parseFloat(tempWeight),
+          }
+        );
+        setWeight(tempWeight);
+        setModalVisibleWeight(false);
+      }
     } catch (error) {
       console.error("Error updating weight:", error);
       Alert.alert("Error", "An error occurred while updating weight.");
@@ -133,7 +162,7 @@ export default function ProfileScreen({}) {
   const haddleLogout = async () => {
     try {
       await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("@user");
+      await AsyncStorage.removeItem("userGoogle");
       console.log("Successfully log out");
       navigation.navigate("Main");
     } catch (error) {

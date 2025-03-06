@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { View, Text, StyleSheet, Platform, Alert } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 
 import { jwtDecode } from "jwt-decode";
@@ -62,12 +62,22 @@ export default function Header({}) {
   };
 
   const fetchUsername = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const userGoogle = await AsyncStorage.getItem("userGoogle");
+    
     try {
-      const token = await AsyncStorage.getItem("token");
+   
       if (token) {
         const decodedToken = jwtDecode(token);
         setUsername(decodedToken.user.username);
+     
       }
+      else if (userGoogle) {
+   
+        const decodedUserGoogle = jwtDecode(userGoogle);
+        setUsername(decodedUserGoogle.user.name);
+      }
+   
     } catch (error) {
       console.error("Error fetching username:", error);
     }
