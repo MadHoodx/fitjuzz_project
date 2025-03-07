@@ -14,11 +14,16 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './src/screens/MainScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
+import { useEffect } from 'react';
+
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
+
+ 
   return (
     <Tab.Navigator
       initialRouteName="Home"

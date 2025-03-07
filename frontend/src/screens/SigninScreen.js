@@ -90,11 +90,13 @@ export default function SigninScreen({ updateActiveScreen }) {
   };
 
   const handleSignin = async () => {
-    setLoading(1);
+   
     if (email == "" && password !== "") {
+      setLoading(1);
       setError("Please enter your email");
       return
     } else if (email !== "" && password == "") {
+      setLoading(1);
       setError("Please enter your password");
       return
     } 

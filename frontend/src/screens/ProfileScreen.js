@@ -22,11 +22,10 @@ import IconFontisto from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { launchImageLibrary } from "react-native-image-picker";
-
+import * as ImagePicker from 'expo-image-picker';
 import axios from "axios";
 
-// อาม
+
 export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
   const [weight, setWeight] = useState(0);
@@ -39,7 +38,7 @@ export default function ProfileScreen({}) {
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-
+  const [image, setImage] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -62,7 +61,8 @@ export default function ProfileScreen({}) {
         setWeight(response.data.weight);
         setHeight(response.data.height);
         setFat(response.data.fat);
-        setSelectedImage(response.data.picture)
+        setSelectedImage(response.data.picture);
+        console.log(response.data.picture);
       } else if (userGoogleToken) {
         const decodedUserGoogleToken = jwtDecode(userGoogleToken);
         const userId = decodedUserGoogleToken.userId;
@@ -186,52 +186,57 @@ export default function ProfileScreen({}) {
       Alert.alert("Error", "An error occurred while updating fat.");
     }
   };
-  const handleImagePicker = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
-    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
 
-    const options = {
-      mediaType: "photo",
-      includeBase64: false,
-    };
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-       console.log("User cancelled image picker");
-      } else if (response.error) {
-      console.log("ImagePicker Error: ", response.error);
-      } else {
-        const source = { uri: response.assets[0].uri };
-        setSelectedImage(source);
-        
-    try{
+  const handleImagePicker  = async () => {
+    
+    const userToken =  await AsyncStorage.getItem("userToken");
+    const userGoogleToken =  await AsyncStorage.getItem("userGoogleToken");
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      const { uri } = result.assets[0]; // Get the URI of the selected image
+
+      setSelectedImage(uri)
+
       if (userToken) {
         const decodedUserToken = jwtDecode(userToken);
         const userId = decodedUserToken.userId;
-        axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
-          {
-            picture: JSON.stringify(source.uri),
-          }
-        );
-      } else if (userGoogleToken) {
-        const decodedUserGooleToken = jwtDecode(userGoogleToken);
-        const userId = decodedUserGooleToken.userId;
-  
-        axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
-          {
-            picture: source,
-          }
-        );
-      }
-      }
-      catch (error) {
-        console.error("Error updating picture:", error);
-        Alert.alert("Error", "An error occurred while updating picture.");
-      }
-      }
-    });
 
+        try {
+          const response =  axios.put(
+            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
+            {
+              picture: uri, // Send the image URI in the request
+            }
+          );
+          console.log("Image upload successful:", response);
+        } catch (error) {
+          console.error("Image upload failed:", error);
+        }
+      } else if (userGoogleToken) {
+        const decodedUserGoogleToken = jwtDecode(userGoogleToken);
+        const userId = decodedUserGoogleToken.userId;
+
+        try {
+          const response =  axios.put(
+            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
+            {
+              picture: uri, // Send the image URI in the request
+            }
+          );
+          console.log("Image upload successful:", response);
+        } catch (error) {
+          console.error("Image upload failed:", error);
+        }
+      }
+    }
   };
 
   const haddleLogout = async () => {
@@ -304,7 +309,7 @@ export default function ProfileScreen({}) {
           <View style={[ProfileScreenStyle.profile_box]}>
             <View style={[ProfileScreenStyle.profile]}>
               <Image
-                source={ selectedImage}
+                source={{ uri: selectedImage }}
                 style={{ width: 200, height: 100 }}
               />
             </View>

@@ -63,9 +63,8 @@ const userUpdateController = {
   updatePicture: async (req,res) => {
     const { id } = req.params
     const { picture } = req.body
-
     try {
-      console.log(picture)
+      
       const user = await userModel.findByIdAndUpdate(
         id,
         { picture },

@@ -28,29 +28,37 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
-    setLoading(1);
+ 
     if (username == "" && email !== "" && password !== "") {
+      setLoading(1);
       setError("Please enter your username");
       return
     } else if (username !== "" && email == "" && password !== "") {
+      setLoading(1);
       setError("Please enter your email");
       return
     } else if (username == "" && email == "" && password !== "") {
+      setLoading(1);
       setError("Please enter your username and email");
       return
     } else if (username == "" && email !== "" && password == "") {
+      setLoading(1);
       setError("Please enter your username and password");
       return
     } else if (username !== "" && email !== "" && password == "") {
+      setLoading(1);
       setError("Please enter your password");
       return
     } else if (username !== "" && email == "" && password == "") {
+      setLoading(1);
       setError("Please enter your email and password");
       return
     } else if (username == "" && email == "" && password == "") {
+      setLoading(1);
       setError("Please enter your incredentials");
       return
     } else if (password !== confirmPassword) {
+      setLoading(1);
       setError("Passwords do not match");
       return
     } 
