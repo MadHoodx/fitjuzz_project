@@ -54,7 +54,7 @@ export default function ProfileScreen({}) {
           console.log(decodedToken);
 
           const response = await axios.get(
-            `http://192.168.221.234:5000/api/user/${userId}/profile`
+            `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
           );
           console.log(response);
           setUsername(response.data.username);
@@ -67,7 +67,7 @@ export default function ProfileScreen({}) {
           console.log(decodedUserGoogle);
 
           const response = await axios.get(
-            `http://192.168.221.234:5000/api/user/${userGoogleId}/profileGoogle`
+            `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userGoogleId}/profileGoogle`
           );
           console.log(response);
           setUsername(response.data.name);
@@ -92,7 +92,7 @@ export default function ProfileScreen({}) {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.user.id;
         await axios.put(
-          `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
           {
             weight: parseFloat(tempWeight),
           }
@@ -105,7 +105,7 @@ export default function ProfileScreen({}) {
         const userGoogleId = decodedUserGoole.user.id;
 
         await axios.put(
-          `http://192.168.221.234:5000/api/user/${userGoogleId}/updateWeightGoogle`,
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userGoogleId}/updateWeightGoogle`,
           {
             weight: parseFloat(tempWeight),
           }
@@ -126,7 +126,7 @@ export default function ProfileScreen({}) {
       const userId = decodedToken.user.id;
 
       await axios.put(
-        `http://192.168.221.234:5000/api/user/${userId}/updateHeight`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
         {
           height: parseFloat(tempHeight),
         }
@@ -147,7 +147,7 @@ export default function ProfileScreen({}) {
       const userId = decodedToken.user.id;
 
       await axios.put(
-        `http://192.168.221.234:5000/api/user/${userId}/updateFat`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
         {
           fat: parseFloat(tempFat), // Convert weight to number
         }

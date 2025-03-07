@@ -49,7 +49,7 @@ export default function SignupScreen({ updateActiveScreen }) {
 
     try {
       const response = await axios.post(
-        "http://192.168.221.234:5000/api/user/signup",
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signup`,
 
         {
           username,

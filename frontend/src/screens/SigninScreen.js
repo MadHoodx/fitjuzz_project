@@ -61,7 +61,7 @@ export default function SigninScreen({ updateActiveScreen }) {
 
       if (user) {
         const response = await axios.post(
-          "http://192.168.221.234:5000/api/user/signinGoogle",
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signinGoogle`,
           {
             googleid: user.id,
             name: user.given_name,
@@ -95,7 +95,7 @@ export default function SigninScreen({ updateActiveScreen }) {
   const handleSignin = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.221.234:5000/api/user/signin",
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
         {
           email,
           password,
