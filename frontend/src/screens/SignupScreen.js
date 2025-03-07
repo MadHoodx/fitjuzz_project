@@ -28,44 +28,51 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
+    setLoading(1);
     if (username == "" && email !== "" && password !== "") {
       setError("Please enter your username");
+      return
     } else if (username !== "" && email == "" && password !== "") {
       setError("Please enter your email");
+      return
     } else if (username == "" && email == "" && password !== "") {
       setError("Please enter your username and email");
+      return
     } else if (username == "" && email !== "" && password == "") {
       setError("Please enter your username and password");
+      return
     } else if (username !== "" && email !== "" && password == "") {
       setError("Please enter your password");
+      return
     } else if (username !== "" && email == "" && password == "") {
       setError("Please enter your email and password");
+      return
     } else if (username == "" && email == "" && password == "") {
       setError("Please enter your incredentials");
+      return
     } else if (password !== confirmPassword) {
-      setLoading(1);
       setError("Passwords do not match");
-    }
-
+      return
+    } 
     try {
       const response = await axios.post(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signup`,
         {
           username,
           email,
-          password,
+          password
         }
       );
-      
+
       await AsyncStorage.setItem("userToken", response.data.token);
       navigation.navigate("MyTabs");
-     
-
     } catch (error) {
       setLoading(1);
       if (error.status == 409) {
         setError("User already exists");
-      } 
+      } else {
+        setError("An unexpected error occurred");
+      }
     }
   };
 

@@ -33,8 +33,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     paddingHorizontal: 40,
     marginTop: Platform.OS === "android" ? sizes.size_5xl : 0,
-    // borderWidth: 2,
-    // borderColor: "red",
+   
 
   },
   section: {

@@ -26,7 +26,7 @@ export default function SigninScreen({ updateActiveScreen }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(0);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -40,11 +40,11 @@ export default function SigninScreen({ updateActiveScreen }) {
 
   useEffect(() => {
     const checkToken = async () => {
-      token = await AsyncStorage.getItem("token");
-      userGoogle = await AsyncStorage.getItem("userGoogle");
-      if (token) {
+      userToken = await AsyncStorage.getItem("userToken");
+      userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+      if (userToken) {
         navigation.navigate("MyTabs");
-      } else if (userGoogle) {
+      } else if (userGoogleToken) {
         navigation.navigate("MyTabs");
       }
     };
@@ -90,6 +90,14 @@ export default function SigninScreen({ updateActiveScreen }) {
   };
 
   const handleSignin = async () => {
+    setLoading(1);
+    if (email == "" && password !== "") {
+      setError("Please enter your email");
+      return
+    } else if (email !== "" && password == "") {
+      setError("Please enter your password");
+      return
+    } 
     try {
       const response = await axios.post(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
@@ -102,10 +110,10 @@ export default function SigninScreen({ updateActiveScreen }) {
       navigation.navigate("MyTabs");
     } catch (error) {
       setLoading(1);
-
       if (error.status == 400) {
         setError("Sorry, looks like that’s the wrong email or password.");
-      } else {
+      }
+      else {
         setError("An unexpected error occurred");
       }
     }
@@ -132,6 +140,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           placeholder={"Password"}
         ></InputWithEye>
         {loading ? <Text style={SigninScreenStyle.error}>{error}</Text> : null}
+
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
             Forget Password?

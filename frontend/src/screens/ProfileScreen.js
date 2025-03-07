@@ -38,7 +38,7 @@ export default function ProfileScreen({}) {
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
 
   const navigation = useNavigation();
 
@@ -53,7 +53,6 @@ export default function ProfileScreen({}) {
       if (userToken) {
         const decodedUserToken = jwtDecode(userToken);
         const userId = decodedUserToken.userId;
-       
 
         const response = await axios.get(
           `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
@@ -63,12 +62,11 @@ export default function ProfileScreen({}) {
         setWeight(response.data.weight);
         setHeight(response.data.height);
         setFat(response.data.fat);
+        setSelectedImage(response.data.picture)
       } else if (userGoogleToken) {
         const decodedUserGoogleToken = jwtDecode(userGoogleToken);
         const userId = decodedUserGoogleToken.userId;
 
-                  
-       
         const response = await axios.get(
           `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
         );
@@ -77,6 +75,7 @@ export default function ProfileScreen({}) {
         setWeight(response.data.weight);
         setHeight(response.data.height);
         setFat(response.data.fat);
+        setSelectedImage(response.data.picture);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -92,12 +91,11 @@ export default function ProfileScreen({}) {
         const decodedUserToken = jwtDecode(userToken);
         const userId = decodedUserToken.userId;
         await axios.put(
-          `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
           {
             weight: parseFloat(tempWeight),
           }
         );
-
         setWeight(tempWeight);
         setModalVisibleWeight(false);
       } else if (userGoogleToken) {
@@ -105,7 +103,7 @@ export default function ProfileScreen({}) {
         const userId = decodedUserGooleToken.userId;
 
         await axios.put(
-          `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
           {
             weight: parseFloat(tempWeight),
           }
@@ -115,50 +113,125 @@ export default function ProfileScreen({}) {
       }
     } catch (error) {
       console.error("Error updating weight:", error);
-      Alert.alert("Error", "An error occurred while updating weight.");
+      Alert.alert("Error", "An error occurred while updating weight.", error);
     }
   };
 
   const handleHeightUpdate = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+
     try {
-      const token = await AsyncStorage.getItem("token");
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.user.id;
+      if (userToken) {
+        const decodedUserToken = jwtDecode(userToken);
+        const userId = decodedUserToken.userId;
+        await axios.put(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
+          {
+            height: parseFloat(tempHeight),
+          }
+        );
+        setHeight(tempHeight);
+        setModalVisibleHeight(false);
+      } else if (userGoogleToken) {
+        const decodedUserGooleToken = jwtDecode(userGoogleToken);
+        const userId = decodedUserGooleToken.userId;
 
-      await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
-        {
-          height: parseFloat(tempHeight),
-        }
-      );
-
-      setHeight(tempHeight);
-      setModalVisibleHeight(false);
+        await axios.put(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
+          {
+            height: parseFloat(tempHeight),
+          }
+        );
+        setHeight(tempHeight);
+        setModalVisibleHeight(false);
+      }
     } catch (error) {
       console.error("Error updating height:", error);
-      Alert.alert("Error", "An error occurred while updating height.");
+      Alert.alert("Error", "An error occurred while updating height.", error);
     }
   };
 
   const handleFatUpdate = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+
     try {
-      const token = await AsyncStorage.getItem("token");
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.user.id;
+      if (userToken) {
+        const decodedUserToken = jwtDecode(userToken);
+        const userId = decodedUserToken.userId;
+        await axios.put(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
+          {
+            fat: parseFloat(tempFat),
+          }
+        );
+        setFat(tempWeight);
+        setModalVisibleFat(false);
+      } else if (userGoogleToken) {
+        const decodedUserGooleToken = jwtDecode(userGoogleToken);
+        const userId = decodedUserGooleToken.userId;
 
-      await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
-        {
-          fat: parseFloat(tempFat), // Convert weight to number
-        }
-      );
-
-      setFat(tempFat);
-      setModalVisibleFat(false);
+        await axios.put(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
+          {
+            fat: parseFloat(tempFat),
+          }
+        );
+        setFat(tempFat);
+        setModalVisibleFat(false);
+      }
     } catch (error) {
-      console.error("Error updating bodyfat:", error);
-      Alert.alert("Error", "An error occurred while updating bodyfat.");
+      console.error("Error updating fat:", error);
+      Alert.alert("Error", "An error occurred while updating fat.");
     }
+  };
+  const handleImagePicker = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+
+    const options = {
+      mediaType: "photo",
+      includeBase64: false,
+    };
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+       console.log("User cancelled image picker");
+      } else if (response.error) {
+      console.log("ImagePicker Error: ", response.error);
+      } else {
+        const source = { uri: response.assets[0].uri };
+        setSelectedImage(source);
+        
+    try{
+      if (userToken) {
+        const decodedUserToken = jwtDecode(userToken);
+        const userId = decodedUserToken.userId;
+        axios.put(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
+          {
+            picture: JSON.stringify(source.uri),
+          }
+        );
+      } else if (userGoogleToken) {
+        const decodedUserGooleToken = jwtDecode(userGoogleToken);
+        const userId = decodedUserGooleToken.userId;
+  
+        axios.put(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
+          {
+            picture: source,
+          }
+        );
+      }
+      }
+      catch (error) {
+        console.error("Error updating picture:", error);
+        Alert.alert("Error", "An error occurred while updating picture.");
+      }
+      }
+    });
+
   };
 
   const haddleLogout = async () => {
@@ -223,23 +296,6 @@ export default function ProfileScreen({}) {
   const pointerPosition = getPointerPosition(calculatedBmi);
   const bmiColor = getBMIColor(calculatedBmi);
 
-  const handleImagePicker = () => {
-    const options = {
-      mediaType: "photo",
-      includeBase64: false,
-    };
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else {
-        const source = { uri: response.assets[0].uri };
-        setSelectedImage(source);
-      }
-    });
-  };
-
   return (
     <View style={[ProfileScreenStyle.container]}>
       <Header />
@@ -248,8 +304,8 @@ export default function ProfileScreen({}) {
           <View style={[ProfileScreenStyle.profile_box]}>
             <View style={[ProfileScreenStyle.profile]}>
               <Image
-                source={selectedImage}
-                style={{ width: 100, height: 100 }}
+                source={ selectedImage}
+                style={{ width: 200, height: 100 }}
               />
             </View>
             <TouchableOpacity

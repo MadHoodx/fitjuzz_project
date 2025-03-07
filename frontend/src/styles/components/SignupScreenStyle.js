@@ -6,8 +6,6 @@ const SignupScreenStyle = StyleSheet.create({
     flex: 1,
   },
   input__section: {
-
-    marginTop: 20,
     gap: 16,
   },
   forgetPassword: {

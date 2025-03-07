@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const userUpdate = require("../controllers/userUpdateController");
+const userUpdateController = require("../controllers/userUpdateController");
 
-router.put("/:id/updateWeight", userUpdate.updateWeight);
-router.put("/:id/updateHeight", userUpdate.updateHeight);
-router.put("/:id/updateFat", userUpdate.updateFat);
-
+router.put("/:id/updateWeight", userUpdateController.updateWeight);
+router.put("/:id/updateHeight", userUpdateController.updateHeight);
+router.put("/:id/updateFat", userUpdateController.updateFat);
+router.put("/:id/updatePicture", userUpdateController.updatePicture)
 module.exports = router;

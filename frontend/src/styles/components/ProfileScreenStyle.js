@@ -42,7 +42,7 @@ const ProfileScreenStyle = StyleSheet.create({
   profile: {
     width: 100,
     height: 100,
-    backgroundColor: "red",
+    borderWidth: 2,
     borderRadius: 100,
     overflow: "hidden",
     justifyContent: "center",
