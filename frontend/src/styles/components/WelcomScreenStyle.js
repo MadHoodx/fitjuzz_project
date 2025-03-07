@@ -7,7 +7,6 @@ const WelcomeScreenStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.clr_slate,
-    marginTop: Platform.OS === 'android' ? 50 : 0
   },
   placeholder: {
     maxWidth: '100%',

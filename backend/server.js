@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const userRoute = require('./routes/userRoute');
-const userUpdate = require('./routes/userUpdate');
+const userUpdateRoute = require('./routes/userUpdateRoute');
 const otpRoute = require('./routes/otpRoute')
 
 
@@ -13,8 +13,6 @@ app.use(express.json());
 app.use(cors()); 
 
 
-
-// MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -24,19 +22,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 
 
-app.use('/api/user', userRoute,userUpdate)
+app.use('/api/user', userRoute,userUpdateRoute)
 app.use('/api/user', otpRoute)
-
-
-
-
-
-
-
-
-
-
-  
 
 
 

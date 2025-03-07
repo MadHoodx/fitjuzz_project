@@ -1,56 +1,74 @@
 const userModel = require("../models/userModel");
-const userGoogleModel = require("../models/userGoogleModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const userController = {
   signin: async (req, res) => {
-    const { email, password } = req.body;
-
+    // const { email, password } = req.body;
+    const { googleId, name, givenName, familyName, email, picture, password } =
+      req.body;
     try {
-      const user = await userModel.findOne({ email });
+      if (email && password) {
+        const user = await userModel.findOne({ userType: "normal", email });
 
-      if (!user) {
-        return res.status(400).json({
-          message: "Sorry, looks like that’s the wrong email or password. ",
-        });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(400).json({
-          message: "Sorry, looks like that’s the wrong email or password. ",
-        });
-      }
-
-      const payload = {
-        user: {
-          id: user.id,
-          username: user.username,
-          weight: user.weight,
-          height: user.height,
-          fat: user.fat,
-        },
-      };
-
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token, message: "Signin successful" });
+        if (!user) {
+          return res.status(400).json({
+            message: "Sorry, looks like that’s the wrong email or password. ",
+          });
         }
-      );
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res.status(400).json({
+            message: "Sorry, looks like that’s the wrong email or password. ",
+          });
+        }
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+
+        res.json({ token });
+      } else if (googleId) {
+        const userGoogle = await userModel.findOne({
+          userType: "google",
+          email,
+        });
+        if (!userGoogle) {
+          const newUser = new userModel({
+            userType: "google",
+            googleId,
+            name,
+            givenName,
+            familyName,
+            email,
+            picture,
+          });
+
+          await newUser.save();
+
+          const token = jwt.sign(
+            { userId: newUser.id },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: "1h",
+            }
+          );
+          return res.json({ token });
+        }
+        const token = jwt.sign({ userId: userGoogle.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+        return res.json({ token });
+      }
     } catch (error) {
       res.status(500).json({ message: "Server error" });
     }
   },
   signup: async (req, res) => {
     const { username, email, password } = req.body;
-
+    console.log(req.body);
     try {
-      const user = await userModel.findOne({ $or: [{ username }, { email }] });
+      const user = await userModel.findOne({ userType: "normal", email });
+
       if (user) {
         return res.status(409).json({ message: "User already exist" });
       }
@@ -58,6 +76,7 @@ const userController = {
       const hashedPassword = await bcrypt.hash(password, 12);
 
       const newUser = new userModel({
+        userType: "normal",
         username,
         email,
         password: hashedPassword,
@@ -65,22 +84,11 @@ const userController = {
 
       await newUser.save();
 
-      const payload = {
-        user: {
-          id: newUser.id,
-          username: newUser.username,
-        },
-      };
+      const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
 
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token, message: "Signup successful" });
-        }
-      );
+      res.json({ token });
     } catch (error) {
       res.status(500).json({ message: "Server error" });
     }
@@ -90,91 +98,68 @@ const userController = {
 
     try {
       const user = await userModel.findById(userId).select("-password");
+      // const userGoogle = await userGoogleModel.findById(userId);
 
-      if (!user) {
+      if (user) {
+        res.json(user);
+      }
+      // else if (userGoogle) {
+      //   res.json(userGoogle);
+      // }
+      else {
         return res.status(404).json({ message: "User not found" });
       }
-      res.json(user);
     } catch (error) {
       res.status(500).json({ message: "Server error" });
     }
   },
   signinGoogle: async (req, res) => {
-    const { googleid, name, username, email, picture } = req.body;
-
+    const { googleId, name, givenName, familyName, email, picture } = req.body;
     try {
-      const user = await userGoogleModel.findOne({ email });
+      const user = await userModel.findOne({ userType: "google", email });
 
       if (!user) {
-        const newUser = new userGoogleModel({
-          googleid,
+        const newUser = new userModel({
+          userType: "google",
+          googleId,
           name,
-          username,
+          givenName,
+          familyName,
           email,
           picture,
         });
 
         await newUser.save();
 
-        const payload = {
-          user: {
-            id: newUser.id,
-            name: newUser.name,
-            username: newUser.username,
-            picture: newUser.picture,
-          },
-        };
-
-        jwt.sign(
-          payload,
-          process.env.JWT_SECRET,
-          { expiresIn: "1h" },
-          (err, token) => {
-            if (err) throw err;
-
-            res.json({ token, message: "Sign up successful" });
-          }
-        );
+        const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+        return res.json({ token });
       }
 
-      const payload = {
-        user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          picture: user.picture,
-        },
-      };
-
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" },
-        (err, token) => {
-          if (err) throw err;
-
-          res.json({ token, message: "Sign in successful" });
-        }
-      );
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+      res.json({ token });
     } catch (error) {
       res.status(500).json({ message: "Server error" });
     }
   },
-  profileGoogle: async (req, res) => {
-    const userGoogleId = req.params.id;
+  // profileGoogle: async (req, res) => {
+  //   const userId = req.params.id;
 
-    try {
-      const userGoogle = await userGoogleModel.findById(userGoogleId);
+  //   try {
+  //     const user = await userGoogleModel.findById(userId);
+  //     console.log(user)
+  //     if (!user) {
+  //       return res.status(404).json({ message: "User not found" });
+  //     }
 
-      if (!userGoogle) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      res.json(userGoogle);
-    } catch (error) {
-      res.status(500).json({ message: "Server error" });
-    }
-  },
+  //     res.json(user);
+  //   } catch (error) {
+  //     res.status(500).json({ message: "Server error" });
+  //   }
+  // },
 };
 
 module.exports = userController;

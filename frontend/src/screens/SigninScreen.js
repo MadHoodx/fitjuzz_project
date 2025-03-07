@@ -29,8 +29,6 @@ export default function SigninScreen({ updateActiveScreen }) {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(0);
 
-  const [userInfo, setUserInfo] = useState("");
-
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
     webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
@@ -39,6 +37,19 @@ export default function SigninScreen({ updateActiveScreen }) {
   useEffect(() => {
     handleSigninWithGoogle();
   }, [response]);
+
+  useEffect(() => {
+    const checkToken = async () => {
+      token = await AsyncStorage.getItem("token");
+      userGoogle = await AsyncStorage.getItem("userGoogle");
+      if (token) {
+        navigation.navigate("MyTabs");
+      } else if (userGoogle) {
+        navigation.navigate("MyTabs");
+      }
+    };
+    checkToken();
+  });
 
   const handleSigninWithGoogle = async () => {
     if (response?.type === "success") {
@@ -58,51 +69,36 @@ export default function SigninScreen({ updateActiveScreen }) {
       );
 
       const user = await response.json();
-
       if (user) {
         const response = await axios.post(
-          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signinGoogle`,
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
           {
-            googleid: user.id,
-            name: user.given_name,
-            username: user.name,
+            googleId: user.id,
+            name: user.name,
+            givenName: user.given_name,
+            familyName: user.family_name,
             email: user.email,
             picture: user.picture,
           }
         );
 
-        await AsyncStorage.setItem("userGoogle", response.data.token);
+        await AsyncStorage.setItem("userGoogleToken", response.data.token);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    const checkToken = async () => {
-      token = await AsyncStorage.getItem("token");
-      userGoogle = await AsyncStorage.getItem("userGoogle");
-      if (token) {
-        navigation.navigate("MyTabs");
-      }
-      else if (userGoogle) {
-        navigation.navigate("MyTabs");
-      }
-    };
-    checkToken();
-  });
-
   const handleSignin = async () => {
     try {
       const response = await axios.post(
-        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
         {
           email,
           password,
         }
       );
-
-      await AsyncStorage.setItem("token", response.data.token);
+      await AsyncStorage.setItem("userToken", response.data.token);
       navigation.navigate("MyTabs");
     } catch (error) {
       setLoading(1);

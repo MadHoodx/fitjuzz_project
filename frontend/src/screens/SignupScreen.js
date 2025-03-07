@@ -49,16 +49,15 @@ export default function SignupScreen({ updateActiveScreen }) {
 
     try {
       const response = await axios.post(
-        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signup`,
-
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signup`,
         {
           username,
           email,
           password,
         }
       );
-
-      await AsyncStorage.setItem("token", response.data.token);
+      
+      await AsyncStorage.setItem("userToken", response.data.token);
       navigation.navigate("MyTabs");
      
 

@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IconFeather from "react-native-vector-icons/Feather";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
-
+import axios from "axios";
 export default function Header({}) {
   const [username, setUsername] = useState("");
   const [greeting, setGreeting] = useState("");
@@ -62,20 +62,32 @@ export default function Header({}) {
   };
 
   const fetchUsername = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const userGoogle = await AsyncStorage.getItem("userGoogle");
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
     
     try {
    
-      if (token) {
-        const decodedToken = jwtDecode(token);
-        setUsername(decodedToken.user.username);
-     
+      if (userToken) {
+        const decodedUserToken = jwtDecode(userToken);
+        const userId = decodedUserToken.userId;
+          
+  
+          const response = await axios.get(
+            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`,
+         
+          );
+          setUsername(response.data.username);
       }
-      else if (userGoogle) {
-   
-        const decodedUserGoogle = jwtDecode(userGoogle);
-        setUsername(decodedUserGoogle.user.name);
+      else if (userGoogleToken) {
+        const decodedUserGoogleToken = jwtDecode(userGoogleToken);
+        const userId = decodedUserGoogleToken.userId;
+          
+  
+          const response = await axios.get(
+            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`,
+         
+          );
+          setUsername(response.data.givenName);
       }
    
     } catch (error) {

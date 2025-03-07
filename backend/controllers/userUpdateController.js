@@ -1,6 +1,5 @@
 const userModel = require("../models/userModel");
-const userGoogleModel = require("../models/userGoogleModel");
-const userUpdate = {
+const userUpdateController = {
   updateWeight: async (req, res) => {
     const { id } = req.params;
     const { weight } = req.body;
@@ -11,11 +10,18 @@ const userUpdate = {
         { new: true }
       );
 
+      // const userGoogle = await userGoogleModel.findByIdAndUpdate(
+      //   id,
+      //   { weight },
+      //   { new: true }
+      // );
+
+
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user);
+      // res.json(user);
     } catch (error) {
       console.error("Error updating weight:", error);
       res.status(500).json({ message: "Server error" });
@@ -61,26 +67,27 @@ const userUpdate = {
       console.error("Error updating height:", error);
       res.status(500).json({ message: "Server error" });
     }
-  }, updateWeightGoogle: async (req, res) => {
-    const { id } = req.params;
-    const { weight } = req.body;
-    try {
-      const user = await userGoogleModel.findByIdAndUpdate(
-        id,
-        { weight },
-        { new: true }
-      );
+  }
+  //  updateWeightGoogle: async (req, res) => {
+  //   const { id } = req.params;
+  //   const { weight } = req.body;
+  //   try {
+  //     const user = await userGoogleModel.findByIdAndUpdate(
+  //       id,
+  //       { weight },
+  //       { new: true }
+  //     );
 
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
+  //     if (!user) {
+  //       return res.status(404).json({ message: "User not found" });
+  //     }
 
-      res.json(user);
-    } catch (error) {
-      console.error("Error updating weight:", error);
-      res.status(500).json({ message: "Server error" });
-    }
-  },
+  //     res.json(user);
+  //   } catch (error) {
+  //     console.error("Error updating weight:", error);
+  //     res.status(500).json({ message: "Server error" });
+  //   }
+  // },
 };
 
-module.exports = userUpdate;
+module.exports = userUpdateController;

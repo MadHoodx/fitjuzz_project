@@ -22,7 +22,7 @@ import IconFontisto from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary } from "react-native-image-picker";
 
 import axios from "axios";
 
@@ -43,56 +43,56 @@ export default function ProfileScreen({}) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const token = await AsyncStorage.getItem("token");
-      const userGoogle = await AsyncStorage.getItem("userGoogle");
-
-      try {
-        if (token) {
-          const decodedToken = jwtDecode(token);
-          const userId = decodedToken.user.id;
-          console.log(decodedToken);
-
-          const response = await axios.get(
-            `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
-          );
-          console.log(response);
-          setUsername(response.data.username);
-          setWeight(response.data.weight);
-          setHeight(response.data.height);
-          setFat(response.data.fat);
-        } else if (userGoogle) {
-          const decodedUserGoogle = jwtDecode(userGoogle);
-          const userGoogleId = decodedUserGoogle.user.id;
-          console.log(decodedUserGoogle);
-
-          const response = await axios.get(
-            `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userGoogleId}/profileGoogle`
-          );
-          console.log(response);
-          setUsername(response.data.name);
-          setWeight(response.data.weight);
-          setHeight(response.data.height);
-          setFat(response.data.fat);
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-
     fetchUser();
-  },[]);
+  }, []);
+
+  const fetchUser = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+    try {
+      if (userToken) {
+        const decodedUserToken = jwtDecode(userToken);
+        const userId = decodedUserToken.userId;
+       
+
+        const response = await axios.get(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+        );
+
+        setUsername(response.data.username);
+        setWeight(response.data.weight);
+        setHeight(response.data.height);
+        setFat(response.data.fat);
+      } else if (userGoogleToken) {
+        const decodedUserGoogleToken = jwtDecode(userGoogleToken);
+        const userId = decodedUserGoogleToken.userId;
+
+                  
+       
+        const response = await axios.get(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+        );
+
+        setUsername(response.data.givenName);
+        setWeight(response.data.weight);
+        setHeight(response.data.height);
+        setFat(response.data.fat);
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
 
   const handleWeightUpdate = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const userGoogle = await AsyncStorage.getItem("userGoogle");
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
 
     try {
-      if (token) {
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken.user.id;
+      if (userToken) {
+        const decodedUserToken = jwtDecode(userToken);
+        const userId = decodedUserToken.userId;
         await axios.put(
-          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
+          `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
           {
             weight: parseFloat(tempWeight),
           }
@@ -100,12 +100,12 @@ export default function ProfileScreen({}) {
 
         setWeight(tempWeight);
         setModalVisibleWeight(false);
-      } else if (userGoogle) {
-        const decodedUserGoole = jwtDecode(userGoogle);
-        const userGoogleId = decodedUserGoole.user.id;
+      } else if (userGoogleToken) {
+        const decodedUserGooleToken = jwtDecode(userGoogleToken);
+        const userId = decodedUserGooleToken.userId;
 
         await axios.put(
-          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userGoogleId}/updateWeightGoogle`,
+          `http://192.168.221.234:5000/api/user/${userId}/updateWeight`,
           {
             weight: parseFloat(tempWeight),
           }
@@ -126,7 +126,7 @@ export default function ProfileScreen({}) {
       const userId = decodedToken.user.id;
 
       await axios.put(
-        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
         {
           height: parseFloat(tempHeight),
         }
@@ -147,7 +147,7 @@ export default function ProfileScreen({}) {
       const userId = decodedToken.user.id;
 
       await axios.put(
-        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
         {
           fat: parseFloat(tempFat), // Convert weight to number
         }
@@ -163,9 +163,10 @@ export default function ProfileScreen({}) {
 
   const haddleLogout = async () => {
     try {
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("userGoogle");
-      console.log("Successfully log out");
+      await AsyncStorage.removeItem("userToken");
+      navigation.navigate("Main");
+
+      await AsyncStorage.removeItem("userGoogleToken");
       navigation.navigate("Main");
     } catch (error) {
       console.log("Log out failed");
@@ -221,24 +222,23 @@ export default function ProfileScreen({}) {
   const calculatedBmi = parseFloat(calBmi());
   const pointerPosition = getPointerPosition(calculatedBmi);
   const bmiColor = getBMIColor(calculatedBmi);
- 
+
   const handleImagePicker = () => {
     const options = {
-      mediaType: 'photo',
+      mediaType: "photo",
       includeBase64: false,
     };
     launchImageLibrary(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log("User cancelled image picker");
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        console.log("ImagePicker Error: ", response.error);
       } else {
         const source = { uri: response.assets[0].uri };
         setSelectedImage(source);
       }
     });
-  }
-  
+  };
 
   return (
     <View style={[ProfileScreenStyle.container]}>
@@ -252,7 +252,10 @@ export default function ProfileScreen({}) {
                 style={{ width: 100, height: 100 }}
               />
             </View>
-            <TouchableOpacity style={[ProfileScreenStyle.edit_profile_image]} onPress={handleImagePicker}>
+            <TouchableOpacity
+              style={[ProfileScreenStyle.edit_profile_image]}
+              onPress={handleImagePicker}
+            >
               <IconEntypo name={"edit"} size={10} color={colors.clr_gray} />
             </TouchableOpacity>
             <View
