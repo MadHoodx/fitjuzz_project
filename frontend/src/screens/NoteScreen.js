@@ -19,6 +19,7 @@ export default function NoteScreen({}) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentExerciseId, setCurrentExerciseId] = useState(null);
+  const [isAddingNewBox, setIsAddingNewBox] = useState(false);
 
   const allExercises = [
     {
@@ -101,10 +102,8 @@ export default function NoteScreen({}) {
   }, []);
 
   const handleAddBox = () => {
-    setExercises([
-      ...exercises,
-      { id: Date.now(), name: "Exercise", exercises: [] },
-    ]);
+    setIsAddingNewBox(true);
+    setModalVisible(true);
   };
 
   const handleRemoveBox = () => {
@@ -126,11 +125,19 @@ export default function NoteScreen({}) {
   };
 
   const handleSelectExercise = (exerciseName) => {
-    setExercises(exercises.map(exercise => 
-      exercise.id === currentExerciseId 
-        ? { ...exercise, name: exerciseName }
-        : exercise
-    ));
+    if (isAddingNewBox) {
+      setExercises([
+        ...exercises,
+        { id: Date.now(), name: exerciseName, exercises: [] },
+      ]);
+      setIsAddingNewBox(false);
+    } else {
+      setExercises(exercises.map(exercise => 
+        exercise.id === currentExerciseId 
+          ? { ...exercise, name: exerciseName }
+          : exercise
+      ));
+    }
     setModalVisible(false);
   };
 
@@ -243,7 +250,10 @@ export default function NoteScreen({}) {
                     Your{"\n"}Exercise
                   </Text>
 
-                  <TouchableOpacity onPress={() => setModalVisible(false)}>
+                  <TouchableOpacity onPress={() => {
+                    setModalVisible(false);
+                    setIsAddingNewBox(false);
+                  }}>
                     <AntDesign
                       name={"closecircle"}
                       size={20}
