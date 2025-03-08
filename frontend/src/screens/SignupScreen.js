@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
-
+import SocialAuthSection from "../components/SocialAuthSection";
 export default function SignupScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
 
@@ -124,26 +124,7 @@ export default function SignupScreen({ updateActiveScreen }) {
           </Text>
           <View style={SignupScreenStyle.line} />
         </View>
-        <View style={SignupScreenStyle.button__box}>
-          <TouchableOpacity style={SignupScreenStyle.button}>
-            <Image
-              source={require("../assets/images/facebook-logo.png")}
-              style={SignupScreenStyle.logo}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={SignupScreenStyle.button}>
-            <Image
-              source={require("../assets/images/google-logo.png")}
-              style={SignupScreenStyle.logo}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={SignupScreenStyle.button}>
-            <Image
-              source={require("../assets/images/apple-logo.png")}
-              style={SignupScreenStyle.logo}
-            />
-          </TouchableOpacity>
-        </View>
+       <SocialAuthSection></SocialAuthSection>
       </View>
       <View style={SignupScreenStyle.footer__section}>
         <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>

@@ -4,8 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
-  Alert,
 } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 import SigninScreenStyle from "../styles/components/SigninScreenStyle";
@@ -15,11 +13,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
+import SocialAuthSection from "../components/SocialAuthSection";
 
-import * as WebBrowser from "expo-web-browser";
-WebBrowser.maybeCompleteAuthSession();
-import * as Google from "expo-auth-session/providers/google";
+
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
@@ -28,15 +24,6 @@ export default function SigninScreen({ updateActiveScreen }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(0);
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
-    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-  });
-
-  useEffect(() => {
-    handleSigninWithGoogle();
-  }, [response]);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -50,44 +37,6 @@ export default function SigninScreen({ updateActiveScreen }) {
     };
     checkToken();
   });
-
-  const handleSigninWithGoogle = async () => {
-    if (response?.type === "success") {
-      await getGoogleUserInfo(response.authentication.accessToken);
-
-      navigation.navigate("MyTabs");
-    }
-  };
-
-  const getGoogleUserInfo = async (token) => {
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      const user = await response.json();
-      if (user) {
-        const response = await axios.post(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
-          {
-            googleId: user.id,
-            name: user.name,
-            givenName: user.given_name,
-            familyName: user.family_name,
-            email: user.email,
-            picture: user.picture,
-          }
-        );
-
-        await AsyncStorage.setItem("userGoogleToken", response.data.token);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleSignin = async () => {
    
@@ -160,7 +109,9 @@ export default function SigninScreen({ updateActiveScreen }) {
           </Text>
           <View style={SigninScreenStyle.line} />
         </View>
-        <View style={SigninScreenStyle.button__box}>
+
+        <SocialAuthSection></SocialAuthSection>
+        {/* <View style={SigninScreenStyle.button__box}>
           <TouchableOpacity style={SigninScreenStyle.button}>
             <Image
               source={require("../assets/images/facebook-logo.png")}
@@ -182,7 +133,7 @@ export default function SigninScreen({ updateActiveScreen }) {
               style={SigninScreenStyle.logo}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       <View style={SigninScreenStyle.footer__section}>
         <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>

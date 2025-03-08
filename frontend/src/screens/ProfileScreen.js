@@ -11,8 +11,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import styles, { sizes } from "../styles/style";
-import { colors } from "../styles/style";
+import styles, { sizes, colors } from "../styles/style";
 import Header from "../components/Header";
 import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
 import IconIonIcons from "react-native-vector-icons/Ionicons";
@@ -37,8 +36,7 @@ export default function ProfileScreen({}) {
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
-  const [image, setImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -192,16 +190,14 @@ export default function ProfileScreen({}) {
     const userToken =  await AsyncStorage.getItem("userToken");
     const userGoogleToken =  await AsyncStorage.getItem("userGoogleToken");
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images', 'videos'],
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      const { uri } = result.assets[0]; // Get the URI of the selected image
+      const { uri } = result.assets[0];
 
       setSelectedImage(uri)
 
@@ -213,7 +209,7 @@ export default function ProfileScreen({}) {
           const response =  axios.put(
             `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
             {
-              picture: uri, // Send the image URI in the request
+              picture: uri, 
             }
           );
           console.log("Image upload successful:", response);
@@ -228,7 +224,7 @@ export default function ProfileScreen({}) {
           const response =  axios.put(
             `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
             {
-              picture: uri, // Send the image URI in the request
+              picture: uri, 
             }
           );
           console.log("Image upload successful:", response);

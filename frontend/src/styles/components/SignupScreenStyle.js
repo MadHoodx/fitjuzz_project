@@ -27,23 +27,6 @@ const SignupScreenStyle = StyleSheet.create({
     marginVertical: 16,
 
   },
-  button__box: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 20,
-  },
-  button: {
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    backgroundColor: "#FFDFDF",
-    borderColor: colors.clr_orange,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  logo: {
-    width: 40,
-    height: 40,
-  },
   footer__section: {
     flex: 1,
     flexDirection: "row",

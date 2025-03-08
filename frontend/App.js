@@ -15,7 +15,7 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './src/screens/MainScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import { useEffect } from 'react';
-
+import Dummy from './src/screens/Dummy'
 
 
 const Stack = createStackNavigator();
@@ -91,7 +91,7 @@ function MyStack() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
         <Stack.Screen name="MyTabs" component={MyTabs} />
-          
+        <Stack.Screen name="dummy" component={Dummy} />
       </Stack.Navigator>
 
   );
