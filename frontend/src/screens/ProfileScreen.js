@@ -21,9 +21,8 @@ import IconFontisto from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-
 
 export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
@@ -46,151 +45,159 @@ export default function ProfileScreen({}) {
   const fetchUser = async () => {
     const userToken = await AsyncStorage.getItem("userToken");
     const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
-    try {
-      if (userToken) {
-        const decodedUserToken = jwtDecode(userToken);
-        const userId = decodedUserToken.userId;
+    const userXToken = await AsyncStorage.getItem("userXToken");
 
-        const response = await axios.get(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
-        );
-
-        setUsername(response.data.username);
-        setWeight(response.data.weight);
-        setHeight(response.data.height);
-        setFat(response.data.fat);
-        setSelectedImage(response.data.picture);
-        console.log(response.data.picture);
-      } else if (userGoogleToken) {
-        const decodedUserGoogleToken = jwtDecode(userGoogleToken);
-        const userId = decodedUserGoogleToken.userId;
-
-        const response = await axios.get(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
-        );
-
-        setUsername(response.data.givenName);
-        setWeight(response.data.weight);
-        setHeight(response.data.height);
-        setFat(response.data.fat);
-        setSelectedImage(response.data.picture);
-      }
-    } catch (error) {
-      console.error("Error fetching user:", error);
+    if (userToken) {
+      const decodedUserToken = jwtDecode(userToken);
+      fetchUserProfile(decodedUserToken);
+    } else if (userGoogleToken) {
+      const decodedUserGoogleToken = jwtDecode(userGoogleToken);
+      fetchUserProfile(decodedUserGoogleToken);
+    } else if (userXToken) {
+      const decodedUserXToken = jwtDecode(userXToken);
+      fetchUserProfile(decodedUserXToken);
     }
   };
 
-  const handleWeightUpdate = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
-    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
-
+  const fetchUserProfile = async (allUserToken) => {
+    const userId = allUserToken.userId;
     try {
-      if (userToken) {
-        const decodedUserToken = jwtDecode(userToken);
-        const userId = decodedUserToken.userId;
-        await axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
-          {
-            weight: parseFloat(tempWeight),
-          }
-        );
-        setWeight(tempWeight);
-        setModalVisibleWeight(false);
-      } else if (userGoogleToken) {
-        const decodedUserGooleToken = jwtDecode(userGoogleToken);
-        const userId = decodedUserGooleToken.userId;
+      const response = await axios.get(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+      );
+      const { username, weight, height, fat, picture } = response.data;
+      setUsername(username || response.data.givenName || response.data.name);
+      setWeight(weight);
+      setHeight(height);
+      setFat(fat);
+      setSelectedImage(picture);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
 
-        await axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
-          {
-            weight: parseFloat(tempWeight),
-          }
-        );
-        setWeight(tempWeight);
-        setModalVisibleWeight(false);
-      }
+  const updateWeightForUser = async (allUserToken) => {
+    const decodedAllUserToken = jwtDecode(allUserToken);
+    const userId = decodedAllUserToken.userId;
+    try {
+      await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
+        {
+          weight: parseFloat(tempWeight),
+        }
+      );
+      setWeight(tempWeight);
+      setModalVisibleWeight(false);
     } catch (error) {
       console.error("Error updating weight:", error);
       Alert.alert("Error", "An error occurred while updating weight.", error);
     }
   };
 
-  const handleHeightUpdate = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
-    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+  const updateHeightForUser = async (allUserToken) => {
+    const decodedAllUserToken = jwtDecode(allUserToken);
+    const userId = decodedAllUserToken.userId;
 
     try {
-      if (userToken) {
-        const decodedUserToken = jwtDecode(userToken);
-        const userId = decodedUserToken.userId;
-        await axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
-          {
-            height: parseFloat(tempHeight),
-          }
-        );
-        setHeight(tempHeight);
-        setModalVisibleHeight(false);
-      } else if (userGoogleToken) {
-        const decodedUserGooleToken = jwtDecode(userGoogleToken);
-        const userId = decodedUserGooleToken.userId;
-
-        await axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
-          {
-            height: parseFloat(tempHeight),
-          }
-        );
-        setHeight(tempHeight);
-        setModalVisibleHeight(false);
-      }
+      await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
+        {
+          height: parseFloat(tempHeight),
+        }
+      );
+      setHeight(tempHeight);
+      setModalVisibleHeight(false);
     } catch (error) {
       console.error("Error updating height:", error);
       Alert.alert("Error", "An error occurred while updating height.", error);
     }
   };
 
-  const handleFatUpdate = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
-    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+  const updateFatForUser = async (allUserToken) => {
+    const decodedAllUserToken = jwtDecode(allUserToken);
+    const userId = decodedAllUserToken.userId;
 
     try {
-      if (userToken) {
-        const decodedUserToken = jwtDecode(userToken);
-        const userId = decodedUserToken.userId;
-        await axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
-          {
-            fat: parseFloat(tempFat),
-          }
-        );
-        setFat(tempWeight);
-        setModalVisibleFat(false);
-      } else if (userGoogleToken) {
-        const decodedUserGooleToken = jwtDecode(userGoogleToken);
-        const userId = decodedUserGooleToken.userId;
-
-        await axios.put(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
-          {
-            fat: parseFloat(tempFat),
-          }
-        );
-        setFat(tempFat);
-        setModalVisibleFat(false);
-      }
+      await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
+        {
+          fat: parseFloat(tempFat),
+        }
+      );
+      setFat(tempFat);
+      setModalVisibleFat(false);
     } catch (error) {
       console.error("Error updating fat:", error);
-      Alert.alert("Error", "An error occurred while updating fat.");
+      Alert.alert("Error", "An error occurred while updating fat.", error);
     }
   };
 
-  const handleImagePicker  = async () => {
-    
-    const userToken =  await AsyncStorage.getItem("userToken");
-    const userGoogleToken =  await AsyncStorage.getItem("userGoogleToken");
+  const handleWeightUpdate = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+    const userXToken = await AsyncStorage.getItem("userXToken");
+
+    if (userToken) {
+      await updateWeightForUser(userToken);
+    } else if (userGoogleToken) {
+      await updateWeightForUser(userGoogleToken);
+    } else if (userXToken) {
+      await updateWeightForUser(userXToken);
+    }
+  };
+
+  const handleHeightUpdate = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+    const userXToken = await AsyncStorage.getItem("userXToken");
+
+    if (userToken) {
+      await updateHeightForUser(userToken);
+    } else if (userGoogleToken) {
+      await updateHeightForUser(userGoogleToken);
+    } else if (userXToken) {
+      await updateHeightForUser(userXToken);
+    }
+  };
+
+  const handleFatUpdate = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+    const userXToken = await AsyncStorage.getItem("userXToken");
+
+    if (userToken) {
+      await updateFatForUser(userToken);
+    } else if (userGoogleToken) {
+      await updateFatForUser(userGoogleToken);
+    } else if (userXToken) {
+      await updateFatForUser(userXToken);
+    }
+  };
+
+  const updatePictureForUser = async (allUserToken, uri) => {
+    const decodedAllUserToken = jwtDecode(allUserToken);
+    const userId = decodedAllUserToken.userId;
+
+    try {
+      const response = await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
+        {
+          picture: uri,
+        }
+      );
+      console.log("Image upload successful:", response);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+
+  const handleImagePicker = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+    const userXToken = await AsyncStorage.getItem("userXToken");
+
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -198,39 +205,14 @@ export default function ProfileScreen({}) {
 
     if (!result.canceled) {
       const { uri } = result.assets[0];
-
-      setSelectedImage(uri)
+      setSelectedImage(uri);
 
       if (userToken) {
-        const decodedUserToken = jwtDecode(userToken);
-        const userId = decodedUserToken.userId;
-
-        try {
-          const response =  axios.put(
-            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
-            {
-              picture: uri, 
-            }
-          );
-          console.log("Image upload successful:", response);
-        } catch (error) {
-          console.error("Image upload failed:", error);
-        }
+        await updatePictureForUser(userToken, uri);
       } else if (userGoogleToken) {
-        const decodedUserGoogleToken = jwtDecode(userGoogleToken);
-        const userId = decodedUserGoogleToken.userId;
-
-        try {
-          const response =  axios.put(
-            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
-            {
-              picture: uri, 
-            }
-          );
-          console.log("Image upload successful:", response);
-        } catch (error) {
-          console.error("Image upload failed:", error);
-        }
+        await updatePictureForUser(userGoogleToken, uri);
+      } else if (userXToken) {
+        await updatePictureForUser(userXToken, uri);
       }
     }
   };
@@ -238,9 +220,9 @@ export default function ProfileScreen({}) {
   const haddleLogout = async () => {
     try {
       await AsyncStorage.removeItem("userToken");
-      navigation.navigate("Main");
-
       await AsyncStorage.removeItem("userGoogleToken");
+      await AsyncStorage.removeItem("userXToken");
+
       navigation.navigate("Main");
     } catch (error) {
       console.log("Log out failed");

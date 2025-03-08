@@ -64,32 +64,34 @@ export default function Header({}) {
   const fetchUsername = async () => {
     const userToken = await AsyncStorage.getItem("userToken");
     const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
-    
+    const userXToken = await AsyncStorage.getItem("userXToken");
     try {
-   
       if (userToken) {
         const decodedUserToken = jwtDecode(userToken);
         const userId = decodedUserToken.userId;
-          
-  
-          const response = await axios.get(
-            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`,
-         
-          );
-          setUsername(response.data.username);
-      }
-      else if (userGoogleToken) {
+
+        const response = await axios.get(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+        );
+        setUsername(response.data.username);
+      } else if (userGoogleToken) {
         const decodedUserGoogleToken = jwtDecode(userGoogleToken);
         const userId = decodedUserGoogleToken.userId;
-          
-  
-          const response = await axios.get(
-            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`,
-         
-          );
-          setUsername(response.data.givenName);
+
+        const response = await axios.get(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+        );
+        setUsername(response.data.givenName);
+      } else if (userXToken) {
+        const decodedUserXToken = jwtDecode(userXToken);
+        const userId = decodedUserXToken.userId;
+
+        const response = await axios.get(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+        );
+        
+        setUsername(response.data.name);
       }
-   
     } catch (error) {
       console.error("Error fetching username:", error);
     }

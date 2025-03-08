@@ -31,10 +31,7 @@ export default function WelcomeScreen({ navigation }) {
        
         <Text style={styles.buttonText}>Tabs</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-          style={[styles.button, styles.section]}
-          onPress={() => navigation.navigate("dummy")}
-        ></TouchableOpacity>
+     
     </View>
   );
 }

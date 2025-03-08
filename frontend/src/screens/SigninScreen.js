@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 import SigninScreenStyle from "../styles/components/SigninScreenStyle";
 import { useNavigation } from "@react-navigation/native";
@@ -15,8 +10,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SocialAuthSection from "../components/SocialAuthSection";
 
-
-
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
 
@@ -26,29 +19,33 @@ export default function SigninScreen({ updateActiveScreen }) {
   const [loading, setLoading] = useState(0);
 
   useEffect(() => {
-    const checkToken = async () => {
-      userToken = await AsyncStorage.getItem("userToken");
-      userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
-      if (userToken) {
-        navigation.navigate("MyTabs");
-      } else if (userGoogleToken) {
+    checkUserToken(navigation);
+  }, [navigation]);
+
+  const checkUserToken = async (navigation) => {
+    try {
+      const userToken = await AsyncStorage.getItem("userToken");
+      const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+      const userXToken = await AsyncStorage.getItem("userXToken");
+
+      if (userToken || userGoogleToken || userXToken) {
         navigation.navigate("MyTabs");
       }
-    };
-    checkToken();
-  });
+    } catch (error) {
+      console.error("Failed to check token:", error);
+    }
+  };
 
   const handleSignin = async () => {
-   
     if (email == "" && password !== "") {
       setLoading(1);
       setError("Please enter your email");
-      return
+      return;
     } else if (email !== "" && password == "") {
       setLoading(1);
       setError("Please enter your password");
-      return
-    } 
+      return;
+    }
     try {
       const response = await axios.post(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
@@ -63,8 +60,7 @@ export default function SigninScreen({ updateActiveScreen }) {
       setLoading(1);
       if (error.status == 400) {
         setError("Sorry, looks like that’s the wrong email or password.");
-      }
-      else {
+      } else {
         setError("An unexpected error occurred");
       }
     }

@@ -5,13 +5,14 @@ const userUpdateController = {
     const { weight } = req.body;
     try {
       const user = await userModel.findByIdAndUpdate(
-        id,
+          id,
         { weight },
         { new: true }
       )
-
+     
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        console.log("User not found")
+           res.status(404).json({ message: "User not found" });
       }
       res.json(user)
     } catch (error) {

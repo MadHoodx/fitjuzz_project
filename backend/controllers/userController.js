@@ -4,8 +4,17 @@ const jwt = require("jsonwebtoken");
 
 const userController = {
   signin: async (req, res) => {
-    const { googleId, name, givenName, familyName, email, picture, password } =
-      req.body;
+    const {
+      xId,
+      username,
+      googleId,
+      name,
+      givenName,
+      familyName,
+      email,
+      picture,
+      password,
+    } = req.body;
     try {
       if (googleId) {
         const userGoogle = await userModel.findOne({
@@ -22,9 +31,9 @@ const userController = {
             email,
             picture,
           });
-          console.log("before saving")
+          console.log("before saving");
           await newUser.save();
-          console.log("after saving")
+          console.log("after saving");
           const token = jwt.sign(
             { userId: newUser.id },
             process.env.JWT_SECRET,
@@ -32,6 +41,7 @@ const userController = {
               expiresIn: "1h",
             }
           );
+          console.log(token)
           return res.json({ token });
         }
         const token = jwt.sign(
@@ -42,9 +52,43 @@ const userController = {
           }
         );
         return res.json({ token });
+      } else if (xId) {
+        const userX = await userModel.findOne({
+          userType: "x",
+          xId,
+        });
+
+        console.log(userX)
+        if (!userX) {
+          const newUser = new userModel({
+            userType: "x",
+            xId,
+            username,
+            name,
+          });
+          console.log("before saving");
+          await newUser.save();
+          console.log("after saving");
+          const token = jwt.sign(
+            { userId: newUser.id },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: "1h",
+            }
+          );
+          return res.json({ token });
+        }
+        const token = jwt.sign(
+          { userId: userX.id },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1h",
+          }
+        );
+        return res.json({ token });
       } else {
         const user = await userModel.findOne({ userType: "normal", email });
-
+        console.log(user.id)
         if (!user) {
           return res.status(400).json({
             message: "Sorry, looks like that’s the wrong email or password. ",
@@ -101,7 +145,7 @@ const userController = {
 
     try {
       const user = await userModel.findById(userId).select("-password");
-
+     
       if (user) {
         return res.json(user);
       } else {
@@ -111,8 +155,6 @@ const userController = {
       res.status(500).json({ message: "Server error" });
     }
   },
-
-  
 };
 
 module.exports = userController;

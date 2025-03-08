@@ -2,15 +2,18 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  userType: { type: String, enum: ['normal', 'google'], required: true },
+  userType: { type: String, enum: ['normal', 'google', 'x'], required: true },
   googleId: { type: String, sparse: true },
+  xId: { type: String, sparse: true },
   username: { type: String, sparse: true,  required: function () {
-    return this.userType === 'normal'
+    return this.userType ===  ('normal' || 'x')
   }},
   name: { type: String, sparse: true},
   givenName: { type: String,  sparse: true, },
   familyName: { type: String,  sparse: true, },
-  email: { type: String, required: true},
+  email: { type: String, sparse: true, required: function () {
+    return this.userType === ('normal' || 'google')
+  }},
   password: { type: String, sparse: true, required: function () {
     return this.userType === 'normal'
   }},
@@ -23,8 +26,8 @@ const userSchema = new mongoose.Schema({
 });
 
 
-userSchema.index({ email: 1, userType: 1 }, { unique: true });
-
+userSchema.index({ userType: 1, email: 1 }, { unique: true });
+userSchema.index({ userType: 1, xId: 1 }, { unique: true });
 
 const userModel = mongoose.model("userModel", userSchema);
 
