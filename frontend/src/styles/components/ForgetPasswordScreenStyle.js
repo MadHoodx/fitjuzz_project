@@ -31,6 +31,12 @@ const ForgetPasswordScreenStyle = StyleSheet.create({
 logo: {
     width: 100,
     height: 100
+},
+error: {
+  textAlign: 'left',
+  paddingHorizontal: 16,
+  color: 'red',
+  fontSize: sizes.size_base
 }
 
 });

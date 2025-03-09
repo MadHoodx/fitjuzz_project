@@ -23,10 +23,11 @@ export default function ForgetPasswordScreen({}) {
   const [isSentItoVisible, setIsSentItoVisible] = useState(1);
   const [isOtpVisible, setIsOtpVisible] = useState(0);
   const [isPasswordResetVisible, setIsPasswordResetVisible] = useState(0);
-  const [isSuccessfullyResetVisible, setIsSuccessfullyResetVisible] = useState(0)
+  const [isSuccessfullyResetVisible, setIsSuccessfullyResetVisible] = useState(0);
   const [password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
-
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(0);
   const [otp, setOtp] = useState(new Array(5).fill(""));
   const inputRefs = useRef([]);
 
@@ -45,64 +46,74 @@ export default function ForgetPasswordScreen({}) {
   };
 
   const handleSentOtp = async () => {
+    if (email == "") {
+      setLoading(1)
+      setError("please enter your email")
+      return
+    }
     try {
-      const response = await axios.post(
-        "http://192.168.221.234:5000/api/user/sentOtp",
+      await axios.post(
+      `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/sentOtp`,
         {
           email,
         }
       );
 
-      Alert.alert("Succesfully sent otp", response.data.message);
       setIsSentItoVisible(0);
       setIsOtpVisible(1);
     } catch (error) {
-      console.error("Error sending OTP:", error.data.message);
-      Alert.alert("Error sending OTP", error);
+      if(error.status == 405) {
+        setLoading(1)
+        setError('Invalid email format')
+      }
+      else if(error.status == 404) {
+        setLoading(1)
+        setError('Sorry, user not found')
+      }
     }
   };
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post(
-        "http://192.168.221.234:5000/api/user/verifyOtp",
+      await axios.post(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/verifyOtp`,
         {
           email,
           otp,
         }
       );
-      Alert.alert(response.data.message);
+      
 
       setIsOtpVisible(0);
       setIsPasswordResetVisible(1);
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      Alert.alert("Error verifying OTP");
+      if(error.status == 400) {
+        setLoading(1)
+        setError('Invalid OTP')
+      }
     }
   };
 
   const handleChangePassword = async () => {
-
-    if(password !== ConfirmPassword){
-      return Alert.alert("password do not match eact other")
+    if (password !== ConfirmPassword) {
+      setLoading(1)
+      setError('Password do not match each other')
+      return ;
     }
 
     try {
-      await axios.put('http://192.168.221.234:5000/api/user/passwordReset', {
+      await axios.put(`${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/passwordReset`, {
         email,
-        password : password
-      })
+        password: password,
+      });
 
-      console.log("Successfully reset password")
-      Alert.alert("Success")
-      setIsPasswordResetVisible(0)
-      setIsSuccessfullyResetVisible(1)
+      setIsPasswordResetVisible(0);
+      setIsSuccessfullyResetVisible(1);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Failed");
     }
-    catch (error) {
-      console.log(error)
-      Alert.alert("Failed")
-    }
-  }
+  };
 
   return (
     <View style={ForgetPasswordScreenStyle.container}>
@@ -125,7 +136,7 @@ export default function ForgetPasswordScreen({}) {
               value={email}
               onChangeText={setEmail}
             />
-
+            {loading ? <Text style={ForgetPasswordScreenStyle.error}>{error}</Text> : null}
             <TouchableOpacity style={styles.button} onPress={handleSentOtp}>
               <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
@@ -136,7 +147,10 @@ export default function ForgetPasswordScreen({}) {
         <View style={ForgetPasswordScreenStyle.container}>
           <View style={[styles.container]}>
             <View
-              style={[ForgetPasswordScreenStyle.verify__section, styles.section]}
+              style={[
+                ForgetPasswordScreenStyle.verify__section,
+                styles.section,
+              ]}
             >
               <Text style={styles.title}>Check your email</Text>
               <Text style={styles.sub__title}>
@@ -160,7 +174,7 @@ export default function ForgetPasswordScreen({}) {
                   ></TextInput>
                 ))}
               </View>
-
+              {loading ? <Text style={ForgetPasswordScreenStyle.error}>{error}</Text> : null}
               <TouchableOpacity style={styles.button} onPress={handleVerifyOtp}>
                 <Text style={styles.buttonText}>Continue</Text>
               </TouchableOpacity>
@@ -206,6 +220,7 @@ export default function ForgetPasswordScreen({}) {
               value={ConfirmPassword}
               onChangeText={setConfirmPassword}
             ></InputWithEye>
+            {loading ? <Text style={ForgetPasswordScreenStyle.error}>{error}</Text> : null}
             <TouchableOpacity
               style={styles.button}
               onPress={handleChangePassword}
@@ -216,31 +231,33 @@ export default function ForgetPasswordScreen({}) {
         </View>
       ) : null}
 
-      {isSuccessfullyResetVisible ? <View style={[styles.container]}>
-        <View
-          style={[
-            ForgetPasswordScreenStyle.successful__section,
-            styles.section,
-          ]}
-        >
-          <View style={styles.section}></View>
-          <Image
-            source={require("../assets/images/successful.png")}
-            style={ForgetPasswordScreenStyle.logo}
-          ></Image>
-          <Text style={styles.title}>Successful</Text>
-          <Text style={styles.sub__title}>
-            Congratulation! Your password has been changed. Click continue to
-            login
-          </Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate("Main")}
+      {isSuccessfullyResetVisible ? (
+        <View style={[styles.container]}>
+          <View
+            style={[
+              ForgetPasswordScreenStyle.successful__section,
+              styles.section,
+            ]}
           >
-            <Text style={styles.buttonText}>Continue</Text>
-          </TouchableOpacity>
+            <View style={styles.section}></View>
+            <Image
+              source={require("../assets/images/successful.png")}
+              style={ForgetPasswordScreenStyle.logo}
+            ></Image>
+            <Text style={styles.title}>Successful</Text>
+            <Text style={styles.sub__title}>
+              Congratulation! Your password has been changed. Click continue to
+              login
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("Main")}
+            >
+              <Text style={styles.buttonText}>Continue</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View> : null}
+      ) : null}
     </View>
   );
 }

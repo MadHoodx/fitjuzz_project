@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 0,
     paddingHorizontal: 40,
-    marginTop: Platform.OS === "android" ? sizes.size_5xl : 0,
+    marginTop: Platform.OS === "android" ? sizes.size_base : 0,
    
 
   },

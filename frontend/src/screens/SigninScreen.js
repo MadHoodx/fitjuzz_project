@@ -46,6 +46,11 @@ export default function SigninScreen({ updateActiveScreen }) {
       setError("Please enter your password");
       return;
     }
+    else if (email == "" && password == "") {
+      setLoading(1);
+      setError("Please enter your email and password");
+      return;
+    }
     try {
       const response = await axios.post(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
@@ -71,7 +76,6 @@ export default function SigninScreen({ updateActiveScreen }) {
       <View
         style={[
           SigninScreenStyle.input__section,
-          { borderColor: "purple", paddingTop: 20 },
         ]}
       >
         <TextInput
@@ -107,29 +111,7 @@ export default function SigninScreen({ updateActiveScreen }) {
         </View>
 
         <SocialAuthSection></SocialAuthSection>
-        {/* <View style={SigninScreenStyle.button__box}>
-          <TouchableOpacity style={SigninScreenStyle.button}>
-            <Image
-              source={require("../assets/images/facebook-logo.png")}
-              style={SigninScreenStyle.logo}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={SigninScreenStyle.button}
-            onPress={() => promptAsync()}
-          >
-            <Image
-              source={require("../assets/images/google-logo.png")}
-              style={SigninScreenStyle.logo}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={SigninScreenStyle.button}>
-            <Image
-              source={require("../assets/images/apple-logo.png")}
-              style={SigninScreenStyle.logo}
-            />
-          </TouchableOpacity>
-        </View> */}
+        
       </View>
       <View style={SigninScreenStyle.footer__section}>
         <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>

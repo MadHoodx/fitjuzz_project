@@ -4,8 +4,7 @@ import { colors } from "../style";
 const WelcomeScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingTop: 50,
     backgroundColor: colors.clr_slate,
   },
   placeholder: {

@@ -19,15 +19,16 @@ const isValidEmail = (email) => {
 const otpController = {
   sentOtp: async (req, res) => {
     const { email } = req.body;
-
+    console.log(email)
     try {
       
       if (!isValidEmail(email)) {
         return res.status(400).json({ error: 'Invalid email format' });
       }
-      const user = await userModel.findOne({ email });
+      const user = await userModel.findOne({ userType: 'normal', email });
+
       if (!user) {
-        return res.status(401).json({ error: 'Email not found' });
+        return res.status(404).json({ error: 'Email not found' });
       }
 
       const otp = generateOTP();
