@@ -66,7 +66,7 @@ export default function ProfileScreen({}) {
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
       );
       const { username, weight, height, fat, picture } = response.data;
-      setUsername(username || response.data.givenName || response.data.name);
+      setUsername(username || response.data.givenName || response.data.name );
       setWeight(weight);
       setHeight(height);
       setFat(fat);
