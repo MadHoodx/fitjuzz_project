@@ -8,6 +8,12 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
 
+import Constants from 'expo-constants';
+const EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID  = Constants.expoConfig.extra.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID
+const EXPO_PUBLIC_WEB_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_WEB_CLIENT_ID
+const EXPO_PUBLIC_X_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_ID
+const EXPO_PUBLIC_X_CLIENT_SECRET= Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_SECRET
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API
 WebBrowser.maybeCompleteAuthSession();
 
 const discovery = {
@@ -26,14 +32,14 @@ export default function SocialAuthSection() {
   // Google Sign-In
   const [googleRequest, googleResponse, googlePromptAsync] =
     Google.useAuthRequest({
-      androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
-      webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
+      androidClientId: EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+      webClientId: EXPO_PUBLIC_WEB_CLIENT_ID,
     });
 
   // X (Twitter) Sign-In
   const [xRequest, xResponse, xPromptAsync] = AuthSession.useAuthRequest(
     {
-      clientId: process.env.EXPO_PUBLIC_X_CLIENT_ID,
+      clientId: EXPO_PUBLIC_X_CLIENT_ID,
       redirectUri: redirectUri,
       scopes: ["tweet.read", "users.read", "offline.access"],
       responseType: "code",
@@ -71,7 +77,7 @@ export default function SocialAuthSection() {
       console.log(user)
       if (user) {
         const response = await axios.post(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
           {
             googleId: user.id,
             name: user.name,
@@ -98,7 +104,7 @@ export default function SocialAuthSection() {
   const exchangeCodeForToken = async (code) => {
     try {
       const authHeader = btoa(
-        `${process.env.EXPO_PUBLIC_X_CLIENT_ID}:${process.env.EXPO_PUBLIC_X_CLIENT_SECRET}`
+        `${EXPO_PUBLIC_X_CLIENT_ID}:${EXPO_PUBLIC_X_CLIENT_SECRET}`
       );
       const tokenResponse = await axios.post(
         discovery.tokenEndpoint,
@@ -106,7 +112,7 @@ export default function SocialAuthSection() {
           grant_type: "authorization_code",
           code,
           redirect_uri: redirectUri,
-          client_id: process.env.EXPO_PUBLIC_X_CLIENT_ID,
+          client_id: EXPO_PUBLIC_X_CLIENT_ID,
           code_verifier: xRequest.codeVerifier,
         }).toString(),
         {
@@ -140,7 +146,7 @@ export default function SocialAuthSection() {
       const userData = userResponse.data;
       if (userData) {
         const response = await axios.post(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
           {
             xId: userData.data.id,
             name: userData.data.name,
