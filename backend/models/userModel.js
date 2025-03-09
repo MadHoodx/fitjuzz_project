@@ -21,8 +21,9 @@ const userSchema = new mongoose.Schema({
   weight: { type: Number, default: 0 },
   height: { type: Number, default: 0 },
   fat: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date,  default: Date.now}
+
+},{
+  timeStamps: true
 });
 
 
