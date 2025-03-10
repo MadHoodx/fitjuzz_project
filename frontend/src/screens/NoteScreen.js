@@ -12,7 +12,7 @@ import axios from "axios";
 
 export default function NoteScreen({}) {
   const [currentDate, setCurrentDate] = useState("");
-  const [exercises, setExercises] = useState([
+  const [exercisesBox, setExercisesBox] = useState([
     { id: 1, name: "Exercise", exercises: [] },
     { id: 2, name: "Exercise", exercises: [] },
     { id: 3, name: "Exercise", exercises: [] },
@@ -21,73 +21,14 @@ export default function NoteScreen({}) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentExerciseId, setCurrentExerciseId] = useState(null);
   const [isAddingNewBox, setIsAddingNewBox] = useState(false);
-
-  const allExercises = [
-    {
-      name: "Bench Press",
-      des: "Bench Press is a compound exercise that targets the chest, shoulders, and triceps. It involves lying on a bench with a barbell, and pressing the barbell straight up to the chest.",
-      pathImage: myImage,
-      category: "Chest",
-    },
-    {
-      name: "Push Up",
-      des: "A bodyweight exercise that works your chest, shoulders, triceps, and core. Start in a plank position and lower your body until your chest nearly touches the ground, then push back up.",
-      pathImage: myImage,
-      category: "Chest",
-    },
-    {
-      name: "Squat",
-      des: "A fundamental lower body exercise that targets quadriceps, hamstrings, glutes, and core. Stand with feet shoulder-width apart, lower your body by bending your knees, then return to standing.",
-      pathImage: myImage,
-      category: "Leg",
-    },
-    {
-      name: "Deadlift",
-      des: "A compound exercise that works multiple muscle groups including back, legs, and core. With a barbell in front of you, hinge at your hips to lift the weight while keeping your back straight.",
-      pathImage: myImage,
-      category: "Back",
-    },
-    {
-      name: "Pull Up",
-      des: "An upper body exercise that targets your back, biceps, and shoulders. Hang from a bar with palms facing away, then pull yourself up until your chin is over the bar.",
-      pathImage: myImage,
-      category: "Back",
-    },
-    {
-      name: "Shoulder Press",
-      des: "Also known as overhead press, this exercise targets your shoulders and triceps. Press a barbell or dumbbells from shoulder level to overhead.",
-      pathImage: myImage,
-      category: "Arms",
-    },
-    {
-      name: "Bicep Curl",
-      des: "An isolation exercise for the biceps. Hold dumbbells with palms facing up, keep your upper arms still, and curl the weights toward your shoulders.",
-      pathImage: myImage,
-      category: "Arms",
-    },
-    {
-      name: "Plank",
-      des: "A core strengthening exercise. Hold a push-up position with your body forming a straight line from head to heels, engaging your core muscles.",
-      pathImage: myImage,
-      category: "ABS",
-    },
-    {
-      name: "Leg Press",
-      des: "A machine exercise that targets your legs. Sit in the leg press machine, place your feet on the platform, and push the weight away by extending your legs.",
-      pathImage: myImage,
-      category: "Leg",
-    },
-    {
-      name: "Lat Pulldown",
-      des: "A back exercise performed on a cable machine. Grip the bar with hands wider than shoulder-width, then pull it down to your upper chest while keeping your back straight.",
-      pathImage: myImage,
-      category: "Back",
-    },
-  ];
+  const [databaseExercises, setDatabaseExercises] = useState([]);
+ 
+ 
 
   useEffect(() => {
     fetchExercise();
-  });
+  }, []);
+
 
   const fetchExercise = async () => {
     try {
@@ -95,21 +36,21 @@ export default function NoteScreen({}) {
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/getExercises`
       );
 
-      console.log(response);
-      const exercises = await response.json();
-      console.log(exercises);
-     
+      setDatabaseExercises(response.data)
+ 
+    
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
   };
 
+
   const getAvailableExercises = () => {
-    const selectedExercises = exercises.map((ex) => ex.name);
-    const filteredExercises = allExercises.filter(
+    const selectedExercises = exercisesBox.map((ex) => ex.name);
+    const filteredExercises = databaseExercises.filter(
       (ex) =>
         (!selectedExercises.includes(ex.name) || ex.name === "Exercise") &&
-        (selectedCategory === "All" || ex.category === selectedCategory)
+        (selectedCategory === "all" || ex.category === selectedCategory)
     );
     return filteredExercises;
   };
@@ -128,17 +69,17 @@ export default function NoteScreen({}) {
   };
 
   const handleRemoveBox = () => {
-    setExercises([]);
+    setExercisesBox([]);
   };
 
   const handleAddExercise = (exerciseId) => {
-    const exercise = exercises.find((ex) => ex.id === exerciseId);
+    const exercise = exercisesBox.find((ex) => ex.id === exerciseId);
     if (exercise.name === "Exercise") {
       setCurrentExerciseId(exerciseId);
       setModalVisible(true);
     } else {
-      setExercises(
-        exercises.map((ex) =>
+      setExercisesBox(
+        exercisesBox.map((ex) =>
           ex.id === exerciseId ? { ...ex, name: "Exercise" } : ex
         )
       );
@@ -147,14 +88,14 @@ export default function NoteScreen({}) {
 
   const handleSelectExercise = (exerciseName) => {
     if (isAddingNewBox) {
-      setExercises([
-        ...exercises,
+      setExercisesBox([
+        ...exercisesBox,
         { id: Date.now(), name: exerciseName, exercises: [] },
       ]);
       setIsAddingNewBox(false);
     } else {
-      setExercises(
-        exercises.map((exercise) =>
+      setExercisesBox(
+        exercisesBox.map((exercise) =>
           exercise.id === currentExerciseId
             ? { ...exercise, name: exerciseName }
             : exercise
@@ -169,7 +110,7 @@ export default function NoteScreen({}) {
   };
 
   const handleRemoveExercise = (id) => {
-    setExercises(exercises.filter((exercise) => exercise.id !== id));
+    setExercisesBox(exercisesBox.filter((exercise) => exercise.id !== id));
   };
 
   return (
@@ -186,7 +127,7 @@ export default function NoteScreen({}) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 10 }}
         >
-          {exercises.map((exercise) => (
+          {exercisesBox.map((exercise) => (
             <View
               key={exercise.id}
               style={{ marginBottom: 10, position: "relative", width: "100%" }}
@@ -323,19 +264,19 @@ export default function NoteScreen({}) {
                       { width: 50 },
                       {
                         backgroundColor:
-                          selectedCategory === "All"
+                          selectedCategory === "all"
                             ? colors.clr_slate
                             : colors.clr_gray,
                       },
                     ]}
-                    onPress={() => handleCategoryPress("All")}
+                    onPress={() => handleCategoryPress("all")}
                   >
                     <Text
                       style={[
                         NoteScreenStyle.modal_category_inside_text,
                         {
                           color:
-                            selectedCategory === "All"
+                            selectedCategory === "all"
                               ? colors.clr_white
                               : colors.clr_black,
                         },
@@ -351,19 +292,19 @@ export default function NoteScreen({}) {
                       { width: 50 },
                       {
                         backgroundColor:
-                          selectedCategory === "Leg"
+                          selectedCategory === "leg"
                             ? colors.clr_slate
                             : colors.clr_gray,
                       },
                     ]}
-                    onPress={() => handleCategoryPress("Leg")}
+                    onPress={() => handleCategoryPress("leg")}
                   >
                     <Text
                       style={[
                         NoteScreenStyle.modal_category_inside_text,
                         {
                           color:
-                            selectedCategory === "Leg"
+                            selectedCategory === "leg"
                               ? colors.clr_white
                               : colors.clr_black,
                         },
@@ -378,19 +319,19 @@ export default function NoteScreen({}) {
                       { width: 50 },
                       {
                         backgroundColor:
-                          selectedCategory === "ABS"
+                          selectedCategory === "abs"
                             ? colors.clr_slate
                             : colors.clr_gray,
                       },
                     ]}
-                    onPress={() => handleCategoryPress("ABS")}
+                    onPress={() => handleCategoryPress("abs")}
                   >
                     <Text
                       style={[
                         NoteScreenStyle.modal_category_inside_text,
                         {
                           color:
-                            selectedCategory === "ABS"
+                            selectedCategory === "abs"
                               ? colors.clr_white
                               : colors.clr_black,
                         },
@@ -405,19 +346,19 @@ export default function NoteScreen({}) {
                       { width: 65 },
                       {
                         backgroundColor:
-                          selectedCategory === "Back"
+                          selectedCategory === "back"
                             ? colors.clr_slate
                             : colors.clr_gray,
                       },
                     ]}
-                    onPress={() => handleCategoryPress("Back")}
+                    onPress={() => handleCategoryPress("back")}
                   >
                     <Text
                       style={[
                         NoteScreenStyle.modal_category_inside_text,
                         {
                           color:
-                            selectedCategory === "Back"
+                            selectedCategory === "back"
                               ? colors.clr_white
                               : colors.clr_black,
                         },
@@ -432,19 +373,19 @@ export default function NoteScreen({}) {
                       { width: 65 },
                       {
                         backgroundColor:
-                          selectedCategory === "Chest"
+                          selectedCategory === "chest"
                             ? colors.clr_slate
                             : colors.clr_gray,
                       },
                     ]}
-                    onPress={() => handleCategoryPress("Chest")}
+                    onPress={() => handleCategoryPress("chest")}
                   >
                     <Text
                       style={[
                         NoteScreenStyle.modal_category_inside_text,
                         {
                           color:
-                            selectedCategory === "Chest"
+                            selectedCategory === "chest"
                               ? colors.clr_white
                               : colors.clr_black,
                         },
@@ -453,25 +394,26 @@ export default function NoteScreen({}) {
                       Chest
                     </Text>
                   </TouchableOpacity>
+                  
                   <TouchableOpacity
                     style={[
                       NoteScreenStyle.modal_category_inside,
                       { width: 65 },
                       {
                         backgroundColor:
-                          selectedCategory === "Arms"
+                          selectedCategory === "arms"
                             ? colors.clr_slate
                             : colors.clr_gray,
                       },
                     ]}
-                    onPress={() => handleCategoryPress("Arms")}
+                    onPress={() => handleCategoryPress("arms")}
                   >
                     <Text
                       style={[
                         NoteScreenStyle.modal_category_inside_text,
                         {
                           color:
-                            selectedCategory === "Arms"
+                            selectedCategory === "arms"
                               ? colors.clr_white
                               : colors.clr_black,
                         },
@@ -503,8 +445,8 @@ export default function NoteScreen({}) {
                       >
                         <ExerciseCard
                           name={exercise.name}
-                          des={exercise.des}
-                          pathImage={exercise.pathImage}
+                          description={exercise.description}
+                          picture={exercise.picture}
                         />
                       </TouchableOpacity>
                     ))}

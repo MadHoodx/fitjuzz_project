@@ -23,16 +23,17 @@ mongoose.connect(process.env.MONGODB_URI, {
 
   // Array of 10 exercises
   const exercises = [
-      { name: 'Push-up', description: 'A bodyweight exercise for chest and arms.', catagory: 'chest' },
-      { name: 'Pull-up', description: 'A bodyweight exercise for the back.', catagory: 'back' },
-      { name: 'Bicep Curl', description: 'An exercise for strengthening the arms.', catagory: 'arms' },
-      { name: 'Sit-up', description: 'A core exercise for the abs.', catagory: 'abs' },
-      { name: 'Squat', description: 'A lower body exercise for legs and glutes.', catagory: 'leg' },
-      { name: 'Bench Press', description: 'A strength exercise for the chest and triceps.', catagory: 'chest' },
-      { name: 'Deadlift', description: 'A compound exercise for the back and legs.', catagory: 'back' },
-      { name: 'Tricep Dip', description: 'An exercise for triceps.', catagory: 'arms' },
-      { name: 'Leg Press', description: 'A machine-based leg exercise for quads and glutes.', catagory: 'leg' },
-      { name: 'Plank', description: 'A core strengthening exercise for abs and lower back.', catagory: 'abs' }
+      { name: 'Push-up', description: 'A bodyweight exercise for chest and arms.', category: 'chest' },
+      { name: 'Pull-up', description: 'A bodyweight exercise for the back.', category: 'back' },
+      { name: 'Bicep Curl', description: 'An exercise for strengthening the arms.', category: 'arms' },
+      { name: 'Sit-up', description: 'A core exercise for the abs.', category: 'abs' },
+      { name: 'Squat', description: 'A lower body exercise for legs and glutes.', category: 'leg' },
+      { name: 'Bench Press', description: 'A strength exercise for the chest and triceps.', category: 'chest' },
+      { name: 'Deadlift', description: 'A compound exercise for the back and legs.', category: 'back' },
+      { name: 'Tricep Dip', description: 'An exercise for triceps.', category: 'arms' },
+      { name: 'Leg Press', description: 'A machine-based leg exercise for quads and glutes.', category: 'leg' },
+      { name: 'Plank', description: 'A core strengthening exercise for abs and lower back.', category: 'abs' },
+      { name: 'Fly', description: 'A chest exercise for middle and inner chest', category: 'chest' }
   ];
 
   // Insert all exercises into the database

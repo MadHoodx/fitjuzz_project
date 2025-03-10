@@ -9,13 +9,13 @@ const ExerciseCard = (props) => {
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Image
           // source={require("../assets/images/Welcomimage.png")}
-          source={props.pathImage}
+          source={{uri: props.picture}}
           style={{ width: 70, height: 50 }}
         />
       </View>
       <View>
         <Text style={[ExerciseCardstyles.text_name]}>{props.name}</Text>
-        <Text style={[ExerciseCardstyles.text_des]}>{props.des}</Text>
+        <Text style={[ExerciseCardstyles.text_des]}>{props.description}</Text>
       </View>
     </View>
   );
