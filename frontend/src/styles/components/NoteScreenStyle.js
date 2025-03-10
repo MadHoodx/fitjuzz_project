@@ -86,6 +86,7 @@ const NoteScreenStyle = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
+    width: 50
   },
   modal_category_inside_text: {
     fontSize: sizes.size_xs,

@@ -105,9 +105,12 @@ export default function NoteScreen({}) {
     setModalVisible(false);
   };
 
-  const handleCategoryPress = (category) => {
-    setSelectedCategory(category);
-  };
+
+
+  
+  // const handleCategoryPress = (category) => {
+  //   setSelectedCategory(category);
+  // };
 
   const handleRemoveExercise = (id) => {
     setExercisesBox(exercisesBox.filter((exercise) => exercise.id !== id));
@@ -257,171 +260,19 @@ export default function NoteScreen({}) {
                     />
                   </TouchableOpacity>
                 </View>
+
                 <View style={[NoteScreenStyle.modal_category_box]}>
-                  <TouchableOpacity
-                    style={[
-                      NoteScreenStyle.modal_category_inside,
-                      { width: 50 },
-                      {
-                        backgroundColor:
-                          selectedCategory === "all"
-                            ? colors.clr_slate
-                            : colors.clr_gray,
-                      },
-                    ]}
-                    onPress={() => handleCategoryPress("all")}
-                  >
-                    <Text
-                      style={[
-                        NoteScreenStyle.modal_category_inside_text,
-                        {
-                          color:
-                            selectedCategory === "all"
-                              ? colors.clr_white
-                              : colors.clr_black,
-                        },
-                      ]}
-                      rr
+                  {["all", "leg", "abs", "back", "chest", "arms"].map(category => (
+                    <TouchableOpacity
+                      key={category}
+                      style={[NoteScreenStyle.modal_category_inside, { backgroundColor: selectedCategory === category ? colors.clr_slate : colors.clr_gray }]}
+                      onPress={() => setSelectedCategory(category)}
                     >
-                      All
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      NoteScreenStyle.modal_category_inside,
-                      { width: 50 },
-                      {
-                        backgroundColor:
-                          selectedCategory === "leg"
-                            ? colors.clr_slate
-                            : colors.clr_gray,
-                      },
-                    ]}
-                    onPress={() => handleCategoryPress("leg")}
-                  >
-                    <Text
-                      style={[
-                        NoteScreenStyle.modal_category_inside_text,
-                        {
-                          color:
-                            selectedCategory === "leg"
-                              ? colors.clr_white
-                              : colors.clr_black,
-                        },
-                      ]}
-                    >
-                      Leg
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      NoteScreenStyle.modal_category_inside,
-                      { width: 50 },
-                      {
-                        backgroundColor:
-                          selectedCategory === "abs"
-                            ? colors.clr_slate
-                            : colors.clr_gray,
-                      },
-                    ]}
-                    onPress={() => handleCategoryPress("abs")}
-                  >
-                    <Text
-                      style={[
-                        NoteScreenStyle.modal_category_inside_text,
-                        {
-                          color:
-                            selectedCategory === "abs"
-                              ? colors.clr_white
-                              : colors.clr_black,
-                        },
-                      ]}
-                    >
-                      ABS
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      NoteScreenStyle.modal_category_inside,
-                      { width: 65 },
-                      {
-                        backgroundColor:
-                          selectedCategory === "back"
-                            ? colors.clr_slate
-                            : colors.clr_gray,
-                      },
-                    ]}
-                    onPress={() => handleCategoryPress("back")}
-                  >
-                    <Text
-                      style={[
-                        NoteScreenStyle.modal_category_inside_text,
-                        {
-                          color:
-                            selectedCategory === "back"
-                              ? colors.clr_white
-                              : colors.clr_black,
-                        },
-                      ]}
-                    >
-                      Back
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      NoteScreenStyle.modal_category_inside,
-                      { width: 65 },
-                      {
-                        backgroundColor:
-                          selectedCategory === "chest"
-                            ? colors.clr_slate
-                            : colors.clr_gray,
-                      },
-                    ]}
-                    onPress={() => handleCategoryPress("chest")}
-                  >
-                    <Text
-                      style={[
-                        NoteScreenStyle.modal_category_inside_text,
-                        {
-                          color:
-                            selectedCategory === "chest"
-                              ? colors.clr_white
-                              : colors.clr_black,
-                        },
-                      ]}
-                    >
-                      Chest
-                    </Text>
-                  </TouchableOpacity>
-                  
-                  <TouchableOpacity
-                    style={[
-                      NoteScreenStyle.modal_category_inside,
-                      { width: 65 },
-                      {
-                        backgroundColor:
-                          selectedCategory === "arms"
-                            ? colors.clr_slate
-                            : colors.clr_gray,
-                      },
-                    ]}
-                    onPress={() => handleCategoryPress("arms")}
-                  >
-                    <Text
-                      style={[
-                        NoteScreenStyle.modal_category_inside_text,
-                        {
-                          color:
-                            selectedCategory === "arms"
-                              ? colors.clr_white
-                              : colors.clr_black,
-                        },
-                      ]}
-                    >
-                      Arms
-                    </Text>
-                  </TouchableOpacity>
+                      <Text style={[NoteScreenStyle.modal_category_inside_text, { color: selectedCategory === category ? colors.clr_white : colors.clr_black }]}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
                 </View>
                 <ScrollView
                   style={{ marginTop: 20, flex: 1 }}
