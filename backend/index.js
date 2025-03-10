@@ -6,7 +6,7 @@ require('dotenv').config();
 const userRoute = require('./routes/userRoute');
 const userUpdateRoute = require('./routes/userUpdateRoute');
 const otpRoute = require('./routes/otpRoute')
-
+const exerciseRoute = require('./routes/exerciseRoute')
 
 const app = express();
 app.use(express.json());
@@ -42,7 +42,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 app.use('/api/user', userRoute,userUpdateRoute)
 app.use('/api/user', otpRoute)
-
+app.use('/api/user', exerciseRoute)
 
 
 const PORT = process.env.PORT || 3000;
