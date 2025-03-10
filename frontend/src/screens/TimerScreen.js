@@ -58,7 +58,7 @@ export default function HomeScreen({}) {
   return (
     <View style={[TimerScreenStyle.container]}>
       <Header />
-      <ScrollView style={[TimerScreenStyle.all]}>
+      <View style={[TimerScreenStyle.all]}>
         <View style={{ alignItems: "center" }}>
           <Text style={TimerScreenStyle.time}>{formatTime(time)}</Text>
           <View style={TimerScreenStyle.buttonContainer}>
@@ -81,18 +81,22 @@ export default function HomeScreen({}) {
           </View>
           <View style={[TimerScreenStyle.line]} />
 
-          <View style={TimerScreenStyle.lapsContainer}>
+          <ScrollView 
+            style={TimerScreenStyle.lapsContainer} 
+            contentContainerStyle={{ width: '100%' }}
+            showsVerticalScrollIndicator={false}
+          >
             {laps.map((lap, index) => (
-              <View key={index}>
+              <View key={index} style={{ width: '100%' }}>
                 <Text style={TimerScreenStyle.lapText}>
                   Lap {index + 1}: {formatTime(lap)}
                 </Text>
                 <View style={[TimerScreenStyle.line]} />
               </View>
             ))}
-          </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }

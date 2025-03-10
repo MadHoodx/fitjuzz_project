@@ -5,6 +5,9 @@ const TimerScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
+  all: {
+    flex: 1,
+  },
   time: {
     fontSize: 60,
     fontWeight: "bold",
@@ -31,10 +34,11 @@ const TimerScreenStyle = StyleSheet.create({
     justifyContent:'center',
   },
   line:{
-    width:300,
-    height:1,
-    backgroundColor:colors.clr_slate,
-    marginTop:3
+    width: 300,
+    height: 1,
+    backgroundColor: colors.clr_slate,
+    marginTop: 3,
+    alignSelf: 'center',
   },
   startButton: {
     backgroundColor:colors.clr_orange,
@@ -50,14 +54,18 @@ const TimerScreenStyle = StyleSheet.create({
     textAlign:'center'
   },
   lapsContainer: {
-    width: "80%",
-    alignItems:'center'
+    width: "100%",
+    maxHeight: 300,
+    marginTop: 10,
+    marginBottom: 20,
+    paddingHorizontal: 50,
   },
   lapText: {
     fontSize: sizes.size_lg,
     marginBottom: 5,
-    marginTop:5,
-    color:'gray'
+    marginTop: 5,
+    color: 'gray',
+    paddingLeft: 20,
   },
 });
 
