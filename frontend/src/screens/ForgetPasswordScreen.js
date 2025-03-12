@@ -20,7 +20,7 @@ import InputWithEye from "../components/InputWithEye";
 export default function ForgetPasswordScreen({}) {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
-  const [isSentItoVisible, setIsSentItoVisible] = useState(1);
+  const [isSentOtpVisible, setisSentOtpVisible] = useState(1);
   const [isOtpVisible, setIsOtpVisible] = useState(0);
   const [isPasswordResetVisible, setIsPasswordResetVisible] = useState(0);
   const [isSuccessfullyResetVisible, setIsSuccessfullyResetVisible] = useState(0);
@@ -59,7 +59,7 @@ export default function ForgetPasswordScreen({}) {
         }
       );
 
-      setIsSentItoVisible(0);
+      setisSentOtpVisible(0);
       setIsOtpVisible(1);
     } catch (error) {
       if(error.status == 405) {
@@ -118,7 +118,7 @@ export default function ForgetPasswordScreen({}) {
   return (
     <View style={ForgetPasswordScreenStyle.container}>
       <HeaderAlternative isResetPasswordPage={true}></HeaderAlternative>
-      {isSentItoVisible ? (
+      {isSentOtpVisible ? (
         <View style={[styles.container]}>
           <View
             style={[

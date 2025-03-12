@@ -86,7 +86,7 @@ const NoteScreenStyle = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    width: 50
+    width: 50,
   },
   modal_category_inside_text: {
     fontSize: sizes.size_xs,
@@ -99,15 +99,15 @@ const NoteScreenStyle = StyleSheet.create({
     paddingTop: 20,
     flexWrap: "wrap",
   },
-  exercisecard:{
-    width: '47%',
+  exercisecard: {
+    width: "47%",
     height: 180,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -136,6 +136,76 @@ const NoteScreenStyle = StyleSheet.create({
     opacity: 0.2,
     zIndex: 0,
     transform: [{ rotate: "-50deg" }],
+  },
+  userExerciseDisplay: {
+    borderWidth: 2,
+    borderColor: "red",
+    alignItems: "center",
+  },
+  userWorkoutTrackInput: {
+    borderWidth: 2,
+    borderColor: "red",
+  },
+  continueButton: {
+    width: "50%",
+    backgroundColor: colors.clr_black,
+    borderRadius: 20,
+    paddingVertical: 12,
+    elevation: 24,
+    marginVertical: 10,
+  },
+
+  tableContainer: {
+    borderColor: 'red',
+    borderWidth: 2
+  },
+  tableHeader: {
+   
+    flexDirection: "row",
+    backgroundColor: "#ddd",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#bbb",
+    borderColor: 'red',
+    borderWidth: 2
+  },
+  headerCell: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: sizes.size_base,
+    borderColor: 'red',
+    borderWidth: 2
+  },
+  row: {
+    
+    flexDirection: "row",
+    paddingVertical: 10,
+    width: "100%",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+    borderColor: 'red',
+    borderWidth: 2
+  },
+  cell: {
+    flex: 1,
+    textAlign: "center",
+    fontSize: sizes.size_base,
+    borderColor: 'red',
+    borderWidth: 2
+  },
+  nextButton: {
+    width: "50%",
+    backgroundColor: colors.clr_black,
+    borderRadius: 20,
+    paddingVertical: 12,
+    elevation: 24,
+    marginVertical: 16,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 
