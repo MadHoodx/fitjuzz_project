@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './src/screens/MainScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
-import Note3 from './src/screens/Note3';
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -89,7 +89,7 @@ function MyStack() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
         <Stack.Screen name="MyTabs" component={MyTabs} />
-        <Stack.Screen name="Note3" component={Note3} />
+    
       </Stack.Navigator>
 
   );

@@ -18,6 +18,7 @@ import ExerciseCard from "../components/ExerciseCard";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import myImage from "../assets/images/Welcomimage.png";
 import axios from "axios";
+import CircularTimer from "../components/CircularTimer";
 
 export default function NoteScreen({}) {
   const [currentDate, setCurrentDate] = useState("");
@@ -34,6 +35,7 @@ export default function NoteScreen({}) {
 
   const [isNoteVisible, setIsNoteVisible] = useState(1);
   const [isStartVisible, setIsStartVisible] = useState(0);
+  const [isTimerVisible, setIsTimerVisible] = useState(0)
 
   useEffect(() => {
     fetchExercise();
@@ -123,6 +125,12 @@ export default function NoteScreen({}) {
     setIsNoteVisible(0);
     setIsStartVisible(1);
   };
+  const handleIsTimerVisible = () => {
+    setIsStartVisible(0);
+    setIsTimerVisible(1)
+  };
+  
+
 
   const [data, setData] = useState([
     { id: "1", weight: "2 ", reps: "2", timer: "" },
@@ -130,11 +138,7 @@ export default function NoteScreen({}) {
     { id: "3", weight: "", reps: "", timer: "" },
   ]);
 
-  const handleInputChange = (text, index, field) => {
-    const newData = [...data];
-    newData[index][field] = text;
-    setData(newData);
-  };
+
 
   return (
     <View style={[NoteScreenStyle.container]}>
@@ -462,12 +466,15 @@ export default function NoteScreen({}) {
           />
 
           <View style={{ alignItems: "center" }}>
-            <TouchableOpacity style={NoteScreenStyle.nextButton}>
+            <TouchableOpacity style={NoteScreenStyle.nextButton} onPress={handleIsTimerVisible}>
               <Text style={NoteScreenStyle.buttonText}>Next ➝</Text>
             </TouchableOpacity>
           </View>
         </View>
       ) : null}
+      {isTimerVisible ? <View style={styles.container}>
+        <CircularTimer duration={180}></CircularTimer>
+      </View>: null}
     </View>
   );
 }
