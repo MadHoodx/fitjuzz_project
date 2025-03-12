@@ -8,10 +8,12 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { colors } from "../styles/style";
+import { useNavigation } from "@react-navigation/native";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const CircularTimer = ({ duration = 120 }) => {
+  const navigation = useNavigation();
   const [timeLeft, setTimeLeft] = useState(duration);
   const progress = useSharedValue(1); // Animation progress from 1 to 0
   const radius = 80;
@@ -68,7 +70,7 @@ const CircularTimer = ({ duration = 120 }) => {
           strokeDasharray={circumference}
           animatedProps={animatedProps}
           strokeLinecap="round"
-          transform="rotate(-90 100 100)" // Start from top
+          transform="rotate(90 100 100)" // Start from top
         />
       </Svg>
 
@@ -111,7 +113,7 @@ const CircularTimer = ({ duration = 120 }) => {
           <Text style={{ color: "white", fontWeight: "bold" }}>Restart</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={CircularTimerStyle.button}>
+      <TouchableOpacity style={CircularTimerStyle.button} onPress={() => navigation.navigate("Welcome")}>
         <Text style={CircularTimerStyle.buttonText}>Continue</Text>
       </TouchableOpacity>
     </View>

@@ -138,13 +138,10 @@ const NoteScreenStyle = StyleSheet.create({
     transform: [{ rotate: "-50deg" }],
   },
   userExerciseDisplay: {
-    borderWidth: 2,
-    borderColor: "red",
     alignItems: "center",
   },
   userWorkoutTrackInput: {
-    borderWidth: 2,
-    borderColor: "red",
+
   },
   continueButton: {
     width: "50%",
@@ -152,7 +149,7 @@ const NoteScreenStyle = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 12,
     elevation: 24,
-    marginVertical: 10,
+    marginVertical: 20,
   },
 
   tableContainer: {
@@ -163,36 +160,38 @@ const NoteScreenStyle = StyleSheet.create({
    
     flexDirection: "row",
     backgroundColor: "#ddd",
-    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#bbb",
-    borderColor: 'red',
-    borderWidth: 2
+ 
+
   },
   headerCell: {
     flex: 1,
     textAlign: "center",
     fontWeight: "bold",
     fontSize: sizes.size_base,
-    borderColor: 'red',
-    borderWidth: 2
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingVertical: 10
+
   },
   row: {
     
     flexDirection: "row",
-    paddingVertical: 10,
+    padding: 0,
     width: "100%",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-    borderColor: 'red',
-    borderWidth: 2
+
+    
+   
   },
   cell: {
     flex: 1,
     textAlign: "center",
     fontSize: sizes.size_base,
-    borderColor: 'red',
-    borderWidth: 2
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingVertical: 10
+  
   },
   nextButton: {
     width: "50%",
@@ -204,7 +203,7 @@ const NoteScreenStyle = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: sizes.size_base,
     textAlign: 'center',
   },
 });

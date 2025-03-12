@@ -35,7 +35,7 @@ export default function NoteScreen({}) {
 
   const [isNoteVisible, setIsNoteVisible] = useState(1);
   const [isStartVisible, setIsStartVisible] = useState(0);
-  const [isTimerVisible, setIsTimerVisible] = useState(0)
+  const [isTimerVisible, setIsTimerVisible] = useState(0);
 
   useEffect(() => {
     fetchExercise();
@@ -127,18 +127,59 @@ export default function NoteScreen({}) {
   };
   const handleIsTimerVisible = () => {
     setIsStartVisible(0);
-    setIsTimerVisible(1)
+    setIsTimerVisible(1);
   };
-  
-
 
   const [data, setData] = useState([
-    { id: "1", weight: "2 ", reps: "2", timer: "" },
+    { id: "1", weight: "", reps: "", timer: "" },
     { id: "2", weight: "", reps: "", timer: "" },
-    { id: "3", weight: "", reps: "", timer: "" },
   ]);
 
+  const [inputValue, setInputValue] = useState("");
+  const [currentRow, setCurrentRow] = useState(0);
+  const [currentColumn, setCurrentColumn] = useState("weight"); // Start with weight
 
+  const columnTitles = {
+    weight: "Weight",
+    reps: "Reps",
+    timer: "Timer",
+  };
+  const columnPlaceholder = {
+    weight: "Enter Weight",
+    reps: "Enter Reps",
+    timer: "Enter Timer",
+  };
+
+
+const handleNextInput = () => {
+    if (inputValue === "") return; // Prevent empty input
+
+    const updatedData = [...data];
+
+    // Update the current column in the table
+    updatedData[currentRow][currentColumn] = inputValue;
+    setData(updatedData);
+    setInputValue(""); // Clear input field
+
+    // Move to the next column (Weight → Reps → Timer)
+    if (currentColumn === "weight") {
+      setCurrentColumn("reps");
+    } else if (currentColumn === "reps") {
+      setCurrentColumn("timer");
+    } else {
+      // If timer is filled, move to the next row
+      if (currentRow < data.length - 1) {
+        setCurrentRow(currentRow + 1);
+        setCurrentColumn("weight"); // Reset to weight
+      } else {
+        // Add a new row if the last row is completed
+        const newRow = { id: (data.length + 1).toString(), weight: "", reps: "", timer: "" };
+        setData([...data, newRow]);
+        setCurrentRow(data.length); // Move to the new row
+        setCurrentColumn("weight"); // Reset column
+      }
+    }
+  };
 
   return (
     <View style={[NoteScreenStyle.container]}>
@@ -396,8 +437,8 @@ export default function NoteScreen({}) {
           <View
             style={[NoteScreenStyle.userWorkoutTrackInput, { marginTop: 10 }]}
           >
-            <Text style={{ fontWeight: "bold", fontSize: sizes.size_base }}>
-              Weight
+            <Text style={{ fontWeight: "bold", fontSize: sizes.size_base}}>
+              {columnTitles[currentColumn]}
             </Text>
             <View
               style={{ borderWidth: 1, borderColor: colors.clr_gray }}
@@ -405,23 +446,24 @@ export default function NoteScreen({}) {
 
             <View
               style={{
-                borderWidth: 2,
-                borderColor: "blue",
+                
                 alignItems: "center",
-                marginTop: 10,
+                marginTop: 20,
               }}
             >
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity>
                   <AntDesign name="minuscircle" size={15} color="#E77339" />
-                </TouchableOpacity>
+                </TouchableOpacity> 
                 <TextInput
-                  placeholder="input"
+                  placeholder={columnPlaceholder[currentColumn]}
+                  value={inputValue}
+                  onChangeText={setInputValue}
                   style={{
                     textAlign: "center",
                     fontSize: sizes.size_base,
                     color: colors.clr_black,
-                    width: 50,
+                    width: 100,
                     height: 20,
 
                     marginHorizontal: 20,
@@ -436,10 +478,13 @@ export default function NoteScreen({}) {
                 style={{
                   borderWidth: 1,
                   borderColor: colors.clr_gray,
-                  width: "20%",
+                  width: "30%",
                 }}
               ></View>
-              <TouchableOpacity style={NoteScreenStyle.continueButton}>
+              <TouchableOpacity
+                style={NoteScreenStyle.continueButton}
+                onPress={handleNextInput}
+              >
                 <Text style={[NoteScreenStyle.buttonText]}>Continue</Text>
               </TouchableOpacity>
             </View>
@@ -466,15 +511,20 @@ export default function NoteScreen({}) {
           />
 
           <View style={{ alignItems: "center" }}>
-            <TouchableOpacity style={NoteScreenStyle.nextButton} onPress={handleIsTimerVisible}>
+            <TouchableOpacity
+              style={NoteScreenStyle.nextButton}
+              onPress={handleIsTimerVisible}
+            >
               <Text style={NoteScreenStyle.buttonText}>Next ➝</Text>
             </TouchableOpacity>
           </View>
         </View>
       ) : null}
-      {isTimerVisible ? <View style={styles.container}>
-        <CircularTimer duration={180}></CircularTimer>
-      </View>: null}
+      {isTimerVisible ? (
+        <View style={styles.container}>
+          <CircularTimer duration={180}></CircularTimer>
+        </View>
+      ) : null}
     </View>
   );
 }
