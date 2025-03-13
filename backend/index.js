@@ -7,7 +7,7 @@ const userRoute = require('./routes/userRoute');
 const userUpdateRoute = require('./routes/userUpdateRoute');
 const otpRoute = require('./routes/otpRoute')
 const exerciseRoute = require('./routes/exerciseRoute')
-
+const workoutRoute = require('./routes/workoutRoute')
 const app = express();
 app.use(express.json());
 app.use(cors()); 
@@ -44,7 +44,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/user', userRoute,userUpdateRoute)
 app.use('/api/user', otpRoute)
 app.use('/api/user', exerciseRoute)
-
+app.use('/api/user', workoutRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
