@@ -36,8 +36,8 @@ mongoose.connect(process.env.MONGODB_URI, {
       { name: 'Fly', description: 'A chest exercise for middle and inner chest', category: 'chest' }
   ];
 
-  // Insert all exercises into the database
-  // return exerciseModel.insertMany(exercises);
+
+  return exerciseModel.insertMany(exercises);
 })
 
 

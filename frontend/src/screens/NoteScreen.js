@@ -227,7 +227,7 @@ export default function NoteScreen({ }) {
     const decodedUserToken = jwtDecode(userToken);
     const userId = decodedUserToken.userId;
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
         {
 
