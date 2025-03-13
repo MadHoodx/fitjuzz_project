@@ -222,6 +222,23 @@ export default function NoteScreen({ }) {
     }
   };
 
+  const saveExercise = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const decodedUserToken = jwtDecode(userToken);
+    const userId = decodedUserToken.userId;
+    try {
+      const response = await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
+        {
+
+          exercises: exercisesBox,
+        }
+      )
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
 
   const moveToNextExercise = () => {
     if (currentExerciseIndex < exercisesBox.length - 1) {
@@ -229,7 +246,9 @@ export default function NoteScreen({ }) {
       setCurrentSetIndex(0); // Reset set index for new exercise
       setCurrentField("weight"); // Reset input field to 'weight' for new exercise
     } else {
-      
+
+      saveExercise()
+
       // Reset everything when the last exercise is finished
       setExercisesBox([
         {
@@ -259,7 +278,7 @@ export default function NoteScreen({ }) {
 
   const moveToWorkout = () => {
     const selectedExercises = exercisesBox.filter((exercise) => exercise.name !== "Exercise");
-  
+
     if (selectedExercises.length > 0) {
       // Keep only selected exercises and reset everything else
       setExercisesBox(selectedExercises);
@@ -273,7 +292,7 @@ export default function NoteScreen({ }) {
       setError("Please select at least one exercise");
     }
   };
-  
+
 
   return (
     <View style={[NoteScreenStyle.container]}>
