@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const CircularTimer = ({ duration = 120 }) => {
+const CircularTimer = ({ duration = 200, setNextExercise }) => {
   const navigation = useNavigation();
   const [timeLeft, setTimeLeft] = useState(duration);
   const progress = useSharedValue(1); // Animation progress from 1 to 0
@@ -113,7 +113,7 @@ const CircularTimer = ({ duration = 120 }) => {
           <Text style={{ color: "white", fontWeight: "bold" }}>Restart</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={CircularTimerStyle.button} onPress={() => navigation.navigate("Welcome")}>
+      <TouchableOpacity style={CircularTimerStyle.button} onPress={setNextExercise}>
         <Text style={CircularTimerStyle.buttonText}>Continue</Text>
       </TouchableOpacity>
     </View>

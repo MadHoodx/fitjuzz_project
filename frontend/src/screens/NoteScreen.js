@@ -20,15 +20,33 @@ import myImage from "../assets/images/Welcomimage.png";
 import axios from "axios";
 import CircularTimer from "../components/CircularTimer";
 
-export default function NoteScreen({}) {
+export default function NoteScreen({ }) {
+
+  const [error, setError] = useState('')
+  const [errorLoading, setErrorLoading] = useState(0)
   const [currentDate, setCurrentDate] = useState("");
   const [exercisesBox, setExercisesBox] = useState([
-    { id: 1, name: "Exercise", exercises: [] },
-    { id: 2, name: "Exercise", exercises: [] },
-    { id: 3, name: "Exercise", exercises: [] },
+    {
+      id: 1, name: "Exercise", sets: [
+        { setNumber: 1, weight: 0, reps: 0, timer: 0 },
+        { setNumber: 2, weight: 0, reps: 0, timer: 0 },
+      ]
+    },
+    {
+      id: 2, name: "Exercise", sets: [
+        { setNumber: 1, weight: 0, reps: 0, timer: 0 },
+        { setNumber: 2, weight: 0, reps: 0, timer: 0 },
+      ]
+    },
+    {
+      id: 3, name: "Exercise", sets: [
+        { setNumber: 1, weight: 0, reps: 0, timer: 0 },
+        { setNumber: 2, weight: 0, reps: 0, timer: 0 },
+      ]
+    },
   ]);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentExerciseId, setCurrentExerciseId] = useState(null);
   const [isAddingNewBox, setIsAddingNewBox] = useState(false);
   const [databaseExercises, setDatabaseExercises] = useState([]);
@@ -36,6 +54,7 @@ export default function NoteScreen({}) {
   const [isNoteVisible, setIsNoteVisible] = useState(1);
   const [isStartVisible, setIsStartVisible] = useState(0);
   const [isTimerVisible, setIsTimerVisible] = useState(0);
+
 
   useEffect(() => {
     fetchExercise();
@@ -113,31 +132,17 @@ export default function NoteScreen({}) {
     setModalVisible(false);
   };
 
-  // const handleCategoryPress = (category) => {
-  //   setSelectedCategory(category);
-  // };
-
   const handleRemoveExercise = (id) => {
     setExercisesBox(exercisesBox.filter((exercise) => exercise.id !== id));
   };
 
-  const handleIsNoteVisible = () => {
-    setIsNoteVisible(0);
-    setIsStartVisible(1);
-  };
-  const handleIsTimerVisible = () => {
-    setIsStartVisible(0);
-    setIsTimerVisible(1);
-  };
 
-  const [data, setData] = useState([
-    { id: "1", weight: "", reps: "", timer: "" },
-    { id: "2", weight: "", reps: "", timer: "" },
-  ]);
+  const [inputValue, setInputValue] = useState(""); // Input that user enter (weight, reps, timer)
 
-  const [inputValue, setInputValue] = useState("");
-  const [currentRow, setCurrentRow] = useState(0);
-  const [currentColumn, setCurrentColumn] = useState("weight"); // Start with weight
+  const [currentField, setCurrentField] = useState("weight"); // Track which value user is entering
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [currentSetIndex, setCurrentSetIndex] = useState(0);
+  const [timerDuration, setTimerDuration] = useState(0)
 
   const columnTitles = {
     weight: "Weight",
@@ -150,36 +155,125 @@ export default function NoteScreen({}) {
     timer: "Enter Timer",
   };
 
+  const handleConfirm = () => {
 
-const handleNextInput = () => {
-    if (inputValue === "") return; // Prevent empty input
-
-    const updatedData = [...data];
-
-    // Update the current column in the table
-    updatedData[currentRow][currentColumn] = inputValue;
-    setData(updatedData);
-    setInputValue(""); // Clear input field
-
-    // Move to the next column (Weight → Reps → Timer)
-    if (currentColumn === "weight") {
-      setCurrentColumn("reps");
-    } else if (currentColumn === "reps") {
-      setCurrentColumn("timer");
+    if (inputValue == '') {
+      setErrorLoading(1)
+      return setError('Please enter your workout progrss')
     } else {
-      // If timer is filled, move to the next row
-      if (currentRow < data.length - 1) {
-        setCurrentRow(currentRow + 1);
-        setCurrentColumn("weight"); // Reset to weight
+      setErrorLoading(0)
+    }
+    setExercisesBox((prevExercises) =>
+      prevExercises.map((exercise, exIdx) =>
+        exIdx === currentExerciseIndex
+          ? {
+            ...exercise,
+            sets: exercise.sets.map((set, sIdx) =>
+              sIdx === currentSetIndex
+                ? { ...set, [currentField]: inputValue } // Store dynamically
+                : set
+            ),
+          }
+          : exercise
+      )
+    );
+
+    setInputValue(0); // Reset input field
+
+    if (currentField === "weight") {
+      setCurrentField("reps");
+    } else if (currentField === "reps") {
+      setCurrentField("timer");
+    } else if (currentField === "timer") {
+      setTimerDuration(inputValue);
+      setIsStartVisible(0)
+      setIsTimerVisible(1)
+
+      if (currentSetIndex < exercisesBox[currentExerciseIndex].sets.length - 1) {
+        // ✅ Move to next set
+        setCurrentSetIndex(currentSetIndex + 1);
+        setCurrentField("weight");
       } else {
-        // Add a new row if the last row is completed
-        const newRow = { id: (data.length + 1).toString(), weight: "", reps: "", timer: "" };
-        setData([...data, newRow]);
-        setCurrentRow(data.length); // Move to the new row
-        setCurrentColumn("weight"); // Reset column
+        // ✅ If last set, create a new set object inside sets array
+        setExercisesBox((prevExercises) =>
+          prevExercises.map((exercise, exIdx) =>
+            exIdx === currentExerciseIndex
+              ? {
+                ...exercise,
+                sets: [
+                  ...exercise.sets,
+                  {
+                    setNumber: exercise.sets.length + 1,
+                    weight: "",
+                    reps: "",
+                    timer: "",
+                  },
+                ],
+              }
+              : exercise
+          )
+        );
+
+        // Move to new set
+        // setCurrentSetIndex((prevIndex) => prevIndex + 1);
+
+        setCurrentField("weight");
       }
     }
   };
+
+
+  const moveToNextExercise = () => {
+    if (currentExerciseIndex < exercisesBox.length - 1) {
+      setCurrentExerciseIndex(currentExerciseIndex + 1);
+      setCurrentSetIndex(0); // Reset set index for new exercise
+      setCurrentField("weight"); // Reset input field to 'weight' for new exercise
+    } else {
+      
+      // Reset everything when the last exercise is finished
+      setExercisesBox([
+        {
+          id: 1, name: "Exercise", sets: [{ setNumber: 1, weight: 0, reps: 0, timer: 0 },
+          { setNumber: 2, weight: 0, reps: 0, timer: 0 },]
+        },
+        {
+          id: 2, name: "Exercise", sets: [{ setNumber: 1, weight: 0, reps: 0, timer: 0 },
+          { setNumber: 2, weight: 0, reps: 0, timer: 0 },]
+        },
+        {
+          id: 3, name: "Exercise", sets: [{ setNumber: 1, weight: 0, reps: 0, timer: 0 },
+          { setNumber: 2, weight: 0, reps: 0, timer: 0 },]
+        }
+      ]); // Reset exercisesBox with empty sets
+
+      setCurrentExerciseIndex(0);
+      setCurrentSetIndex(0);
+      setCurrentField("weight");
+      setIsNoteVisible(1);
+      setIsStartVisible(0);
+      setIsTimerVisible(0);
+      setErrorLoading(0); // Reset error state if needed
+      setError("");
+    }
+  };
+
+  const moveToWorkout = () => {
+    const selectedExercises = exercisesBox.filter((exercise) => exercise.name !== "Exercise");
+  
+    if (selectedExercises.length > 0) {
+      // Keep only selected exercises and reset everything else
+      setExercisesBox(selectedExercises);
+      setErrorLoading(0);
+      setIsNoteVisible(0);
+      setIsStartVisible(1);
+      setIsTimerVisible(0);
+    } else {
+      // Show error if no exercise is selected
+      setErrorLoading(1);
+      setError("Please select at least one exercise");
+    }
+  };
+  
 
   return (
     <View style={[NoteScreenStyle.container]}>
@@ -189,11 +283,12 @@ const handleNextInput = () => {
           <View style={{}}>
             <Text style={[NoteScreenStyle.dateText]}>{currentDate}</Text>
             <TouchableOpacity
-              style={[styles.button, { marginBottom: 35 }]}
-              onPress={handleIsNoteVisible}
+              style={[styles.button, { marginBottom: 16 }]}
+              onPress={moveToWorkout}
             >
               <Text style={[styles.buttonText]}>Start</Text>
             </TouchableOpacity>
+            {errorLoading ? <Text style={{ color: 'red', textAlign: 'center', marginBottom: 12, fontSize: sizes.size_base }}> {error}</Text> : null}
           </View>
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -430,15 +525,15 @@ const handleNextInput = () => {
               style={{ width: 100, height: 100 }}
             />
             <Text style={{ fontWeight: "bold", fontSize: sizes.size_xl }}>
-              Placeholder
+              {exercisesBox[currentExerciseIndex].name}
             </Text>
           </View>
 
           <View
             style={[NoteScreenStyle.userWorkoutTrackInput, { marginTop: 10 }]}
           >
-            <Text style={{ fontWeight: "bold", fontSize: sizes.size_base}}>
-              {columnTitles[currentColumn]}
+            <Text style={{ fontWeight: "bold", fontSize: sizes.size_base }}>
+              {columnTitles[currentField]}
             </Text>
             <View
               style={{ borderWidth: 1, borderColor: colors.clr_gray }}
@@ -446,7 +541,7 @@ const handleNextInput = () => {
 
             <View
               style={{
-                
+
                 alignItems: "center",
                 marginTop: 20,
               }}
@@ -454,9 +549,10 @@ const handleNextInput = () => {
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity>
                   <AntDesign name="minuscircle" size={15} color="#E77339" />
-                </TouchableOpacity> 
+                </TouchableOpacity>
                 <TextInput
-                  placeholder={columnPlaceholder[currentColumn]}
+                  placeholder={columnPlaceholder[currentField]}
+                  keyboardType="numeric"
                   value={inputValue}
                   onChangeText={setInputValue}
                   style={{
@@ -481,11 +577,12 @@ const handleNextInput = () => {
                   width: "30%",
                 }}
               ></View>
+              {errorLoading ? <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text> : null}
               <TouchableOpacity
                 style={NoteScreenStyle.continueButton}
-                onPress={handleNextInput}
+                onPress={handleConfirm}
               >
-                <Text style={[NoteScreenStyle.buttonText]}>Continue</Text>
+                <Text style={[NoteScreenStyle.buttonText]}>Confirm</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -498,11 +595,11 @@ const handleNextInput = () => {
           </View>
 
           <FlatList
-            data={data}
-            keyExtractor={(item) => item.id}
+            data={exercisesBox[currentExerciseIndex].sets}
+            keyExtractor={(item) => item.setNumber}
             renderItem={({ item }) => (
               <View style={NoteScreenStyle.row}>
-                <Text style={NoteScreenStyle.cell}>{item.id}</Text>
+                <Text style={NoteScreenStyle.cell}>{item.setNumber || "-"}</Text>
                 <Text style={NoteScreenStyle.cell}>{item.weight || "-"}</Text>
                 <Text style={NoteScreenStyle.cell}>{item.reps || "-"}</Text>
                 <Text style={NoteScreenStyle.cell}>{item.timer || "-"}</Text>
@@ -513,16 +610,24 @@ const handleNextInput = () => {
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity
               style={NoteScreenStyle.nextButton}
-              onPress={handleIsTimerVisible}
+              onPress={moveToNextExercise}
             >
-              <Text style={NoteScreenStyle.buttonText}>Next ➝</Text>
+              <Text style={NoteScreenStyle.buttonText}>
+
+                {currentExerciseIndex < exercisesBox.length - 1 ? "Next exercise ➝" : "Finish"}
+              </Text>
             </TouchableOpacity>
+
           </View>
         </View>
       ) : null}
       {isTimerVisible ? (
         <View style={styles.container}>
-          <CircularTimer duration={180}></CircularTimer>
+          <CircularTimer
+            duration={timerDuration}
+            setNextExercise={moveToWorkout}
+          />
+
         </View>
       ) : null}
     </View>

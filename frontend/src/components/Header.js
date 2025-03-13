@@ -128,7 +128,7 @@ export default function Header({}) {
           },
         ]}
       >
-        Myapp
+        Fitjuzz
       </Text>
       <View style={[header.header__section]}>
         <View style={[header.header__details]}>

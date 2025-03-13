@@ -147,9 +147,9 @@ const NoteScreenStyle = StyleSheet.create({
     width: "50%",
     backgroundColor: colors.clr_black,
     borderRadius: 20,
-    paddingVertical: 12,
+    paddingVertical: 10,
     elevation: 24,
-    marginVertical: 20,
+    marginVertical: 14
   },
 
   tableContainer: {
@@ -172,7 +172,7 @@ const NoteScreenStyle = StyleSheet.create({
     fontSize: sizes.size_base,
     borderColor: 'gray',
     borderWidth: 1,
-    paddingVertical: 10
+    paddingVertical: 6
 
   },
   row: {
@@ -190,14 +190,14 @@ const NoteScreenStyle = StyleSheet.create({
     fontSize: sizes.size_base,
     borderColor: 'gray',
     borderWidth: 1,
-    paddingVertical: 10
+    paddingVertical: 6
   
   },
   nextButton: {
     width: "50%",
     backgroundColor: colors.clr_black,
     borderRadius: 20,
-    paddingVertical: 12,
+    paddingVertical: 10,
     elevation: 24,
     marginVertical: 16,
   },
