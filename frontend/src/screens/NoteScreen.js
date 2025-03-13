@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   FlatList,
+  Alert,
 } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 import NoteScreenStyle from "../styles/components/NoteScreenStyle";
@@ -19,6 +20,8 @@ import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import myImage from "../assets/images/Welcomimage.png";
 import axios from "axios";
 import CircularTimer from "../components/CircularTimer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 export default function NoteScreen({ }) {
 
@@ -204,9 +207,9 @@ export default function NoteScreen({ }) {
                   ...exercise.sets,
                   {
                     setNumber: exercise.sets.length + 1,
-                    weight: "",
-                    reps: "",
-                    timer: "",
+                    weight: 0,
+                    reps: 0,
+                    timer: 0,
                   },
                 ],
               }
@@ -222,32 +225,61 @@ export default function NoteScreen({ }) {
     }
   };
 
-  const saveExercise = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
-    const decodedUserToken = jwtDecode(userToken);
-    const userId = decodedUserToken.userId;
-    try {
-      const response = await axios.post(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
-        {
-
-          exercises: exercisesBox,
-        }
-      )
-    }
-    catch (error) {
-      console.log(error)
-    }
-  }
-
   const moveToNextExercise = () => {
+    console.log("Before filtering:", exercisesBox);
+
+    const filteredExercises = exercisesBox
+      .filter((exercise) => exercise.name !== "Exercise") // Remove unselected exercises
+      .map((exercise) => ({
+        ...exercise,
+        sets: exercise.sets.filter(set => set.weight !== 0 || set.reps !== 0 || set.timer !== 0),
+      }));
+
+    console.log("After filtering:", filteredExercises); // Debug: Check if extra sets exist
+
+
+    if (filteredExercises.length === 0) {
+      setErrorLoading(1);
+      setError("Please select at least one exercise");
+      return;
+    }
+
+    const saveWorkout = async () => {
+      const userToken = await AsyncStorage.getItem("userToken");
+      const decodedUserToken = jwtDecode(userToken);
+
+      const userId = decodedUserToken.userId;
+      const workoutData = {
+        userId,
+        exercises: filteredExercises
+      };
+
+      console.log("🚀 Sending workout data:", workoutData);
+
+
+      try {
+        const response = await axios.post(
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
+          workoutData,
+
+        );
+        console.log("✅ Workout saved successfully:", response.data);
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
+
     if (currentExerciseIndex < exercisesBox.length - 1) {
       setCurrentExerciseIndex(currentExerciseIndex + 1);
       setCurrentSetIndex(0); // Reset set index for new exercise
       setCurrentField("weight"); // Reset input field to 'weight' for new exercise
     } else {
+      console.log('before saving')
 
-      saveExercise()
+
+      saveWorkout()
+      console.log('after saving')
 
       // Reset everything when the last exercise is finished
       setExercisesBox([

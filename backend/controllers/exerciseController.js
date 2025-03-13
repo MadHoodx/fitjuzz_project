@@ -7,7 +7,6 @@ const exerciseController = {
         try{
             
             const exercises = await exerciseModel.find()
-            console.log(exercises)
             res.json(exercises)
         }
         catch(error) {
