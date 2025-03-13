@@ -37,7 +37,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   ];
 
   // Insert all exercises into the database
-  return exerciseModel.insertMany(exercises);
+  // return exerciseModel.insertMany(exercises);
 })
 
 

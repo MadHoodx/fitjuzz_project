@@ -2,7 +2,7 @@ const workoutModel = require("../models/exerciseModel");
 
 
 const workoutController = {
-    workoutUpdate: async (req, res) => {
+    updateWorkout: async (req, res) => {
         const { userId } = req.params
         const { exercises } = req.body
 
