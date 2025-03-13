@@ -1,4 +1,4 @@
-const workoutModel = require("../models/exerciseModel");
+const workoutModel = require("../models/workoutModel");
 
 
 const workoutController = {
@@ -12,7 +12,7 @@ const workoutController = {
                 return res.status(400).json({ error: "Missing userId or exercises" });
             }
 
-            const newWorkout = new Workout({ userId, exercises });
+            const newWorkout = new workoutModel({ userId, exercises });
             await newWorkout.save();
 
             res.status(201).json({ message: "Workout saved successfully" });
