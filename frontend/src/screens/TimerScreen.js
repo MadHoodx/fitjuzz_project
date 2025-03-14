@@ -58,7 +58,7 @@ export default function HomeScreen({}) {
   return (
     <View style={[TimerScreenStyle.container]}>
       <Header />
-      <View style={[TimerScreenStyle.all]}>
+      <View style={[styles.container]}>
         <View style={{ alignItems: "center" }}>
           <Text style={TimerScreenStyle.time}>{formatTime(time)}</Text>
           <View style={TimerScreenStyle.buttonContainer}>

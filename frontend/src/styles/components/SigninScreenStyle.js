@@ -27,6 +27,7 @@ const SigninScreenStyle = StyleSheet.create({
     paddingHorizontal: 40,
   },
   button__section: {
+    flexDirection: 'row',
     marginVertical: 16,
     
   },
@@ -40,10 +41,9 @@ const SigninScreenStyle = StyleSheet.create({
     gap:4
   },
   error: {
-    textAlign: 'left',
-    paddingHorizontal: 16,
+    textAlign: 'center',
     color: 'red',
-    fontSize: sizes.size_base
+    fontSize: sizes.size_sm
   }
 });
 

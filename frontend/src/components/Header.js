@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Platform, Alert } from "react-native";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 
 import { jwtDecode } from "jwt-decode";
@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import IconFeather from "react-native-vector-icons/Feather";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import axios from "axios";
-export default function Header({}) {
+export default function Header({ }) {
   const [username, setUsername] = useState("");
   const [greeting, setGreeting] = useState("");
   const [quote, setQuote] = useState("qd");
@@ -89,7 +89,7 @@ export default function Header({}) {
         const response = await axios.get(
           `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
         );
-        
+
         setUsername(response.data.name);
       }
     } catch (error) {
@@ -98,108 +98,81 @@ export default function Header({}) {
   };
 
   return (
-    <View style={[header.container]}>
-      <IconFontAwesome5
-        name={"dumbbell"}
-        size={60}
-        color={colors.clr_white}
-        style={[header.dumbbell_top]}
-      />
-      <IconFontAwesome5
-        name={"dumbbell"}
-        size={40}
-        color={colors.clr_white}
-        style={[header.dumbbell_middle]}
-      />
-      <IconFontAwesome5
-        name={"dumbbell"}
-        size={80}
-        color={colors.clr_white}
-        style={[header.dumbbell_bottom]}
-      />
-      <Text
-        style={[
-          styles.orangeText,
-          {
-            textAlign: "center",
-            fontSize: sizes.size_2xl,
-            fontWeight: "bold",
-            paddingTop: 60,
-          },
-        ]}
+    <View>
+      <ImageBackground
+        source={require("../assets/images/person-exercise3.jpg")} // Use local image
+        style={header.backgroundImage}
+        imageStyle={header.imageStyle}
+        resizeMode="cover" // or "contain", "stretch"
       >
-        Fitjuzz
-      </Text>
-      <View style={[header.header__section]}>
-        <View style={[header.header__details]}>
+        <View style={[header.container,]}>
           <Text
             style={[
-              styles.whiteText,
-              { fontSize: sizes.size_lg, fontWeight: "bold" },
+             
+              {
+                textAlign: "center",
+                fontSize: sizes.size_2xl,
+                fontWeight: "bold",
+                paddingTop: 20,
+                color: colors.clr_brightblue,
+              },
             ]}
           >
-            {greeting}: {username}
+            Fitjuzz
           </Text>
-          <Text
-            style={{
-              color: colors.clr_gray,
-              width: 300,
-            }}
-          >
-            Motavaltional quote:
-            <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
-              {quote}
-            </Text>
-          </Text>
-        </View>
+          <View style={[header.header__section]}>
+            <View style={[header.header__details]}>
+              <Text
+                style={[
+                  styles.whiteText,
+                  { fontSize: sizes.size_lg, fontWeight: "bold" },
+                ]}
+              >
+                {greeting}: {username}
+              </Text>
+              <Text
+                style={{
+                  color: colors.clr_gray,
+                  width: 300,
+                }}
+              >
+                Motavaltional quote:
+                <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
+                  {quote}
+                </Text>
+              </Text>
+            </View>
 
-        <IconFeather name={emoji} size={35} color={colors.clr_white} />
-      </View>
+            <IconFeather name={emoji} size={35} color={colors.clr_white} />
+          </View>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
 
 const header = StyleSheet.create({
   container: {
-    flexBasis: 200,
+    flexBasis: '22.5%',
     marginHorizontal: 0,
     paddingHorizontal: 25,
-    backgroundColor: colors.clr_slate,
-    borderRadius: 20,
-    marginTop: -20,
+    zIndex: 1
   },
   header__section: {
-    flex: 1,
     flexDirection: "row",
     marginTop: 16,
     justifyContent: "space-between",
+  
   },
   header__details: {
-    flex: 1,
     gap: 4,
   },
-  dumbbell_top: {
-    position: "absolute",
-    top: 15,
-    right: 35,
-    opacity: 0.1,
-    zIndex: 0,
-    transform: [{ rotate: "-55deg" }],
+  backgroundImage: {
+    backgroundColor: colors.clr_background
   },
-  dumbbell_middle: {
-    position: "absolute",
-    top: 60,
-    right: 120,
-    opacity: 0.2,
-    zIndex: 0,
-    transform: [{ rotate: "45deg" }],
-  },
-  dumbbell_bottom: {
-    position: "absolute",
-    top: 130,
-    right: 50,
-    opacity: 0.2,
-    zIndex: 0,
-    transform: [{ rotate: "-50deg" }],
-  },
+  imageStyle: {
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    opacity: 0.7
+  }
 });

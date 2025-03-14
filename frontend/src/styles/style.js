@@ -25,6 +25,10 @@ export const colors = {
   clr_black: "#1C2431",
   clr_slate: "#334357",
   clr_orange: "#E77339",
+  clr_blue: "#0046C2",
+  clr_background: "#242424",
+  clr_graybutton: "#575757",
+  clr_brightblue : "#005eff"
 };
 
 const styles = StyleSheet.create({
@@ -32,7 +36,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 0,
     paddingHorizontal: 40,
-    marginTop: Platform.OS === "android" ? sizes.size_base : 0,
+   paddingTop : Platform.OS == "android" ? sizes.size_xs : 0,
+    backgroundColor: colors.clr_background 
+    
    
 
   },
@@ -45,12 +51,20 @@ const styles = StyleSheet.create({
   orangeText: {
     color: colors.clr_orange,
   },
+  buttonAuth: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.clr_blue,
+    borderRadius: 26,
+    elevation: 6,
+  },
   button: {
+  
     width: "100%",
-    backgroundColor: colors.clr_black,
+    backgroundColor: colors.clr_blue,
     borderRadius: 20,
-    paddingVertical: 18,
-    elevation: 24,
+    paddingVertical: 14,
+    elevation: 6
   },
 
   buttonText: {
@@ -63,25 +77,29 @@ const styles = StyleSheet.create({
   input__subsection: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 20,
-    backgroundColor: colors.clr_gray,
     opacity: 0.7,
-    height: 60,
+    height: 40,
+    borderColor: colors.clr_gray,
+    borderBottomWidth: 2,
+
   },
   input__box: {
-    fontSize: sizes.size_base,
-    paddingLeft: 20,
+    
+    fontSize: sizes.size_sm,
+    color: 'white',
     paddingRight: 50,
-    borderRadius: 20,
-    backgroundColor: colors.clr_gray,
     opacity: 0.7,
-    height: 60,
+    height: 40,
+    borderColor: colors.clr_gray,
+    borderBottomWidth: 2,
+
   },
   input: {
     flex: 1,
-    fontSize: sizes.size_base,
-    paddingLeft: 20,
+    color: 'white',
+    fontSize: sizes.size_sm,
     paddingRight: 10,
+    opacity: 0.8,
   },
   title: {
     fontSize: sizes.size_xl,

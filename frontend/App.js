@@ -9,7 +9,7 @@ import NoteScreen from './src/screens/NoteScreen';
 import WelcomeScreen from './src/screens/WelcomScreen';
 import TimerScreen from './src/screens/TimerScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
-import {colors} from './src/styles/style'
+import styles, {colors} from './src/styles/style'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './src/screens/MainScreen';
@@ -30,8 +30,9 @@ function MyTabs() {
         tabBarStyle: {
           ...app.tabBar,
         },
-        tabBarActiveTintColor: colors.clr_orange,
+        tabBarActiveTintColor: colors.clr_brightblue,
         tabBarInActiveTintColor: colors.clr_gray,
+     
       })}
     >
       <Tab.Screen
@@ -105,14 +106,12 @@ export default function App() {
 
 const app = StyleSheet.create({
   tabBar: {
-    backgroundColor: colors.clr_white,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingTop: 5,
-    height: 70,
+    backgroundColor: colors.clr_background,
+    borderColor: 'black',
+    shadowColor: 'white',
+    elevation: 16
+    
 
-    //
-    shadowColor: "red",
-    elevation: 5,
+  
   },
 });

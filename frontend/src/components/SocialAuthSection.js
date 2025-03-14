@@ -9,6 +9,7 @@ import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
 
 import Constants from 'expo-constants';
+import { colors } from "../styles/style";
 const EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID  = Constants.expoConfig.extra.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID
 const EXPO_PUBLIC_WEB_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_WEB_CLIENT_ID
 const EXPO_PUBLIC_X_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_ID
@@ -167,7 +168,7 @@ export default function SocialAuthSection() {
         onPress={() => googlePromptAsync()}
       >
         <Image
-          source={require("../assets/images/google-logo.png")}
+          source={require("../assets/images/white-google-logo.png")}
           style={SocialAuthSectionStyle.logo}
         />
       </TouchableOpacity>
@@ -176,16 +177,11 @@ export default function SocialAuthSection() {
         onPress={() => xPromptAsync()}
       >
         <Image
-          source={require("../assets/images/x-logo.png")}
-          style={SocialAuthSectionStyle.logo}
+          source={require("../assets/images/white-x-logo.png")}
+          style={[SocialAuthSectionStyle.logo, {left: 2}]}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={SocialAuthSectionStyle.button}>
-        <Image
-          source={require("../assets/images/apple-logo.png")}
-          style={SocialAuthSectionStyle.logo}
-        />
-      </TouchableOpacity>
+     
     </View>
   );
 }
@@ -194,18 +190,19 @@ const SocialAuthSectionStyle = StyleSheet.create({
   button__box: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 20,
+    gap: 16,
   },
   button: {
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    backgroundColor: "#FFDFDF",
-    borderColor: "#FF6600",
+
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    backgroundColor:'#575757',
+    borderColor: colors.clr_black,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 30,
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: 24,
+    height: 24,
   },
 });

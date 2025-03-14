@@ -6,6 +6,7 @@ const SignupScreenStyle = StyleSheet.create({
     flex: 1,
   },
   input__section: {
+    marginTop: 40,
     gap: 16,
   },
   forgetPassword: {
@@ -24,7 +25,8 @@ const SignupScreenStyle = StyleSheet.create({
     paddingHorizontal: 40,
   },
   button__section: {
-    marginVertical: 16,
+    flexDirection : 'row',
+    marginVertical: 50,
 
   },
   footer__section: {
@@ -37,10 +39,9 @@ const SignupScreenStyle = StyleSheet.create({
     gap: 4
   },
   error: {
-    textAlign: 'left',
-    paddingLeft: 16,
+    textAlign: 'center',
     color: 'red',
-    fontSize: sizes.size_base
+    fontSize: sizes.size_sm
   }
 });
 

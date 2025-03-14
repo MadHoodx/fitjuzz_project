@@ -76,52 +76,53 @@ export default function SigninScreen({ updateActiveScreen }) {
       <View
         style={[
           SigninScreenStyle.input__section,
-        ]}
+          { marginTop: 16 }]}
       >
-        <TextInput
-          style={[styles.input__box]}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        />
+        <View style={{}}>
+          <Text style={[styles.whiteText, { fontWeight: 'bold' }]}>Username</Text>
+          <TextInput
+            style={[styles.input__box]}
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+        <View style={{ }}>
+          <Text style={[styles.whiteText, { fontWeight: 'bold' }]}>Password</Text>
+          <InputWithEye
+            value={password}
+            onChangeText={setPassword}
 
-        <InputWithEye
-          value={password}
-          onChangeText={setPassword}
-          placeholder={"Password"}
-        ></InputWithEye>
+          ></InputWithEye>
+        </View>
         {loading ? <Text style={SigninScreenStyle.error}>{error}</Text> : null}
 
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
-          <Text style={[styles.orangeText, SigninScreenStyle.forgetPassword]}>
+          <Text style={[SigninScreenStyle.forgetPassword, { color: colors.clr_brightblue, }]}>
             Forget Password?
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={[SigninScreenStyle.button__section]}>
-        <TouchableOpacity style={styles.button} onPress={handleSignin}>
-          <Text style={styles.buttonText}>Log In</Text>
-        </TouchableOpacity>
-        <View style={SigninScreenStyle.line__section}>
-          <View style={SigninScreenStyle.line} />
-          <Text style={{ fontSize: sizes.size_xl, fontWeight: "bold" }}>
-            Or login with
-          </Text>
-          <View style={SigninScreenStyle.line} />
-        </View>
+      <View style={[SigninScreenStyle.button__section, { justifyContent: 'space-around', gap: 12 }]}>
+
 
         <SocialAuthSection></SocialAuthSection>
-        
+        <TouchableOpacity style={[styles.buttonAuth, {
+          paddingHorizontal: 52,
+          paddingVertical: 10,
+        }]} onPress={handleSignin}>
+          <Text style={styles.buttonText}>Sign in ➝</Text>
+        </TouchableOpacity>
+
       </View>
-      <View style={SigninScreenStyle.footer__section}>
-        <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>
+      <View style={[SigninScreenStyle.footer__section]}>
+        <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
           if you don't have an account.
         </Text>
         <TouchableOpacity onPress={() => updateActiveScreen("signup")}>
           <Text
             style={[
-              styles.orangeText,
-              { fontSize: sizes.size_base, fontWeight: "bold" },
+
+              { fontSize: sizes.size_base, fontWeight: "bold", color: colors.clr_brightblue },
             ]}
           >
             Sign up

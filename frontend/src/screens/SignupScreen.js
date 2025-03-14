@@ -7,7 +7,7 @@ import {
   Image,
   Alert,
 } from "react-native";
-import styles, { sizes } from "../styles/style";
+import styles, { sizes, colors } from "../styles/style";
 import SignupScreenStyle from "../styles/components/SignupScreenStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useState, useEffect } from "react";
@@ -28,7 +28,7 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
- 
+
     if (username == "" && email !== "" && password !== "") {
       setLoading(1);
       setError("Please enter your username");
@@ -61,7 +61,7 @@ export default function SignupScreen({ updateActiveScreen }) {
       setLoading(1);
       setError("Passwords do not match");
       return
-    } 
+    }
     try {
       const response = await axios.post(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signup`,
@@ -86,55 +86,64 @@ export default function SignupScreen({ updateActiveScreen }) {
 
   return (
     <View style={[styles.container]}>
-      <View style={SignupScreenStyle.input__section}>
-        <TextInput
-          style={styles.input__box}
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput
-          style={styles.input__box}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-        />
-        <InputWithEye
-          placeholder={"Password"}
-          value={password}
-          onChangeText={setPassword}
-        ></InputWithEye>
-        <InputWithEye
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          placeholder={"Confirm Password"}
-        ></InputWithEye>
+      <View style={[SignupScreenStyle.input__section, ]}>
+        <View>
+          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >Username</Text>
+          <TextInput
+            style={styles.input__box}
+            value={username}
+            onChangeText={setUsername}
+          />
+        </View>
+        <View>
+          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >Email Address</Text>
+          <TextInput
+            style={styles.input__box}
 
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+        </View>
+        <View>
+          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >Password</Text>
+          <InputWithEye
+
+            value={password}
+            onChangeText={setPassword}
+          ></InputWithEye>
+        </View>
+        <View>
+          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >ConfirmPassword</Text>
+          <InputWithEye
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+
+          ></InputWithEye>
+        </View>
         {loading ? <Text style={SignupScreenStyle.error}>{error} </Text> : null}
       </View>
-      <View style={SignupScreenStyle.button__section}>
-        <TouchableOpacity style={styles.button} onPress={handleSignup}>
-          <Text style={styles.buttonText}>Sign up</Text>
+      <View style={[SignupScreenStyle.button__section, { justifyContent: 'space-around', gap: 12,}]}>
+
+
+        <SocialAuthSection></SocialAuthSection>
+        <TouchableOpacity style={[styles.buttonAuth, {
+          paddingHorizontal: 52,
+          paddingVertical: 10,
+        }]} onPress={handleSignup}>
+          <Text style={styles.buttonText}>Sign up ➝</Text>
         </TouchableOpacity>
-        <View style={SignupScreenStyle.line__section}>
-          <View style={SignupScreenStyle.line} />
-          <Text style={{ fontSize: sizes.size_xl, fontWeight: "bold" }}>
-            Or login with
-          </Text>
-          <View style={SignupScreenStyle.line} />
-        </View>
-       <SocialAuthSection></SocialAuthSection>
+
       </View>
-      <View style={SignupScreenStyle.footer__section}>
-        <Text style={{ fontSize: sizes.size_base, fontWeight: "bold" }}>
+      <View style={[SignupScreenStyle.footer__section,]}>
+        <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
           Already have an account?
         </Text>
         <TouchableOpacity onPress={() => updateActiveScreen("signin")}>
           <Text
             style={[
               styles.orangeText,
-              { fontSize: sizes.size_base, fontWeight: "bold" },
+              { fontSize: sizes.size_base, fontWeight: "bold", color: colors.clr_brightblue},
             ]}
           >
             Sign in

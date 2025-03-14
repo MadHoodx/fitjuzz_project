@@ -5,8 +5,8 @@ import { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 
 
-export default function InputWithEye({placeholder, value, onChangeText}) {
-  
+export default function InputWithEye({ value, onChangeText }) {
+
   const [visible, setVisible] = useState(true);
   const [activeIcon, setActiveIcon] = useState(true);
 
@@ -19,24 +19,23 @@ export default function InputWithEye({placeholder, value, onChangeText}) {
     activeIcon === true ? 'eye' : 'eye-off'
 
   return (
-    
-          <View style={styles.input__subsection}>
-            <TextInput
-              secureTextEntry={visible}
-              style={styles.input}
-              placeholder={placeholder}
-              value={value}
-              onChangeText={onChangeText}
-            />
-            <TouchableOpacity onPress={handleHiddenPassword}>
-              <Icon
-                name={iconName}
-                size={20}
-                color="#888"
-                style={{ marginRight: 20 }}
-              />
-            </TouchableOpacity>
-          </View>
-          
+
+    <View style={styles.input__subsection}>
+      <TextInput
+        secureTextEntry={visible}
+        style={styles.input}
+        value={value}
+        onChangeText={onChangeText}
+      />
+      <TouchableOpacity onPress={handleHiddenPassword}>
+        <Icon
+          name={iconName}
+          size={20}
+          color="gray"
+          style={{ marginRight: 10}}
+        />
+      </TouchableOpacity>
+    </View>
+
   );
 }
