@@ -9,19 +9,19 @@ import NoteScreen from './src/screens/NoteScreen';
 import WelcomeScreen from './src/screens/WelcomScreen';
 import TimerScreen from './src/screens/TimerScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
-import styles, {colors} from './src/styles/style'
+import styles, { colors } from './src/styles/style'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './src/screens/MainScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
-
+import ExerciseScreen from './src/screens/ExerciseScreen'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
 
- 
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -32,7 +32,7 @@ function MyTabs() {
         },
         tabBarActiveTintColor: colors.clr_brightblue,
         tabBarInActiveTintColor: colors.clr_gray,
-     
+
       })}
     >
       <Tab.Screen
@@ -42,6 +42,17 @@ function MyTabs() {
           title: "Home",
           tabBarIcon: ({ color, size }) => {
             return <Icon name={"home"} size={size} color={color} />;
+          },
+        }}
+      />
+
+      <Tab.Screen
+        name="Exercise"
+        component={ExerciseScreen}
+        options={{
+          title: "Exercise",
+          tabBarIcon: ({ color, size }) => {
+            return <Icon name={"sports-gymnastics"} size={size} color={color} />;
           },
         }}
       />
@@ -82,16 +93,16 @@ function MyTabs() {
 
 function MyStack() {
   return (
-  
-      <Stack.Navigator screenOptions={{ headerShown: false }} 
-        initialRouteName='Welcome'>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
-        <Stack.Screen name="MyTabs" component={MyTabs} />
-        <Stack.Screen name="Note" component={NoteScreen} />
-      </Stack.Navigator>
+
+    <Stack.Navigator screenOptions={{ headerShown: false }}
+      initialRouteName='Welcome'>
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen name="Main" component={MainScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
+      <Stack.Screen name="MyTabs" component={MyTabs} />
+      <Stack.Screen name="Note" component={NoteScreen} />
+    </Stack.Navigator>
 
   );
 }
@@ -110,8 +121,8 @@ const app = StyleSheet.create({
     borderColor: 'black',
     shadowColor: 'white',
     elevation: 16
-    
 
-  
+
+
   },
 });

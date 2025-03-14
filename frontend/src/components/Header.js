@@ -100,7 +100,7 @@ export default function Header({ }) {
   return (
     <View>
       <ImageBackground
-        source={require("../assets/images/person-exercise3.jpg")} // Use local image
+        source={require("../assets/images/person-exercise2.jpg")} // Use local image
         style={header.backgroundImage}
         imageStyle={header.imageStyle}
         resizeMode="cover" // or "contain", "stretch"
