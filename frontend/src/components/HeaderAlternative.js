@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
-  ImageBackground
+  ImageBackground,
+  KeyboardAvoidingView
 } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 import { useState } from "react";
@@ -24,95 +25,100 @@ export default function HeaderAlternative({
 
   return (
 
-    <View>
 
-      <ImageBackground
-        source={ activeScreen === 'signin' ? require("../assets/images/person-exercise.jpg"): require("../assets/images/person-exercise2.jpg") } // Use local image
-        style={headerAlternative.backgroundImage}
-        imageStyle={headerAlternative.imageStyle}
-        resizeMode="cover" // or "contain", "stretch"
+
+    <ImageBackground
+      source={activeScreen === 'signin' ? require("../assets/images/person-exercise.jpg") : require("../assets/images/person-exercise2.jpg")} // Use local image
+      style={[headerAlternative.backgroundImage, activeScreen === 'signin' ? { flexBasis: '50%' } : { flexBasis: '22.5%' }]}
+      imageStyle={headerAlternative.imageStyle}
+      resizeMode="cover"
+    >
+      <View style={[headerAlternative.container,]}>
+
+        <Text
+          style={[
+            styles.whiteText,
+            isResetPasswordPage === true && headerAlternative.hide,
+            { fontSize: sizes.size_xl, fontWeight: "bold", marginTop: 20 },
+            activeScreen === 'signin' ? { fontSize: sizes.size_4xl, } : { fontSize: sizes.size_2xl, }
+          ]}
+        >
+          {headerText}
+        </Text>
+        <Text
+          style={[
+            styles.whiteText,
+            isResetPasswordPage === false && headerAlternative.hide,
+            { fontSize: sizes.size_2xl, fontWeight: "bold", paddingTop: 50 },
+          ]}
+        >
+          Let’s reset your password!
+        </Text>
+      </View>
+
+      <View
+        style={[
+          headerAlternative.button__section,
+          isResetPasswordPage === true && headerAlternative.hide,
+          activeScreen === "signin" ? {paddingBottom: 30} : {paddingBottom: 8} ,
+        ]}
       >
-        <View
-          style={[headerAlternative.container,
-          activeScreen === 'signin' ? { flexBasis: "50%" } : { flexBasis: "22.5%" }]}>
 
+        <TouchableOpacity
+          style={[
+            headerAlternative.button,
+            { left: 26 },
+            activeScreen === "signin" && headerAlternative.activeButton,
+          ]}
+          onPress={() => updateActiveScreen('signin')}
+        >
           <Text
             style={[
-              styles.whiteText,
-              isResetPasswordPage === true && headerAlternative.hide,
-              { fontSize: sizes.size_xl, fontWeight: "bold",},
-              activeScreen === 'signin' ? { fontSize: sizes.size_4xl, paddingTop: 70,  } : { fontSize: sizes.size_xl, paddingTop: 32, }
+              headerAlternative.buttonText,
+              activeScreen === "signin" && headerAlternative.activeButtonText,
             ]}
           >
-            {headerText}
+            Sign In
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            headerAlternative.button,
+            { right: 26 },
+            activeScreen === "signup" && headerAlternative.activeButton,
+          ]}
+          onPress={() => updateActiveScreen('signup')}
+        >
           <Text
             style={[
-              styles.whiteText,
-              isResetPasswordPage === false && headerAlternative.hide,
-              { fontSize: sizes.size_xl, fontWeight: "bold", paddingTop: 105 },
+              headerAlternative.buttonText,
+              activeScreen === "signup" && headerAlternative.activeButtonText,
             ]}
           >
-            Let’s reset your password!
+            Sign Up
           </Text>
-          <View
-            style={[
-              headerAlternative.button__section,
-              isResetPasswordPage === true && headerAlternative.hide,
-              activeScreen === 'signin' ? { paddingTop: 150 } : { paddingTop: 44 }
-            ]}
-          >
-            <TouchableOpacity
-              style={[
-                headerAlternative.button,
-                { left: 26 },
-                activeScreen === "signin" && headerAlternative.activeButton,
-              ]}
-              onPress={() => updateActiveScreen('signin')}
-            >
-              <Text
-                style={[
-                  headerAlternative.buttonText,
-                  activeScreen === "signin" && headerAlternative.activeButtonText,
-                ]}
-              >
-                Sign In
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                headerAlternative.button,
-                { right: 26 },
-                activeScreen === "signup" && headerAlternative.activeButton,
-              ]}
-              onPress={() => updateActiveScreen('signup')}
-            >
-              <Text
-                style={[
-                  headerAlternative.buttonText,
-                  activeScreen === "signup" && headerAlternative.activeButtonText,
-                ]}
-              >
-                Sign Up
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-      </ImageBackground>
+        </TouchableOpacity>
+      </View>
 
 
-    </View>
+    </ImageBackground>
+
+
+
   );
 }
 
 const headerAlternative = StyleSheet.create({
   container: {
+    flex: 1,
     marginHorizontal: 0,
-    paddingHorizontal: 40,
-    zIndex: 1
+    paddingHorizontal: 30,
+    zIndex: 1,
+
   },
   button__section: {
+
+    zIndex: 1,
     flexDirection: "row",
     justifyContent: "center",
 
@@ -128,8 +134,9 @@ const headerAlternative = StyleSheet.create({
     fontWeight: "bold",
   },
   activeButton: {
-    backgroundColor: colors.clr_blue,
     zIndex: 1,
+    backgroundColor: colors.clr_blue,
+
   },
   activeButtonText: {
     color: colors.clr_white,
@@ -138,7 +145,9 @@ const headerAlternative = StyleSheet.create({
     display: "none",
   },
   backgroundImage: {
-    backgroundColor: colors.clr_background
+    backgroundColor: colors.clr_background,
+    paddingHorizontal: 20
+
   },
   imageStyle: {
     borderBottomLeftRadius: 20,

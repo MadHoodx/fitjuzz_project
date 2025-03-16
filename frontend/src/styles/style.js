@@ -26,9 +26,10 @@ export const colors = {
   clr_slate: "#334357",
   clr_orange: "#E77339",
   clr_blue: "#0046C2",
-  clr_background: "#242424",
+  clr_background: "#333333",
   clr_graybutton: "#575757",
-  clr_brightblue: "#005eff"
+  clr_brightblue: "#005eff",
+  clr_background_modal: "#242424"
 };
 
 const styles = StyleSheet.create({

@@ -62,17 +62,16 @@ const NoteScreenStyle = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   inside_box_modal: {
-    backgroundColor: colors.clr_lightgray,
+    backgroundColor: colors.clr_background_modal,
     borderRadius: 10,
     padding: 25,
     width: "80%",
     height: "85%",
   },
   modal_header_text_: {
-    fontSize: sizes.size_3xl,
+    fontSize: sizes.size_2xl,
     fontWeight: "bold",
-    marginBottom: 10,
-    color: colors.clr_slate,
+    color: colors.clr_brightblue,
   },
   modal_category_box: {
     marginTop: 15,
@@ -133,7 +132,7 @@ const NoteScreenStyle = StyleSheet.create({
     position: "absolute",
     top: 80,
     right: 45,
-    opacity: 0.2,
+    opacity: 0.3,
     zIndex: 0,
     transform: [{ rotate: "-50deg" }],
   },
@@ -157,12 +156,12 @@ const NoteScreenStyle = StyleSheet.create({
     borderWidth: 2
   },
   tableHeader: {
-   
+
     flexDirection: "row",
     backgroundColor: "#ddd",
     borderBottomWidth: 1,
     borderBottomColor: "#bbb",
- 
+
 
   },
   headerCell: {
@@ -176,13 +175,13 @@ const NoteScreenStyle = StyleSheet.create({
 
   },
   row: {
-    
+
     flexDirection: "row",
     padding: 0,
     width: "100%",
 
-    
-   
+
+
   },
   cell: {
     flex: 1,
@@ -191,7 +190,7 @@ const NoteScreenStyle = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     paddingVertical: 6
-  
+
   },
   nextButton: {
     width: "50%",
@@ -205,6 +204,30 @@ const NoteScreenStyle = StyleSheet.create({
     color: "#fff",
     fontSize: sizes.size_base,
     textAlign: 'center',
+  },
+  searchbar: {
+    flexDirection: 'row',
+    height: 40,
+    borderColor: colors.clr_black,
+    borderWidth: 2,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center'
+
+  },
+  searchbarInput: {
+    flex: 1,
+    fontSize: sizes.size_sm,
+    paddingLeft: 10,
+  },
+  searchIcon: {
+    paddingLeft: 10,
+  },
+  clearIcon: {
+
+    paddingRight: 10,
+
   },
 });
 

@@ -16,7 +16,7 @@ const exerciseSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['chest', 'back', 'arms', 'abs', 'leg'],
+        enum: ['chest', 'back', 'arms', 'abs', 'leg', 'shoulder'],
         required: true
     },
    

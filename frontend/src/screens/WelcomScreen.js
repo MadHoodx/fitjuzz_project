@@ -3,8 +3,8 @@ import { View, Text, Image, TouchableOpacity, Dimensions, Animated, FlatList, Im
 import styles, { colors } from "../styles/style";
 import { sizes } from "../styles/style";
 import WelcomeScreenStyle from "../styles/components/WelcomScreenStyle";
-import { useRef, useState } from "react";
-
+import { useRef, useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import personexercise1 from '../assets/images/person-exercise.jpg'
 import personexercise2 from '../assets/images/person-exercise2.jpg'
@@ -32,6 +32,25 @@ export default function WelcomeScreen({ navigation }) {
   const flatListRef = useRef(null)
   const [currentIndex, setCurrentIndex] = useState(0)
 
+  useEffect(() => {
+    checkUserToken(navigation);
+  }, [navigation]);
+
+  const checkUserToken = async (navigation) => {
+    try {
+      const userToken = await AsyncStorage.getItem("userToken");
+      const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+      const userXToken = await AsyncStorage.getItem("userXToken");
+
+      if (userToken || userGoogleToken || userXToken) {
+        navigation.navigate("MyTabs");
+      }
+    } catch (error) {
+      console.error("Failed to check token:", error);
+    }
+  };
+
+
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {
 
@@ -39,10 +58,11 @@ export default function WelcomeScreen({ navigation }) {
       setCurrentIndex(currentIndex + 1)
     }
     else {
-      navigation.replace("MyTabs")
+      navigation.replace("Main")
     }
   }
 
+  
   return (
     <View style={[WelcomeScreenStyle.container]}>
 
@@ -52,6 +72,7 @@ export default function WelcomeScreen({ navigation }) {
         keyExtractor={(item) => item.id}
         horizontal
         pagingEnabled
+        scrollEnabled={false} 
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <View>

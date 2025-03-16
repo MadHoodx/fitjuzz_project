@@ -15,6 +15,7 @@ import styles, { colors, sizes } from "../styles/style";
 import NoteScreenStyle from "../styles/components/NoteScreenStyle";
 import Header from "../components/Header";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo"
 import ExerciseCard from "../components/ExerciseCard";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import myImage from "../assets/images/Welcomimage.png";
@@ -22,7 +23,7 @@ import axios from "axios";
 import CircularTimer from "../components/CircularTimer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
-
+import Icon from "react-native-vector-icons/FontAwesome";
 export default function NoteScreen({ }) {
 
   const [error, setError] = useState('')
@@ -53,12 +54,26 @@ export default function NoteScreen({ }) {
   const [currentExerciseId, setCurrentExerciseId] = useState(null);
   const [isAddingNewBox, setIsAddingNewBox] = useState(false);
   const [databaseExercises, setDatabaseExercises] = useState([]);
+  const [storeDatabaseExercises, setDatabaseStoreExercises] = useState([])
 
   const [isNoteVisible, setIsNoteVisible] = useState(1);
   const [isStartVisible, setIsStartVisible] = useState(0);
   const [isTimerVisible, setIsTimerVisible] = useState(0);
 
+  const [searchQuery, setSearchQuery] = useState("");
 
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+    if (text.length > 0) {
+      const newData = databaseExercises.filter((item) =>
+        item.name.toLowerCase().includes(text.toLowerCase())
+      );
+      setDatabaseExercises(newData);
+    } else {
+ 
+      setDatabaseExercises(storeDatabaseExercises);
+    }
+  };
   useEffect(() => {
     fetchExercise();
   }, []);
@@ -70,6 +85,7 @@ export default function NoteScreen({ }) {
       );
 
       setDatabaseExercises(response.data);
+      setDatabaseStoreExercises(response.data);
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
@@ -437,36 +453,37 @@ export default function NoteScreen({ }) {
               visible={isModalVisible}
               animationType="slide"
               transparent={true}
+
             >
               <View style={[NoteScreenStyle.box_modal]}>
                 <View style={[NoteScreenStyle.inside_box_modal]}>
                   <IconFontAwesome5
                     name={"dumbbell"}
                     size={50}
-                    color={colors.clr_slate}
+                    color={colors.clr_lightgray}
                     style={[NoteScreenStyle.dumbbell_top]}
                   />
                   <IconFontAwesome5
                     name={"dumbbell"}
                     size={30}
-                    color={colors.clr_slate}
+                    color={colors.clr_lightgray}
                     style={[NoteScreenStyle.dumbbell_middle]}
                   />
                   <IconFontAwesome5
                     name={"dumbbell"}
                     size={55}
-                    color={colors.clr_slate}
+                    color={colors.clr_lightgray}
                     style={[NoteScreenStyle.dumbbell_bottom]}
                   />
                   <View
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",
-                      marginBottom: 15,
+                      marginBottom: 10,
                     }}
                   >
                     <Text style={[NoteScreenStyle.modal_header_text_]}>
-                      Your{"\n"}Exercise
+                      Add exercise
                     </Text>
 
                     <TouchableOpacity
@@ -483,9 +500,23 @@ export default function NoteScreen({ }) {
                       />
                     </TouchableOpacity>
                   </View>
+                  <View style={NoteScreenStyle.searchbar}>
+                    <Entypo name="magnifying-glass" size={20} color={'gray'} style={NoteScreenStyle.searchIcon}></Entypo>
+                    <TextInput
+                      placeholder="search"
+                      style={NoteScreenStyle.searchbarInput}
+                      value={searchQuery}
+                      onChangeText={handleSearch}>
 
+                    </TextInput>
+                    {searchQuery.length > 0 && (
+                      <TouchableOpacity onPress={() => handleSearch("")}>
+                        <Icon name="times" size={20} color={'gray'} style={NoteScreenStyle.clearIcon} />
+                      </TouchableOpacity>
+                    )}
+                  </View>
                   <View style={[NoteScreenStyle.modal_category_box]}>
-                    {["all", "leg", "abs", "back", "chest", "arms"].map(
+                    {["all", "chest", "back", "shoulder", "arms", "abs", "leg",].map(
                       (category) => (
                         <TouchableOpacity
                           key={category}
@@ -494,7 +525,7 @@ export default function NoteScreen({ }) {
                             {
                               backgroundColor:
                                 selectedCategory === category
-                                  ? colors.clr_slate
+                                  ? colors.clr_blue
                                   : colors.clr_gray,
                             },
                           ]}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 import SigninScreenStyle from "../styles/components/SigninScreenStyle";
 import { useNavigation } from "@react-navigation/native";
@@ -72,7 +72,9 @@ export default function SigninScreen({ updateActiveScreen }) {
   };
 
   return (
+  
     <View style={[styles.container]}>
+  
       <View
         style={[
           SigninScreenStyle.input__section,
@@ -129,6 +131,8 @@ export default function SigninScreen({ updateActiveScreen }) {
           </Text>
         </TouchableOpacity>
       </View>
+   
     </View>
+
   );
 }
