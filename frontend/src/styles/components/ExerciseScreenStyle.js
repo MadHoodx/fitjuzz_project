@@ -12,7 +12,7 @@ const ExerciseScreenStyle = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.clr_background,
     paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingTop: 5,
   },
   
   
@@ -20,10 +20,10 @@ const ExerciseScreenStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
     color: colors.clr_white,
   },
@@ -47,7 +47,7 @@ const ExerciseScreenStyle = StyleSheet.create({
   
   
   categoriesWrapper: {
-    marginBottom: 15,
+    marginBottom: 5,
     alignItems: 'center',
   },
   categoriesRow: {
@@ -81,8 +81,55 @@ const ExerciseScreenStyle = StyleSheet.create({
   },
 
 
-  
-  
+  exerciseList: {
+    flex: 1,
+  },
+  sectionHeader: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: colors.clr_white,
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  exerciseItem: {
+    backgroundColor: '#222',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  exerciseImage: {
+    width: 60,
+    height: 60,
+    marginRight: 15,
+    borderRadius: 5,
+  },
+  exerciseInfo: {
+    flex: 1,
+  },
+  exerciseName: {
+    color: colors.clr_white,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  exerciseCategory: {
+    color: '#aaa',
+    fontSize: 14,
+  },
+  infoButton: {
+    padding: 5,
+  },
+  loadingText: {
+    color: colors.clr_white,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20,
+  },
 })
 
 
