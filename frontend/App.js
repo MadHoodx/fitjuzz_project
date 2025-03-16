@@ -96,6 +96,7 @@ function MyStack() {
 
     <Stack.Navigator screenOptions={{ headerShown: false }}
       initialRouteName='Welcome'>
+
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Main" component={MainScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />

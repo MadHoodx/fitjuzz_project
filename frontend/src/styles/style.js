@@ -28,7 +28,7 @@ export const colors = {
   clr_blue: "#0046C2",
   clr_background: "#242424",
   clr_graybutton: "#575757",
-  clr_brightblue : "#005eff"
+  clr_brightblue: "#005eff"
 };
 
 const styles = StyleSheet.create({
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 0,
     paddingHorizontal: 40,
-   paddingTop : Platform.OS == "android" ? sizes.size_xs : 0,
-    backgroundColor: colors.clr_background 
-    
-   
+    paddingTop: Platform.OS == "android" ? sizes.size_xs : 0,
+    backgroundColor: colors.clr_background
+
+
 
   },
   section: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   button: {
-  
+
     width: "100%",
     backgroundColor: colors.clr_blue,
     borderRadius: 20,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
 
   },
   input__box: {
-    
+
     fontSize: sizes.size_sm,
     color: 'white',
     paddingRight: 50,
