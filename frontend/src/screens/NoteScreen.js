@@ -58,7 +58,8 @@ export default function NoteScreen({ }) {
   const [databaseExercises, setDatabaseExercises] = useState([]);
   const [storeDatabaseExercises, setDatabaseStoreExercises] = useState([])
 
-  const [isNoteVisible, setIsNoteVisible] = useState(1);
+  const [isStartCreateWorkoutVisible, setIsCreateWorkoutVisible] = useState(1)
+  const [isNoteVisible, setIsNoteVisible] = useState(0);
   const [isStartVisible, setIsStartVisible] = useState(0);
   const [isTimerVisible, setIsTimerVisible] = useState(0);
 
@@ -360,6 +361,16 @@ export default function NoteScreen({ }) {
   return (
     <View style={[NoteScreenStyle.container]}>
       <Header />
+      {isStartCreateWorkoutVisible ?
+
+        <View style={styles.container}>
+          <Image
+          source={require('../assets/images/fitness-dumbell.png')}></Image>
+
+        </View>
+
+
+        : null}
       {isNoteVisible ? (
         <View style={[styles.container]}>
           <View style={{}}>

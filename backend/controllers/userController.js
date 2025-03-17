@@ -130,7 +130,7 @@ const userController = {
       });
       console.log(newUser)
       await newUser.save();
-
+      console.log('after saving new user')
       const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
