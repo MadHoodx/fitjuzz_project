@@ -1,7 +1,7 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const mongoose = require('mongoose')
 const userController = {
   signin: async (req, res) => {
     const {
@@ -21,6 +21,8 @@ const userController = {
           userType: "google",
           email,
         });
+
+        console.log(userGoogle)
         if (!userGoogle) {
           const newUser = new userModel({
             userType: "google",
@@ -41,7 +43,7 @@ const userController = {
               expiresIn: "1h",
             }
           );
-          console.log(token)
+        
           return res.json({ token });
         }
         const token = jwt.sign(
@@ -88,7 +90,7 @@ const userController = {
         return res.json({ token });
       } else {
         const user = await userModel.findOne({ userType: "normal", email });
-        console.log(user.id)
+        console.log(user)
         if (!user) {
           return res.status(400).json({
             message: "Sorry, looks like that’s the wrong email or password. ",
@@ -115,22 +117,27 @@ const userController = {
 
     try {
       const user = await userModel.findOne({ userType: "normal", email });
-
+      console.log(user)
       if (user) {
         return res.status(409).json({ message: "User already exist" });
       }
-      console.log(user)
+     
       const hashedPassword = await bcrypt.hash(password, 12);
-
+      
       const newUser = new userModel({
         userType: "normal",
         username,
         email,
         password: hashedPassword,
       });
-      console.log(newUser)
-      await newUser.save();
-      console.log('after saving new user')
+      try {
+        console.log('before saving new user');
+        await newUser.save();
+        console.log('after saving new user');
+      } catch (error) {
+        console.error('Error saving user:', error);
+        return res.status(500).json({ message: "Error saving user" });
+      }
       const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });

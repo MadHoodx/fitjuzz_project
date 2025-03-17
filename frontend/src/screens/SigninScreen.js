@@ -63,10 +63,11 @@ export default function SigninScreen({ updateActiveScreen }) {
       navigation.navigate("MyTabs");
     } catch (error) {
       setLoading(1);
+      console.log(error)
       if (error.status == 400) {
         setError("Sorry, looks like that’s the wrong email or password.");
       } else {
-        setError("An unexpected error occurred");
+        setError("An unexpected error has occured");
       }
     }
   };

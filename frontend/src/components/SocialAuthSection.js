@@ -14,7 +14,7 @@ const EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID  = Constants.expoConfig.extra.EXPO_PU
 const EXPO_PUBLIC_WEB_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_WEB_CLIENT_ID
 const EXPO_PUBLIC_X_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_ID
 const EXPO_PUBLIC_X_CLIENT_SECRET= Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_SECRET
-const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API
+
 WebBrowser.maybeCompleteAuthSession();
 
 const discovery = {
@@ -78,7 +78,7 @@ export default function SocialAuthSection() {
       console.log(user)
       if (user) {
         const response = await axios.post(
-          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
           {
             googleId: user.id,
             name: user.name,
@@ -147,7 +147,7 @@ export default function SocialAuthSection() {
       const userData = userResponse.data;
       if (userData) {
         const response = await axios.post(
-          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
           {
             xId: userData.data.id,
             name: userData.data.name,
