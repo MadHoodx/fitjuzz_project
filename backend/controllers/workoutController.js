@@ -21,6 +21,22 @@ const workoutController = {
         } catch (error) {
             res.status(500).json({ error: "Error saving workout" });
         }
+    },
+    getExercisesHistory: async (req, res) => {
+        const { userId } = req.params
+       
+        try {
+            const user = await workoutModel.findOne(userId)
+            console.log(userId )
+            console.log(user)
+            if (user) {
+                return res.json(user);
+            } else {
+                return res.status(404).json({ message: "User not found" });
+            }
+        } catch (error) {
+            res.status(500).json({ message: "Server error" });
+        }
     }
 };
 

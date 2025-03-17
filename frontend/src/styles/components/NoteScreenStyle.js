@@ -101,7 +101,7 @@ const NoteScreenStyle = StyleSheet.create({
   },
   exercisecard: {
     flexDirection: 'row',
-    alignItems : 'center',
+    alignItems: 'center',
     width: "100%",
     height: 70,
     marginBottom: 8,
@@ -232,6 +232,18 @@ const NoteScreenStyle = StyleSheet.create({
     paddingRight: 10,
 
   },
+  title: {
+    fontSize: sizes.size_3xl,
+    textAlign: 'center',
+    color: colors.clr_white,
+    fontWeight: 'bold'
+  },
+  subtitle: {
+    fontSize: sizes.size_base,
+    textAlign: 'center',
+    color: colors.clr_gray,
+  
+  }
 });
 
 export default NoteScreenStyle;

@@ -153,7 +153,7 @@ export default function NoteScreen({ }) {
         )
       );
     } setSelection(!isSelected)
-    // setModalVisible(false);
+    setModalVisible(false);
   };
 
   const handleRemoveExercise = (id) => {
@@ -246,6 +246,8 @@ export default function NoteScreen({ }) {
     }
   };
 
+
+  //Not Done
   const moveToNextExercise = () => {
     console.log("Before filtering:", exercisesBox);
 
@@ -363,388 +365,407 @@ export default function NoteScreen({ }) {
       <Header />
       {isStartCreateWorkoutVisible ?
 
-        <View style={styles.container}>
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
           <Image
-          source={require('../assets/images/fitness-dumbell.png')}></Image>
+            source={require('../assets/images/fitness-dumbell.png')}
+            style={{ width: 150, height: 150, bottom: 20 }}>
 
-        </View>
+          </Image>
+          <Text style={NoteScreenStyle.title}>Create your note workout</Text>
+          <Text style={NoteScreenStyle.subtitle}>Set up your own unique routine</Text>
+          <TouchableOpacity
+            style={[styles.button, { width: '50%', borderRadius: 30, marginTop: 20 }]}
+            onPress={() =>
+              setModalVisible(true)
+            }>
+            <Text style={styles.buttonText}>Start +</Text>
+          </TouchableOpacity>
+
+        </View >
 
 
-        : null}
-      {isNoteVisible ? (
-        <View style={[styles.container]}>
-          <View style={{}}>
-            <Text style={[NoteScreenStyle.dateText]}>{currentDate}</Text>
-            <TouchableOpacity
-              style={[styles.button, { marginBottom: 16 }]}
-              onPress={moveToWorkout}
-            >
-              <Text style={[styles.buttonText]}>Start</Text>
-            </TouchableOpacity>
-            {errorLoading ? <Text style={{ color: 'red', textAlign: 'center', marginBottom: 12, fontSize: sizes.size_base }}> {error}</Text> : null}
-          </View>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingTop: 10 }}
-          >
-            {exercisesBox.map((exercise) => (
-              <View
-                key={exercise.id}
-                style={{
-                  marginBottom: 10,
-                  position: "relative",
-                  width: "100%",
-                }}
+        : null
+      }
+      {
+        isNoteVisible ? (
+          <View style={[styles.container]}>
+            <View style={{}}>
+              <Text style={[NoteScreenStyle.dateText]}>{currentDate}</Text>
+              <TouchableOpacity
+                style={[styles.button, { marginBottom: 16 }]}
+                onPress={moveToWorkout}
               >
+                <Text style={[styles.buttonText]}>Start</Text>
+              </TouchableOpacity>
+              {errorLoading ? <Text style={{ color: 'red', textAlign: 'center', marginBottom: 12, fontSize: sizes.size_base }}> {error}</Text> : null}
+            </View>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingTop: 10 }}
+            >
+              {exercisesBox.map((exercise) => (
                 <View
-                  style={[
-                    NoteScreenStyle.input__section,
-                    exercise.name !== "Exercise" && {
-                      backgroundColor: "#E8F5E9",
-                      borderWidth: 1,
-                      borderColor: "#4CAF50",
-                    },
-                  ]}
+                  key={exercise.id}
+                  style={{
+                    marginBottom: 10,
+                    position: "relative",
+                    width: "100%",
+                  }}
                 >
-                  <View style={{ flex: 1 }}>
-                    <Text
-                      style={[
-                        NoteScreenStyle.addButtonText,
-                        exercise.name !== "Exercise" && {
-                          color: "#2E7D32",
-                        },
-                      ]}
-                    >
-                      {exercise.name}
-                    </Text>
-                  </View>
                   <View
-                    style={{
-                      position: "absolute",
-                      right: 15,
-                      height: "100%",
-                      justifyContent: "center",
-                    }}
+                    style={[
+                      NoteScreenStyle.input__section,
+                      exercise.name !== "Exercise" && {
+                        backgroundColor: "#E8F5E9",
+                        borderWidth: 1,
+                        borderColor: "#4CAF50",
+                      },
+                    ]}
                   >
-                    <TouchableOpacity
-                      onPress={() => handleAddExercise(exercise.id)}
+                    <View style={{ flex: 1 }}>
+                      <Text
+                        style={[
+                          NoteScreenStyle.addButtonText,
+                          exercise.name !== "Exercise" && {
+                            color: "#2E7D32",
+                          },
+                        ]}
+                      >
+                        {exercise.name}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        position: "absolute",
+                        right: 15,
+                        height: "100%",
+                        justifyContent: "center",
+                      }}
                     >
-                      <AntDesign
-                        name={
-                          exercise.name === "Exercise"
-                            ? "pluscircle"
-                            : "closecircle"
-                        }
-                        size={24}
-                        color={
-                          exercise.name === "Exercise" ? "#4CAF50" : "#E77339"
-                        }
-                      />
-                    </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => handleAddExercise(exercise.id)}
+                      >
+                        <AntDesign
+                          name={
+                            exercise.name === "Exercise"
+                              ? "pluscircle"
+                              : "closecircle"
+                          }
+                          size={24}
+                          color={
+                            exercise.name === "Exercise" ? "#4CAF50" : "#E77339"
+                          }
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
+                  {exercise.name === "Exercise" && (
+                    <View
+                      style={{
+                        position: "absolute",
+                        top: -10,
+                        right: -4,
+                        zIndex: 1,
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => handleRemoveExercise(exercise.id)}
+                      >
+                        <View
+                          style={{
+                            borderRadius: 12,
+                            width: 24,
+                            height: 24,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <AntDesign
+                            name="minuscircle"
+                            size={15}
+                            color="#E77339"
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
-                {exercise.name === "Exercise" && (
-                  <View
-                    style={{
-                      position: "absolute",
-                      top: -10,
-                      right: -4,
-                      zIndex: 1,
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => handleRemoveExercise(exercise.id)}
+              ))}
+              <Modal
+                visible={isModalVisible}
+                animationType="slide"
+                transparent={true}
+
+              >
+                <View style={[NoteScreenStyle.box_modal]}>
+                  <View style={[NoteScreenStyle.inside_box_modal]}>
+                    <IconFontAwesome5
+                      name={"dumbbell"}
+                      size={50}
+                      color={colors.clr_lightgray}
+                      style={[NoteScreenStyle.dumbbell_top]}
+                    />
+                    <IconFontAwesome5
+                      name={"dumbbell"}
+                      size={30}
+                      color={colors.clr_lightgray}
+                      style={[NoteScreenStyle.dumbbell_middle]}
+                    />
+                    <IconFontAwesome5
+                      name={"dumbbell"}
+                      size={55}
+                      color={colors.clr_lightgray}
+                      style={[NoteScreenStyle.dumbbell_bottom]}
+                    />
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginBottom: 10,
+                      }}
                     >
-                      <View
-                        style={{
-                          borderRadius: 12,
-                          width: 24,
-                          height: 24,
-                          justifyContent: "center",
-                          alignItems: "center",
+                      <Text style={[NoteScreenStyle.modal_header_text_]}>
+                        Add exercise
+                      </Text>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          setModalVisible(false);
+                          setIsAddingNewBox(false);
                         }}
                       >
                         <AntDesign
-                          name="minuscircle"
-                          size={15}
-                          color="#E77339"
+                          name={"closecircle"}
+                          size={20}
+                          color={colors.clr_gray}
+                          style={{ paddingVertical: 10 }}
                         />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            ))}
-            <Modal
-              visible={isModalVisible}
-              animationType="slide"
-              transparent={true}
-
-            >
-              <View style={[NoteScreenStyle.box_modal]}>
-                <View style={[NoteScreenStyle.inside_box_modal]}>
-                  <IconFontAwesome5
-                    name={"dumbbell"}
-                    size={50}
-                    color={colors.clr_lightgray}
-                    style={[NoteScreenStyle.dumbbell_top]}
-                  />
-                  <IconFontAwesome5
-                    name={"dumbbell"}
-                    size={30}
-                    color={colors.clr_lightgray}
-                    style={[NoteScreenStyle.dumbbell_middle]}
-                  />
-                  <IconFontAwesome5
-                    name={"dumbbell"}
-                    size={55}
-                    color={colors.clr_lightgray}
-                    style={[NoteScreenStyle.dumbbell_bottom]}
-                  />
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginBottom: 10,
-                    }}
-                  >
-                    <Text style={[NoteScreenStyle.modal_header_text_]}>
-                      Add exercise
-                    </Text>
-
-                    <TouchableOpacity
-                      onPress={() => {
-                        setModalVisible(false);
-                        setIsAddingNewBox(false);
-                      }}
-                    >
-                      <AntDesign
-                        name={"closecircle"}
-                        size={20}
-                        color={colors.clr_gray}
-                        style={{ paddingVertical: 10 }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={NoteScreenStyle.searchbar}>
-                    <Entypo name="magnifying-glass" size={20} color={'gray'} style={NoteScreenStyle.searchIcon}></Entypo>
-                    <TextInput
-                      placeholder="search"
-                      style={NoteScreenStyle.searchbarInput}
-                      value={searchQuery}
-                      onChangeText={handleSearch}>
-
-                    </TextInput>
-                    {searchQuery.length > 0 && (
-                      <TouchableOpacity onPress={() => handleSearch("")}>
-                        <Icon name="times" size={20} color={'gray'} style={NoteScreenStyle.clearIcon} />
                       </TouchableOpacity>
-                    )}
-                  </View>
-                  <View style={[NoteScreenStyle.modal_category_box]}>
-                    {["all", "chest", "back", "shoulder", "arms", "abs", "leg",].map(
-                      (category) => (
-                        <TouchableOpacity
-                          key={category}
-                          style={[
-                            NoteScreenStyle.modal_category_inside,
-                            {
-                              backgroundColor:
-                                selectedCategory === category
-                                  ? colors.clr_blue
-                                  : colors.clr_gray,
-                            },
-                          ]}
-                          onPress={() => setSelectedCategory(category)}
-                        >
-                          <Text
+                    </View>
+                    <View style={NoteScreenStyle.searchbar}>
+                      <Entypo name="magnifying-glass" size={20} color={'gray'} style={NoteScreenStyle.searchIcon}></Entypo>
+                      <TextInput
+                        placeholder="search"
+                        style={NoteScreenStyle.searchbarInput}
+                        value={searchQuery}
+                        onChangeText={handleSearch}>
+
+                      </TextInput>
+                      {searchQuery.length > 0 && (
+                        <TouchableOpacity onPress={() => handleSearch("")}>
+                          <Icon name="times" size={20} color={'gray'} style={NoteScreenStyle.clearIcon} />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <View style={[NoteScreenStyle.modal_category_box]}>
+                      {["all", "chest", "back", "shoulder", "arms", "abs", "leg",].map(
+                        (category) => (
+                          <TouchableOpacity
+                            key={category}
                             style={[
-                              NoteScreenStyle.modal_category_inside_text,
+                              NoteScreenStyle.modal_category_inside,
                               {
-                                color:
+                                backgroundColor:
                                   selectedCategory === category
-                                    ? colors.clr_white
-                                    : colors.clr_black,
+                                    ? colors.clr_blue
+                                    : colors.clr_gray,
                               },
                             ]}
+                            onPress={() => setSelectedCategory(category)}
                           >
-                            {category.charAt(0).toUpperCase() +
-                              category.slice(1)}
-                          </Text>
+                            <Text
+                              style={[
+                                NoteScreenStyle.modal_category_inside_text,
+                                {
+                                  color:
+                                    selectedCategory === category
+                                      ? colors.clr_white
+                                      : colors.clr_black,
+                                },
+                              ]}
+                            >
+                              {category.charAt(0).toUpperCase() +
+                                category.slice(1)}
+                            </Text>
+                          </TouchableOpacity>
+                        )
+                      )}
+                    </View>
+
+                    <FlatList
+                      data={getAvailableExercises()}
+                      keyExtractor={(item) => item.name}
+                      renderItem={({ item }) =>
+                        <TouchableOpacity
+                          onPress={() => handleSelectExercise(item.name)}
+                          style={[NoteScreenStyle.exercisecard]}
+                        >
+
+                          <CheckBox
+                            value={!!selectedExercises[item.name]} // Set checkbox state
+                            onValueChange={() => toggleSelection(item.name)} // Update state when checked/unchecked
+                            tintColors={{ true: "#007AFF", false: "#aaa" }} // Change checkbox color
+                          />
+
+
+                          <ExerciseCard
+                            name={item.name}
+                            category={item.category}
+                            picture={item.picture}
+                          />
                         </TouchableOpacity>
-                      )
-                    )}
+                      }
+                    />
+                    {/* <TouchableOpacity style={[styles.buttonAuth, {
+                paddingHorizontal: 1,
+                paddingVertical: 12,
+                marginTop: 10,
+                marginHorizontal: 60
+              }]}
+                onPress={{}}>
+                <Text style={styles.buttonText}>Done ➝</Text>
+              </TouchableOpacity> */}
+
+
                   </View>
-
-                  <FlatList
-                    data={getAvailableExercises()}
-                    keyExtractor={(item) => item.name}
-                    renderItem={({ item }) =>
-                      <TouchableOpacity
-                        onPress={() => toggleSelection(item.name)}
-                        style={[NoteScreenStyle.exercisecard]}
-                      >
-
-                        <CheckBox
-                          value={!!selectedExercises[item.name]} // Set checkbox state
-                          onValueChange={() => toggleSelection(item.name)} // Update state when checked/unchecked
-                          tintColors={{ true: "#007AFF", false: "#aaa" }} // Change checkbox color
-                        />
-
-
-                        <ExerciseCard
-                          name={item.name}
-                          category={item.category}
-                          picture={item.picture}
-                        />
-                      </TouchableOpacity>
-                    }
-                  />
-                  <TouchableOpacity style={[styles.buttonAuth, {
-                    paddingHorizontal: 1,
-                    paddingVertical: 12,
-                    marginTop: 10,
-                    marginHorizontal: 60
-                  }]}
-                    onPress={{}}>
-                    <Text style={styles.buttonText}>Done ➝</Text>
-                  </TouchableOpacity>
-
-
                 </View>
-              </View>
-            </Modal>
-            <TouchableOpacity onPress={handleAddBox}>
-              <Text style={[NoteScreenStyle.addExerciseBoxText]}>
-                + add exercise box
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleRemoveBox}>
-              <Text
-                style={[
-                  NoteScreenStyle.removeExerciseBoxText,
-                  { marginBottom: 25 },
-                ]}
-              >
-                - remove all exercise box
-              </Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      ) : null}
-      {isStartVisible ? (
-        <View style={styles.container}>
-          <View style={NoteScreenStyle.userExerciseDisplay}>
-            <Image
-              source={require("../assets/images/Welcomimage.png")}
-              style={{ width: 100, height: 100 }}
-            />
-            <Text style={{ fontWeight: "bold", fontSize: sizes.size_xl }}>
-              {exercisesBox[currentExerciseIndex].name}
-            </Text>
+              </Modal>
+              <TouchableOpacity onPress={handleAddBox}>
+                <Text style={[NoteScreenStyle.addExerciseBoxText]}>
+                  + add exercise box
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleRemoveBox}>
+                <Text
+                  style={[
+                    NoteScreenStyle.removeExerciseBoxText,
+                    { marginBottom: 25 },
+                  ]}
+                >
+                  - remove all exercise box
+                </Text>
+              </TouchableOpacity>
+            </ScrollView>
           </View>
+        ) : null
+      }
+      {
+        isStartVisible ? (
+          <View style={styles.container}>
+            <View style={NoteScreenStyle.userExerciseDisplay}>
+              <Image
+                source={require("../assets/images/Welcomimage.png")}
+                style={{ width: 100, height: 100 }}
+              />
+              <Text style={{ fontWeight: "bold", fontSize: sizes.size_xl }}>
+                {exercisesBox[currentExerciseIndex].name}
+              </Text>
+            </View>
 
-          <View
-            style={[NoteScreenStyle.userWorkoutTrackInput, { marginTop: 10 }]}
-          >
-            <Text style={{ fontWeight: "bold", fontSize: sizes.size_base }}>
-              {columnTitles[currentField]}
-            </Text>
             <View
-              style={{ borderWidth: 1, borderColor: colors.clr_gray }}
-            ></View>
-
-            <View
-              style={{
-
-                alignItems: "center",
-                marginTop: 20,
-              }}
+              style={[NoteScreenStyle.userWorkoutTrackInput, { marginTop: 10 }]}
             >
-              <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity>
-                  <AntDesign name="minuscircle" size={15} color="#E77339" />
-                </TouchableOpacity>
-                <TextInput
-                  placeholder={columnPlaceholder[currentField]}
-                  keyboardType="numeric"
-                  value={inputValue}
-                  onChangeText={setInputValue}
-                  style={{
-                    textAlign: "center",
-                    fontSize: sizes.size_base,
-                    color: colors.clr_black,
-                    width: 100,
-                    height: 20,
+              <Text style={{ fontWeight: "bold", fontSize: sizes.size_base }}>
+                {columnTitles[currentField]}
+              </Text>
+              <View
+                style={{ borderWidth: 1, borderColor: colors.clr_gray }}
+              ></View>
 
-                    marginHorizontal: 20,
-                  }}
-                  maxLength={4}
-                ></TextInput>
-                <TouchableOpacity>
-                  <AntDesign name="pluscircle" size={15} color="#4CAF50" />
-                </TouchableOpacity>
-              </View>
               <View
                 style={{
-                  borderWidth: 1,
-                  borderColor: colors.clr_gray,
-                  width: "30%",
+
+                  alignItems: "center",
+                  marginTop: 20,
                 }}
-              ></View>
-              {errorLoading ? <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text> : null}
-              <TouchableOpacity
-                style={NoteScreenStyle.continueButton}
-                onPress={handleConfirm}
               >
-                <Text style={[NoteScreenStyle.buttonText]}>Confirm</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity>
+                    <AntDesign name="minuscircle" size={15} color="#E77339" />
+                  </TouchableOpacity>
+                  <TextInput
+                    placeholder={columnPlaceholder[currentField]}
+                    keyboardType="numeric"
+                    value={inputValue}
+                    onChangeText={setInputValue}
+                    style={{
+                      textAlign: "center",
+                      fontSize: sizes.size_base,
+                      color: colors.clr_black,
+                      width: 100,
+                      height: 20,
+
+                      marginHorizontal: 20,
+                    }}
+                    maxLength={4}
+                  ></TextInput>
+                  <TouchableOpacity>
+                    <AntDesign name="pluscircle" size={15} color="#4CAF50" />
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: colors.clr_gray,
+                    width: "30%",
+                  }}
+                ></View>
+                {errorLoading ? <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text> : null}
+                <TouchableOpacity
+                  style={NoteScreenStyle.continueButton}
+                  onPress={handleConfirm}
+                >
+                  <Text style={[NoteScreenStyle.buttonText]}>Confirm</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={NoteScreenStyle.tableHeader}>
+              <Text style={NoteScreenStyle.headerCell}>Set</Text>
+              <Text style={NoteScreenStyle.headerCell}>Weight</Text>
+              <Text style={NoteScreenStyle.headerCell}>Reps</Text>
+              <Text style={NoteScreenStyle.headerCell}>Timer</Text>
+            </View>
+
+            <FlatList
+              data={exercisesBox[currentExerciseIndex].sets}
+              keyExtractor={(item) => item.setNumber}
+              renderItem={({ item }) => (
+                <View style={NoteScreenStyle.row}>
+                  <Text style={NoteScreenStyle.cell}>{item.setNumber || "-"}</Text>
+                  <Text style={NoteScreenStyle.cell}>{item.weight || "-"}</Text>
+                  <Text style={NoteScreenStyle.cell}>{item.reps || "-"}</Text>
+                  <Text style={NoteScreenStyle.cell}>{item.timer || "-"}</Text>
+                </View>
+              )}
+            />
+
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={NoteScreenStyle.nextButton}
+                onPress={moveToNextExercise}
+              >
+                <Text style={NoteScreenStyle.buttonText}>
+
+                  {currentExerciseIndex < exercisesBox.length - 1 ? "Next exercise ➝" : "Finish"}
+                </Text>
               </TouchableOpacity>
+
             </View>
           </View>
-
-          <View style={NoteScreenStyle.tableHeader}>
-            <Text style={NoteScreenStyle.headerCell}>Set</Text>
-            <Text style={NoteScreenStyle.headerCell}>Weight</Text>
-            <Text style={NoteScreenStyle.headerCell}>Reps</Text>
-            <Text style={NoteScreenStyle.headerCell}>Timer</Text>
-          </View>
-
-          <FlatList
-            data={exercisesBox[currentExerciseIndex].sets}
-            keyExtractor={(item) => item.setNumber}
-            renderItem={({ item }) => (
-              <View style={NoteScreenStyle.row}>
-                <Text style={NoteScreenStyle.cell}>{item.setNumber || "-"}</Text>
-                <Text style={NoteScreenStyle.cell}>{item.weight || "-"}</Text>
-                <Text style={NoteScreenStyle.cell}>{item.reps || "-"}</Text>
-                <Text style={NoteScreenStyle.cell}>{item.timer || "-"}</Text>
-              </View>
-            )}
-          />
-
-          <View style={{ alignItems: "center" }}>
-            <TouchableOpacity
-              style={NoteScreenStyle.nextButton}
-              onPress={moveToNextExercise}
-            >
-              <Text style={NoteScreenStyle.buttonText}>
-
-                {currentExerciseIndex < exercisesBox.length - 1 ? "Next exercise ➝" : "Finish"}
-              </Text>
-            </TouchableOpacity>
+        ) : null
+      }
+      {
+        isTimerVisible ? (
+          <View style={styles.container}>
+            <CircularTimer
+              duration={timerDuration}
+              setNextExercise={moveToWorkout}
+            />
 
           </View>
-        </View>
-      ) : null}
-      {isTimerVisible ? (
-        <View style={styles.container}>
-          <CircularTimer
-            duration={timerDuration}
-            setNextExercise={moveToWorkout}
-          />
-
-        </View>
-      ) : null}
-    </View>
+        ) : null
+      }
+    </View >
   );
 }
