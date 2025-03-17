@@ -8,14 +8,13 @@ const ExerciseCard = (props) => {
     <View style={[ExerciseCardstyles.box]}>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Image
-          // source={require("../assets/images/Welcomimage.png")}
           source={{uri: props.picture}}
           style={{ width: 70, height: 50 }}
         />
       </View>
       <View>
         <Text style={[ExerciseCardstyles.text_name]}>{props.name}</Text>
-        <Text style={[ExerciseCardstyles.text_des]}>{props.description}</Text>
+        <Text style={[ExerciseCardstyles.text_category]}>{props.category}</Text>
       </View>
     </View>
   );
@@ -25,19 +24,21 @@ export default ExerciseCard;
 
 const ExerciseCardstyles = StyleSheet.create({
   box: {
+    flexDirection: 'row',
     borderRadius: 10,
     paddingHorizontal: 5,
     paddingVertical: 5,
     justifyContent: "center",
     alignItems: "center",
+    gap: 8
   },
   text_name: {
     fontSize: sizes.size_sm,
     fontWeight: "bold",
     color: colors.clr_slate,
   },
-  text_des: {
-    fontSize: sizes.size_3xs,
+  text_category: {
+    fontSize: sizes.size_xs,
     color: "gray",
     flexWrap: "wrap",
   },

@@ -17,7 +17,7 @@ import axios from "axios";
 import { useRef } from "react";
 import InputWithEye from "../components/InputWithEye";
 
-export default function ForgetPasswordScreen({}) {
+export default function ForgetPasswordScreen({ }) {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [isSentOtpVisible, setisSentOtpVisible] = useState(1);
@@ -53,7 +53,7 @@ export default function ForgetPasswordScreen({}) {
     }
     try {
       await axios.post(
-      `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/sentOtp`,
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/sentOtp`,
         {
           email,
         }
@@ -62,11 +62,11 @@ export default function ForgetPasswordScreen({}) {
       setisSentOtpVisible(0);
       setIsOtpVisible(1);
     } catch (error) {
-      if(error.status == 405) {
+      if (error.status == 405) {
         setLoading(1)
         setError('Invalid email format')
       }
-      else if(error.status == 404) {
+      else if (error.status == 404) {
         setLoading(1)
         setError('Sorry, user not found')
       }
@@ -82,12 +82,12 @@ export default function ForgetPasswordScreen({}) {
           otp,
         }
       );
-      
+
 
       setIsOtpVisible(0);
       setIsPasswordResetVisible(1);
     } catch (error) {
-      if(error.status == 400) {
+      if (error.status == 400) {
         setLoading(1)
         setError('Invalid OTP')
       }
@@ -98,7 +98,7 @@ export default function ForgetPasswordScreen({}) {
     if (password !== ConfirmPassword) {
       setLoading(1)
       setError('Password do not match each other')
-      return ;
+      return;
     }
 
     try {
@@ -126,13 +126,13 @@ export default function ForgetPasswordScreen({}) {
               styles.section,
             ]}
           >
-            <Text style={styles.title}>Reset password</Text>
+            <Text style={[styles.title, { color: colors.clr_brightblue }]}>Reset password</Text>
             <Text style={styles.sub__title}>
               Please enter your email address that you used to create an account
             </Text>
             <TextInput
-              style={styles.input__box}
-              placeholder="Email"
+              style={[styles.input__box,]}
+              placeholder="Enter you email"
               value={email}
               onChangeText={setEmail}
             />
@@ -152,10 +152,10 @@ export default function ForgetPasswordScreen({}) {
                 styles.section,
               ]}
             >
-              <Text style={styles.title}>Check your email</Text>
+              <Text style={[styles.title, { color: colors.clr_brightblue }]}>Check your email</Text>
               <Text style={styles.sub__title}>
                 We sent OTP to your
-                <Text style={{ fontWeight: "bold", color: colors.clr_black }}>
+                <Text style={{ fontWeight: "bold", color: colors.clr_brightblue }}>
                   {" "}
                   {email}{" "}
                 </Text>
@@ -181,16 +181,19 @@ export default function ForgetPasswordScreen({}) {
 
               <Text style={{ textAlign: "center" }}>
                 Haven't got an email?{" "}
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    color: "#648DDB",
-                    textDecorationColor: "red",
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Resend email
-                </Text>
+                <TouchableOpacity>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      color: "#648DDB",
+                      textDecorationColor: "red",
+                      textDecorationLine: "underline",
+                    }}
+                  >
+                    Resend email
+                  </Text>
+                </TouchableOpacity>
+
               </Text>
             </View>
           </View>

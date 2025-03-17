@@ -10,6 +10,7 @@ import {
   TextInput,
   FlatList,
   Alert,
+
 } from "react-native";
 import styles, { colors, sizes } from "../styles/style";
 import NoteScreenStyle from "../styles/components/NoteScreenStyle";
@@ -24,6 +25,7 @@ import CircularTimer from "../components/CircularTimer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import Icon from "react-native-vector-icons/FontAwesome";
+import CheckBox from "@react-native-community/checkbox";
 export default function NoteScreen({ }) {
 
   const [error, setError] = useState('')
@@ -61,6 +63,7 @@ export default function NoteScreen({ }) {
   const [isTimerVisible, setIsTimerVisible] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSelected, setSelection] = useState(false)
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -70,7 +73,7 @@ export default function NoteScreen({ }) {
       );
       setDatabaseExercises(newData);
     } else {
- 
+
       setDatabaseExercises(storeDatabaseExercises);
     }
   };
@@ -145,10 +148,11 @@ export default function NoteScreen({ }) {
           exercise.id === currentExerciseId
             ? { ...exercise, name: exerciseName }
             : exercise
+
         )
       );
-    }
-    setModalVisible(false);
+    } setSelection(!isSelected)
+    // setModalVisible(false);
   };
 
   const handleRemoveExercise = (id) => {
@@ -339,6 +343,17 @@ export default function NoteScreen({ }) {
       setErrorLoading(1);
       setError("Please select at least one exercise");
     }
+  };
+
+
+  const [selectedExercises, setSelectedExercises] = useState({});
+
+  // Toggle selection for a single exercise
+  const toggleSelection = (exerciseName) => {
+    setSelectedExercises((prev) => ({
+      ...prev,
+      [exerciseName]: !prev[exerciseName], // Toggle selection state
+    }));
   };
 
 
@@ -549,35 +564,42 @@ export default function NoteScreen({ }) {
                       )
                     )}
                   </View>
-                  <ScrollView
-                    style={{ marginTop: 20, flex: 1 }}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 20 }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        justifyContent: "space-between",
-                        paddingHorizontal: 5,
-                        paddingBottom: 20,
-                      }}
-                    >
-                      {getAvailableExercises().map((exercise, index) => (
-                        <TouchableOpacity
-                          key={index}
-                          onPress={() => handleSelectExercise(exercise.name)}
-                          style={[NoteScreenStyle.exercisecard]}
-                        >
-                          <ExerciseCard
-                            name={exercise.name}
-                            description={exercise.description}
-                            picture={exercise.picture}
-                          />
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </ScrollView>
+
+                  <FlatList
+                    data={getAvailableExercises()}
+                    keyExtractor={(item) => item.name}
+                    renderItem={({ item }) =>
+                      <TouchableOpacity
+                        onPress={() => toggleSelection(item.name)}
+                        style={[NoteScreenStyle.exercisecard]}
+                      >
+
+                        <CheckBox
+                          value={!!selectedExercises[item.name]} // Set checkbox state
+                          onValueChange={() => toggleSelection(item.name)} // Update state when checked/unchecked
+                          tintColors={{ true: "#007AFF", false: "#aaa" }} // Change checkbox color
+                        />
+
+
+                        <ExerciseCard
+                          name={item.name}
+                          category={item.category}
+                          picture={item.picture}
+                        />
+                      </TouchableOpacity>
+                    }
+                  />
+                  <TouchableOpacity style={[styles.buttonAuth, {
+                    paddingHorizontal: 1,
+                    paddingVertical: 12,
+                    marginTop: 10,
+                    marginHorizontal: 60
+                  }]}
+                    onPress={{}}>
+                    <Text style={styles.buttonText}>Done ➝</Text>
+                  </TouchableOpacity>
+
+
                 </View>
               </View>
             </Modal>

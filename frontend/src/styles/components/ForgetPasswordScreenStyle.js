@@ -33,7 +33,7 @@ logo: {
     height: 100
 },
 error: {
-  textAlign: 'left',
+  textAlign: 'center',
   paddingHorizontal: 16,
   color: 'red',
   fontSize: sizes.size_base

@@ -119,7 +119,7 @@ const userController = {
       if (user) {
         return res.status(409).json({ message: "User already exist" });
       }
-
+      console.log(user)
       const hashedPassword = await bcrypt.hash(password, 12);
 
       const newUser = new userModel({
@@ -128,7 +128,7 @@ const userController = {
         email,
         password: hashedPassword,
       });
-
+      console.log(newUser)
       await newUser.save();
 
       const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
