@@ -23,7 +23,37 @@ const ProfileScreenStyle = StyleSheet.create({
   },
 
   profile_box: {
-    backgroundColor: "white",
+    padding: 20,
+    height: 200,
+    alignItems: "center",
+  },
+  profile: {
+    width: 90,
+    height: 90,
+    borderWidth: 2,
+    borderRadius: 100,
+    position: "absolute",
+    top: 2,
+    zIndex: 1,
+  },
+  profile_button_edit: {
+    width: 25,
+    height: 25,
+    backgroundColor: colors.clr_slate,
+    borderRadius: 100,
+    alignItems:'center',
+    justifyContent:'center',
+    position:'absolute',
+    left:180,
+    zIndex:2
+  },
+ 
+
+  profile_container: {
+    backgroundColor: colors.clr_background_modal,
+    width: 310,
+    height: 150,
+    marginTop: 30,
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -33,41 +63,13 @@ const ProfileScreenStyle = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
-    padding: 20,
-    height: 150,
-    alignSelf: "stretch",
-    flexDirection: "row",
-    gap: 25,
   },
-  profile: {
-    width: 100,
-    height: 100,
-    borderWidth: 2,
-    borderRadius: 100,
-    overflow: "hidden",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  edit_profile_image: {
-    position: "absolute",
-    width: 25,
-    height: 20,
-    backgroundColor: colors.clr_slate,
-    zIndex: 1,
-    top:100,
-    right:195,
-    borderRadius: 20,
-    alignItems:'center',
-    justifyContent:'center'
-  },
-  footer_profile_box: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    width: 150,
-  },
-  footer_profile_box_text: {
-    fontSize: sizes.size_2xs,
-    color: colors.clr_gray,
+  username_text: {
+    color: colors.clr_white,
+    fontSize: sizes.size_lg,
+    textAlign: "center",
+    paddingTop: 50,
+    fontWeight: "bold",
   },
   inside_box: {
     gap: 15,
@@ -92,7 +94,6 @@ const ProfileScreenStyle = StyleSheet.create({
   header_box: {
     flexDirection: "row",
     justifyContent: "space-between",
-
     alignItems: "center",
   },
   header_text: {

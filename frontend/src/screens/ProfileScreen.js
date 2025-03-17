@@ -66,7 +66,7 @@ export default function ProfileScreen({}) {
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
       );
       const { username, weight, height, fat, picture } = response.data;
-      setUsername(username || response.data.givenName || response.data.name );
+      setUsername(username || response.data.givenName || response.data.name);
       setWeight(weight);
       setHeight(height);
       setFat(fat);
@@ -285,62 +285,23 @@ export default function ProfileScreen({}) {
       <ScrollView style={[styles.container]}>
         <View style={{ gap: 20 }}>
           <View style={[ProfileScreenStyle.profile_box]}>
+            <TouchableOpacity style={[ProfileScreenStyle.profile_button_edit]} onPress={handleImagePicker}>
+              <IconEntypo name={"edit"} size={10} color={colors.clr_gray} />
+            </TouchableOpacity>
+
             <View style={[ProfileScreenStyle.profile]}>
               <Image
                 source={{ uri: selectedImage }}
                 style={{ width: 200, height: 100 }}
               />
             </View>
-            <TouchableOpacity
-              style={[ProfileScreenStyle.edit_profile_image]}
-              onPress={handleImagePicker}
-            >
-              <IconEntypo name={"edit"} size={10} color={colors.clr_gray} />
-            </TouchableOpacity>
-            <View
-              style={{
-                justifyContent: "space-between",
-                flex: 1,
-              }}
-            >
-              <View>
-                <Text style={{ fontWeight: "bold", fontSize: sizes.size_3xl }}>
-                  {username}
-                </Text>
-              </View>
-              <View style={[ProfileScreenStyle.footer_profile_box]}>
-                <View>
-                  <Text style={[ProfileScreenStyle.footer_profile_box_text]}>
-                    Day Streak
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 5,
-                    }}
-                  >
-                    <IconFontisto name={"fire"} color={colors.clr_orange} />
-                    <Text
-                      style={{ fontSize: sizes.size_2xs, fontWeight: "bold" }}
-                    >
-                      0
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ alignItems: "flex-end" }}>
-                  <Text style={[ProfileScreenStyle.footer_profile_box_text]}>
-                    Highest Streak
-                  </Text>
-                  <Text
-                    style={{ fontSize: sizes.size_2xs, fontWeight: "bold" }}
-                  >
-                    100 days
-                  </Text>
-                </View>
-              </View>
+            <View style={[ProfileScreenStyle.profile_container]}>
+              <Text style={[ProfileScreenStyle.username_text]}>
+                {username}Username
+              </Text>
             </View>
           </View>
+          <Text style={{ color: "white" }}>Health Metrics</Text>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
             <View style={[ProfileScreenStyle.box]}>
               <View style={[ProfileScreenStyle.inside_box]}>

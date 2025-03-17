@@ -19,7 +19,7 @@ export default function Header({ }) {
     " The worldis a stage, and your workout is your spotlight.",
     " As stars begin to gleam, chase the dreams that shimmer within.",
     " Let your workout be a dance of dedication.",
-    " เกินเที่ยงคืนแล้วไปนอนอย่าเบียว",
+    " Sleep is the best meditation.",
   ];
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Header({ }) {
       setQuote(motivationalQuote[3]);
       setEmoji("moon");
     } else {
-      setGreeting("ไปนอนไอสัส");
+      setGreeting("Time to bed");
       setQuote(motivationalQuote[4]);
       setEmoji("battery-charging");
     }
