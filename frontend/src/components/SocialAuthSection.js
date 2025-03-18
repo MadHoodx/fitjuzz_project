@@ -10,10 +10,10 @@ import * as AuthSession from "expo-auth-session";
 
 import Constants from 'expo-constants';
 import { colors } from "../styles/style";
-const EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID  = Constants.expoConfig.extra.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID
+const EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID
 const EXPO_PUBLIC_WEB_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_WEB_CLIENT_ID
 const EXPO_PUBLIC_X_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_ID
-const EXPO_PUBLIC_X_CLIENT_SECRET= Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_SECRET
+const EXPO_PUBLIC_X_CLIENT_SECRET = Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_SECRET
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -154,6 +154,7 @@ export default function SocialAuthSection() {
             username: userData.data.username,
           }
         );
+
         await AsyncStorage.setItem("userXToken", response.data.token);
       }
     } catch (error) {
@@ -178,10 +179,10 @@ export default function SocialAuthSection() {
       >
         <Image
           source={require("../assets/images/white-x-logo.png")}
-          style={[SocialAuthSectionStyle.logo, {left: 2}]}
+          style={[SocialAuthSectionStyle.logo, { left: 2 }]}
         />
       </TouchableOpacity>
-     
+
     </View>
   );
 }
@@ -196,7 +197,7 @@ const SocialAuthSectionStyle = StyleSheet.create({
 
     paddingVertical: 12,
     paddingHorizontal: 12,
-    backgroundColor:'#575757',
+    backgroundColor: '#575757',
     borderColor: colors.clr_black,
     borderWidth: 1,
     borderRadius: 30,

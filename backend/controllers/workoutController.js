@@ -26,7 +26,7 @@ const workoutController = {
         const { userId } = req.params
        
         try {
-            const user = await workoutModel.findOne(userId)
+            const user = await workoutModel.find(userId)
             console.log(userId )
             console.log(user)
             if (user) {

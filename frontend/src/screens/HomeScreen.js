@@ -29,8 +29,7 @@ export default function HomeScreen({ }) {
 
 
   const [exercisesHistory, setExercisesHistory] = useState([])
-  const [exercises, setExercises] = useState()
-  const [exercisesDate, setExercisesDate] = useState()
+  const [selectedExercises, setSelectedExercises] = useState(null)
   const [isModalVisible, setModalVisible] = useState(false)
 
 
@@ -62,10 +61,12 @@ export default function HomeScreen({ }) {
     const userId = allUserToken.userId
     try {
       const response = await axios.get(`${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/getExercisesHistory`)
-      console.log(response.data)
+
+
       setExercisesHistory(response.data)
-      setExercises(response.data.exercises)
-      setExercisesDate(response.data.date)
+      console.log(response.data)
+
+
       return
     }
     catch (error) {
@@ -75,22 +76,28 @@ export default function HomeScreen({ }) {
 
 
 
+
   return (
 
     <View style={[HomeScreenStyle.container]}>
       <Header></Header>
       <View style={[styles.container, { alignItems: 'center' }]}>
-        <Text>
+        <Text style={{ color: 'white' }}>
           {exercisesHistory?.date}
         </Text>
         <FlatList
-          data={exercises}
-          keyExtractor={(item) => item.name}
+          data={exercisesHistory}
+          keyExtractor={(item) => item.date}
           renderItem={({ item }) =>
             <View>
               <TouchableOpacity style={HomeScreenStyle.box}
-                onPress={() => setModalVisible(true)}>
-                <Text>{item.name}</Text>
+                onPress={() => {
+                  setModalVisible(true),
+                    setSelectedExercises(item.exercises)
+                }}>
+
+                <Text>Exercise date: {item.date}</Text>
+
 
 
               </TouchableOpacity>
@@ -130,23 +137,25 @@ export default function HomeScreen({ }) {
                     </View>
 
                     <FlatList
-                      data={exercises}
-                      keyExtractor={(item) => item.name}
+                      data={selectedExercises}
+                      keyExtractor={(item, index) => index.toString()}
                       renderItem={({ item }) =>
-                        <View style={{alignItems: 'center'}}>
-                           <View style={[HomeScreenStyle.box, {width: 250, height: 400,}]}>
-                          <Text>{item.name}</Text>
-                          <Text>set number: {item.sets[0]?.sets}</Text>
-                          <Text>weight: {item.sets[0]?.weight}</Text>
-                          <Text>reps: {item.sets[0]?.reps}</Text>
-                          <Text>timer: {item.sets[0]?.timer}</Text>
-                          <Text>set number: {item.sets[0]?.sets}</Text>
-                          <Text>weight: {item.sets[1]?.weight}</Text>
-                          <Text>reps: {item.sets[1]?.reps}</Text>
-                          <Text>timer: {item.sets[1]?.timer}</Text>
+                        <View style={{ alignItems: 'center' }}>
+                          <View style={[HomeScreenStyle.box, { width: 250, height: 400, }]}>
+
+                            <Text>{item.name}</Text>
+                            {item.sets.map((set, index) => (
+                              <View>
+                                <Text>set number: {set.setNumber}</Text>
+                                <Text>weight: {set.weight}</Text>
+                                <Text>reps: {set.reps}</Text>
+                                <Text>timer: {set.timer}</Text>
+                              </View>
+                            ))}
+
+                          </View>
                         </View>
-                        </View>
-                       
+
 
                       }>
 

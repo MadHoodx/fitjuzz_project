@@ -247,7 +247,9 @@ export default function NoteScreen({ }) {
   };
 
 
-  //Not Done
+
+
+
   const moveToNextExercise = () => {
     console.log("Before filtering:", exercisesBox);
 
@@ -269,29 +271,46 @@ export default function NoteScreen({ }) {
 
     const saveWorkout = async () => {
       const userToken = await AsyncStorage.getItem("userToken");
-      const decodedUserToken = jwtDecode(userToken);
+      const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+      const userXToken = await AsyncStorage.getItem("userXToken");
 
-      const userId = decodedUserToken.userId;
-      const workoutData = {
-        userId,
-        exercises: filteredExercises
-      };
-
-      console.log("🚀 Sending workout data:", workoutData);
-
-
-      try {
-        const response = await axios.post(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
-          workoutData,
-
-        );
-        console.log("✅ Workout saved successfully:", response.data);
+      if (userToken) {
+        const decodedUserToken = jwtDecode(userToken);
+        saveWorkoutToDatabase(decodedUserToken)
       }
-      catch (error) {
-        console.log(error)
+      else if (userGoogleToken) {
+        const decodedUserGoogleToken = jwtDecode(userGoogleToken);
+        saveWorkoutToDatabase(decodedUserGoogleToken)
+      }
+      else if (userXToken) {
+        const decodedUserXToken = jwtDecode(userXToken);
+        saveWorkoutToDatabase(decodedUserXToken)
+      }
+
+      const saveWorkoutToDatabase = async (allUserToken) => {
+        const userId = allUserToken.userId;
+        const workoutData = {
+          userId,
+          exercises: filteredExercises
+        };
+
+        console.log("🚀 Sending workout data:", workoutData);
+
+
+        try {
+          const response = await axios.post(
+            `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
+            workoutData,
+
+          );
+          console.log("✅ Workout saved successfully:", response.data);
+        }
+        catch (error) {
+          console.log(error)
+        }
       }
     }
+
 
     if (currentExerciseIndex < exercisesBox.length - 1) {
       setCurrentExerciseIndex(currentExerciseIndex + 1);

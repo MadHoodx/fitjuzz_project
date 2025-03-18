@@ -24,7 +24,8 @@ import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 
-export default function ProfileScreen({}) {
+
+export default function ProfileScreen({ }) {
   const [username, setUsername] = useState("");
   const [weight, setWeight] = useState(0);
   const [tempWeight, setTempWeight] = useState(0);
@@ -217,6 +218,7 @@ export default function ProfileScreen({}) {
     }
   };
 
+
   const haddleLogout = async () => {
     try {
       await AsyncStorage.removeItem("userToken");
@@ -227,6 +229,8 @@ export default function ProfileScreen({}) {
     } catch (error) {
       console.log("Log out failed");
     }
+
+
   };
 
   const handleEditWeight = () => {
