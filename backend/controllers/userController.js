@@ -130,14 +130,18 @@ const userController = {
         email,
         password: hashedPassword,
       });
-      try {
-        console.log('before saving new user');
-        await newUser.save();
-        console.log('after saving new user');
-      } catch (error) {
-        console.error('Error saving user:', error);
-        return res.status(500).json({ message: "Error saving user" });
-      }
+          console.log('before saving new user');
+         await newUser.save();
+            
+         console.log('after saving new user');
+      // try {
+      //   console.log('before saving new user');
+      //   await newUser.save();
+      //   console.log('after saving new user');
+      // } catch (error) {
+      //   console.error('Error saving user:', error);
+      //   return res.status(500).json({ message: "Error saving user" });
+      // }
       const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });

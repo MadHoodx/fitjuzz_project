@@ -82,7 +82,7 @@ export default function SigninScreen({ updateActiveScreen }) {
           { marginTop: 16 }]}
       >
         <View style={{}}>
-          <Text style={[styles.whiteText, { fontWeight: 'bold' }]}>Username</Text>
+          <Text style={[styles.whiteText, { fontWeight: 'bold' }]}>Email</Text>
           <TextInput
             style={[styles.input__box]}
             value={email}

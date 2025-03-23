@@ -6,7 +6,6 @@ const ProfileScreenStyle = StyleSheet.create({
     flex: 1,
   },
   box: {
-    backgroundColor: "white",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -35,19 +34,20 @@ const ProfileScreenStyle = StyleSheet.create({
     position: "absolute",
     top: 2,
     zIndex: 1,
+    overflow: 'hidden'
+    
   },
   profile_button_edit: {
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
     backgroundColor: colors.clr_slate,
     borderRadius: 100,
-    alignItems:'center',
-    justifyContent:'center',
-    position:'absolute',
-    left:180,
-    zIndex:2
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    left: 180,
+    zIndex: 2,
   },
- 
 
   profile_container: {
     backgroundColor: colors.clr_background_modal,
@@ -72,24 +72,20 @@ const ProfileScreenStyle = StyleSheet.create({
     fontWeight: "bold",
   },
   inside_box: {
-    gap: 15,
+    gap: 10,
     justifyContent: "center",
   },
   button_edit: {
-    width: 41,
-    height: 22,
-    backgroundColor: colors.clr_slate,
-    borderRadius: 10,
+    width: 20,
+    height: 20,
+    backgroundColor: "#fab3ff",
+    borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row",
-    gap: 3,
   },
-  button_text: {
-    textAlign: "center",
-    color: colors.clr_gray,
-    fontSize: sizes.size_3xs,
-    fontWeight: "bold",
+  footer__box: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   header_box: {
     flexDirection: "row",
@@ -169,18 +165,19 @@ const ProfileScreenStyle = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   inside_box_modal: {
-    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    width: "80%",
+    width: 315,
+    height:550,
+    backgroundColor:'black'
   },
   modal_header_text_: {
     fontSize: sizes.size_xl,
     fontWeight: "bold",
     marginBottom: 10,
+    color: 'white'
   },
   modal_input_box: {
     borderBottomWidth: 1,

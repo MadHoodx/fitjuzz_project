@@ -28,39 +28,38 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
-
     if (username == "" && email !== "" && password !== "") {
       setLoading(1);
       setError("Please enter your username");
-      return
+      return;
     } else if (username !== "" && email == "" && password !== "") {
       setLoading(1);
       setError("Please enter your email");
-      return
+      return;
     } else if (username == "" && email == "" && password !== "") {
       setLoading(1);
       setError("Please enter your username and email");
-      return
+      return;
     } else if (username == "" && email !== "" && password == "") {
       setLoading(1);
       setError("Please enter your username and password");
-      return
+      return;
     } else if (username !== "" && email !== "" && password == "") {
       setLoading(1);
       setError("Please enter your password");
-      return
+      return;
     } else if (username !== "" && email == "" && password == "") {
       setLoading(1);
       setError("Please enter your email and password");
-      return
+      return;
     } else if (username == "" && email == "" && password == "") {
       setLoading(1);
       setError("Please enter your incredentials");
-      return
+      return;
     } else if (password !== confirmPassword) {
       setLoading(1);
       setError("Passwords do not match");
-      return
+      return;
     }
     try {
       const response = await axios.post(
@@ -68,27 +67,32 @@ export default function SignupScreen({ updateActiveScreen }) {
         {
           username,
           email,
-          password
+          password,
         }
       );
 
       await AsyncStorage.setItem("userToken", response.data.token);
+      console.log(response.data)
+
       navigation.navigate("MyTabs");
     } catch (error) {
       setLoading(1);
       if (error.status == 409) {
         setError("User already exists");
-      } else {
+      } else if (error.status == 500) {
         setError("An unexpected error occurred");
+        console.log(error.status)
       }
     }
   };
 
   return (
     <View style={[styles.container]}>
-      <View style={[SignupScreenStyle.input__section, ]}>
+      <View style={[SignupScreenStyle.input__section]}>
         <View>
-          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >Username</Text>
+          <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
+            Username
+          </Text>
           <TextInput
             style={styles.input__box}
             value={username}
@@ -96,46 +100,57 @@ export default function SignupScreen({ updateActiveScreen }) {
           />
         </View>
         <View>
-          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >Email Address</Text>
+          <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
+            Email Address
+          </Text>
           <TextInput
             style={styles.input__box}
-
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
           />
         </View>
         <View>
-          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >Password</Text>
+          <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
+            Password
+          </Text>
           <InputWithEye
-
             value={password}
             onChangeText={setPassword}
           ></InputWithEye>
         </View>
         <View>
-          <Text style={[styles.whiteText, { fontWeight: 'bold' }]} >ConfirmPassword</Text>
+          <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
+            ConfirmPassword
+          </Text>
           <InputWithEye
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-
           ></InputWithEye>
         </View>
         {loading ? <Text style={SignupScreenStyle.error}>{error} </Text> : null}
       </View>
-      <View style={[SignupScreenStyle.button__section, { justifyContent: 'space-around', gap: 12,}]}>
-
-
+      <View
+        style={[
+          SignupScreenStyle.button__section,
+          { justifyContent: "space-around", gap: 12 },
+        ]}
+      >
         <SocialAuthSection></SocialAuthSection>
-        <TouchableOpacity style={[styles.buttonAuth, {
-          paddingHorizontal: 52,
-          paddingVertical: 10,
-        }]} onPress={handleSignup}>
+        <TouchableOpacity
+          style={[
+            styles.buttonAuth,
+            {
+              paddingHorizontal: 52,
+              paddingVertical: 10,
+            },
+          ]}
+          onPress={handleSignup}
+        >
           <Text style={styles.buttonText}>Sign up ➝</Text>
         </TouchableOpacity>
-
       </View>
-      <View style={[SignupScreenStyle.footer__section,]}>
+      <View style={[SignupScreenStyle.footer__section]}>
         <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
           Already have an account?
         </Text>
@@ -143,7 +158,11 @@ export default function SignupScreen({ updateActiveScreen }) {
           <Text
             style={[
               styles.orangeText,
-              { fontSize: sizes.size_base, fontWeight: "bold", color: colors.clr_brightblue},
+              {
+                fontSize: sizes.size_base,
+                fontWeight: "bold",
+                color: colors.clr_brightblue,
+              },
             ]}
           >
             Sign in
