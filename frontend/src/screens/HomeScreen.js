@@ -65,7 +65,7 @@ export default function HomeScreen({ }) {
 
       setExercisesHistory(response.data)
       console.log(response.data)
-
+      console.log(selectedExercises)
 
       return
     }
@@ -82,12 +82,11 @@ export default function HomeScreen({ }) {
     <View style={[HomeScreenStyle.container]}>
       <Header></Header>
       <View style={[styles.container, { alignItems: 'center' }]}>
-        <Text style={{ color: 'white' }}>
-          {exercisesHistory?.date}
-        </Text>
+        
         <FlatList
           data={exercisesHistory}
           keyExtractor={(item) => item.date}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) =>
             <View>
               <TouchableOpacity style={HomeScreenStyle.box}
@@ -138,13 +137,13 @@ export default function HomeScreen({ }) {
 
                     <FlatList
                       data={selectedExercises}
-                      keyExtractor={(item, index) => index.toString()}
+                      keyExtractor={(item) => item.name}
                       renderItem={({ item }) =>
                         <View style={{ alignItems: 'center' }}>
                           <View style={[HomeScreenStyle.box, { width: 250, height: 400, }]}>
 
                             <Text>{item.name}</Text>
-                            {item.sets.map((set, index) => (
+                            {item.sets.map((set) => (
                               <View>
                                 <Text>set number: {set.setNumber}</Text>
                                 <Text>weight: {set.weight}</Text>

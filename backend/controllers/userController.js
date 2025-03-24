@@ -102,9 +102,7 @@ const userController = {
             message: "Sorry, looks like that’s the wrong email or password. ",
           });
         }
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-          expiresIn: "1h",
-        });
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
 
         return res.json({ token });
       }
@@ -134,17 +132,8 @@ const userController = {
          await newUser.save();
             
          console.log('after saving new user');
-      // try {
-      //   console.log('before saving new user');
-      //   await newUser.save();
-      //   console.log('after saving new user');
-      // } catch (error) {
-      //   console.error('Error saving user:', error);
-      //   return res.status(500).json({ message: "Error saving user" });
-      // }
-      const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
+
+      const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET);
 
       return res.json({ token });
     } catch (error) {

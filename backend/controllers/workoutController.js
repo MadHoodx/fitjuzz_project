@@ -5,8 +5,7 @@ const workoutController = {
     updateWorkout: async (req, res) => {
         const { userId } = req.body
         const { exercises } = req.body
-        console.log(userId)
-        console.log(exercises)
+   
         try {
 
             if (!userId || !exercises.length) {
@@ -19,16 +18,16 @@ const workoutController = {
             console.log('after saving')
             res.status(201).json({ message: "Workout saved successfully" });
         } catch (error) {
+
             res.status(500).json({ error: "Error saving workout" });
         }
     },
     getExercisesHistory: async (req, res) => {
         const { userId } = req.params
-       
+
         try {
             const user = await workoutModel.find(userId)
-            console.log(userId )
-            console.log(user)
+
             if (user) {
                 return res.json(user);
             } else {
