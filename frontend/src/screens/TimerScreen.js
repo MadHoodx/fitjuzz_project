@@ -87,7 +87,7 @@ export default function HomeScreen({}) {
             showsVerticalScrollIndicator={false}
           >
             {laps.map((lap, index) => (
-              <View key={index} style={{ width: '100%' }}>
+              <View key={index} style={{ width: '100%'}}>
                 <Text style={TimerScreenStyle.lapText}>
                   Lap {index + 1}: {formatTime(lap)}
                 </Text>
