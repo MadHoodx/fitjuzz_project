@@ -9,13 +9,14 @@ const TimerScreenStyle = StyleSheet.create({
     flex: 1,
   },
   time: {
-    fontSize: 60,
+    fontSize: sizes.size_6xl,
     fontWeight: "bold",
     marginBottom:20,
     textAlign: "center",
     // borderWidth: 2,
     // borderColor: "red",
-    marginTop:60
+    marginTop:60,
+    color:colors.clr_white
   },
   buttonContainer: {
     flexDirection: "row",
@@ -27,7 +28,7 @@ const TimerScreenStyle = StyleSheet.create({
     gap:100
   },
   lapButton: {
-    backgroundColor: 'lightgray',
+    backgroundColor: colors.clr_graybutton,
     width:60,
     height:60,
     borderRadius: 100,
@@ -36,19 +37,19 @@ const TimerScreenStyle = StyleSheet.create({
   line:{
     width: 300,
     height: 1,
-    backgroundColor: colors.clr_slate,
+    backgroundColor: colors.clr_white,
     marginTop: 3,
     alignSelf: 'center',
   },
   startButton: {
-    backgroundColor:colors.clr_orange,
+    backgroundColor:colors.clr_brightblue,
     width:60,
     height:60,
     borderRadius: 100,
     justifyContent:'center',
   },
   buttonText: {
-    fontSize: sizes.size_base,
+    fontSize: sizes.size_2xs,
     fontWeight: "bold",
     color: "white",
     textAlign:'center'
@@ -56,15 +57,11 @@ const TimerScreenStyle = StyleSheet.create({
   lapsContainer: {
     width: "100%",
     maxHeight: 300,
-    marginTop: 10,
-    marginBottom: 20,
-    paddingHorizontal: 50,
   },
   lapText: {
-    fontSize: sizes.size_lg,
-    marginBottom: 5,
-    marginTop: 5,
-    color: 'gray',
+    fontSize: sizes.size_base,
+    paddingVertical:7,
+    color: colors.clr_lightgray,
     paddingLeft: 20,
   },
 });

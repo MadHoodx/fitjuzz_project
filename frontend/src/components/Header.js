@@ -143,7 +143,7 @@ export default function Header({ }) {
               </Text>
             </View>
 
-            <IconFeather name={emoji} size={35} color={colors.clr_white} />
+            <IconFeather name={emoji} size={25} color={colors.clr_white} />
           </View>
         </View>
       </ImageBackground>

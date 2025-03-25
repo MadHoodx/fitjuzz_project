@@ -15,15 +15,14 @@ import { useNavigation } from "@react-navigation/native";
 import styles, { sizes, colors } from "../styles/style";
 import Header from "../components/Header";
 import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
-import IconIonIcons from "react-native-vector-icons/Ionicons";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import IconFontisto from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import moment from "moment";
 
 
 export default function ProfileScreen({ }) {
@@ -34,6 +33,7 @@ export default function ProfileScreen({ }) {
   const [tempHeight, setTempHeight] = useState(0);
   const [fat, setFat] = useState(0);
   const [tempFat, setTempFat] = useState(0);
+  const [updatedAt, setUpdatedAt] = useState("");
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
@@ -68,12 +68,14 @@ export default function ProfileScreen({ }) {
       const response = await axios.get(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
       );
-      const { username, weight, height, fat, picture } = response.data;
+      const { username, weight, height, fat, picture, updatedAt } =
+        response.data;
       setUsername(username || response.data.givenName || response.data.name);
       setWeight(weight);
       setHeight(height);
       setFat(fat);
       setSelectedImage(picture);
+      setUpdatedAt(updatedAt);
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }
@@ -329,16 +331,17 @@ export default function ProfileScreen({ }) {
             <View style={[ProfileScreenStyle.profile]}>
               <Image
                 source={{ uri: selectedImage }}
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: "100%", height: "100%" }}
               />
             </View>
             <View style={[ProfileScreenStyle.profile_container]}>
-              <Text style={[ProfileScreenStyle.username_text]}>
-                {username}
-              </Text>
+              <Text style={[ProfileScreenStyle.username_text]}>{username}</Text>
             </View>
           </View>
-          <Text style={{ color: "white" }}>Health Metrics</Text>
+          {/* Profile Box Section */}
+
+          {/* Data health Section */}
+          <Text style={[ProfileScreenStyle.text__topic]}>Health Metrics</Text>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
             <View
               style={[ProfileScreenStyle.box, { backgroundColor: "#FCCEFF" }]}
@@ -348,14 +351,7 @@ export default function ProfileScreen({ }) {
                   <Text style={[ProfileScreenStyle.header_text]}>Weight</Text>
                 </View>
                 <View style={[ProfileScreenStyle.body_box]}>
-                  <IconIonIcons
-                    name={"scale"}
-                    size={50}
-                    color={colors.clr_orange}
-                  />
-                  <View
-                    style={{ flexDirection: "row", alignItems: "flex-end" }}
-                  >
+                  <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {weight}
                     </Text>
@@ -366,13 +362,16 @@ export default function ProfileScreen({ }) {
                   <View></View>
                   <View>
                     <TouchableOpacity
-                      style={[ProfileScreenStyle.button_edit]}
+                      style={[
+                        ProfileScreenStyle.button_edit,
+                        { backgroundColor: "#fab3ff" },
+                      ]}
                       onPress={handleEditWeight}
                     >
                       <IconEntypo
                         name={"edit"}
                         size={8}
-                        color={colors.clr_gray}
+                        color={colors.clr_white}
                       />
                     </TouchableOpacity>
                   </View>
@@ -386,7 +385,7 @@ export default function ProfileScreen({ }) {
             >
               <View style={[ProfileScreenStyle.box_modal]}>
                 <View style={[ProfileScreenStyle.inside_box_modal]}>
-                  <Text style={[ProfileScreenStyle.modal_header_text_]}>
+                  <Text style={[ProfileScreenStyle.modal_header_text]}>
                     Edit Weight.
                   </Text>
                   <TextInput
@@ -431,14 +430,7 @@ export default function ProfileScreen({ }) {
                   <Text style={[ProfileScreenStyle.header_text]}>Height</Text>
                 </View>
                 <View style={[ProfileScreenStyle.body_box]}>
-                  <IconMaterialCommunityIcons
-                    name={"human-male-height-variant"}
-                    size={50}
-                    color={colors.clr_slate}
-                  />
-                  <View
-                    style={{ flexDirection: "row", alignItems: "flex-end" }}
-                  >
+                  <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {height}
                     </Text>
@@ -449,13 +441,16 @@ export default function ProfileScreen({ }) {
                   <View></View>
                   <View>
                     <TouchableOpacity
-                      style={[ProfileScreenStyle.button_edit]}
+                      style={[
+                        ProfileScreenStyle.button_edit,
+                        { backgroundColor: "#9dfadb" },
+                      ]}
                       onPress={handleEditHeight}
                     >
                       <IconEntypo
                         name={"edit"}
                         size={8}
-                        color={colors.clr_gray}
+                        color={colors.clr_white}
                       />
                     </TouchableOpacity>
                   </View>
@@ -469,7 +464,7 @@ export default function ProfileScreen({ }) {
             >
               <View style={[ProfileScreenStyle.box_modal]}>
                 <View style={[ProfileScreenStyle.inside_box_modal]}>
-                  <Text style={[ProfileScreenStyle.modal_header_text_]}>
+                  <Text style={[ProfileScreenStyle.modal_header_text]}>
                     Edit Height.
                   </Text>
                   <TextInput
@@ -516,14 +511,7 @@ export default function ProfileScreen({ }) {
                   </Text>
                 </View>
                 <View style={[ProfileScreenStyle.body_box]}>
-                  <IconMaterialCommunityIcons
-                    name={"human-child"}
-                    size={50}
-                    color={"darkyellow"}
-                  />
-                  <View
-                    style={{ flexDirection: "row", alignItems: "flex-end" }}
-                  >
+                  <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {fat}
                     </Text>
@@ -535,12 +523,12 @@ export default function ProfileScreen({ }) {
                   <View>
                     <TouchableOpacity
                       style={[ProfileScreenStyle.button_edit]}
-                      onPress={handleEditFat}
+                      onPress={handleEditWeight}
                     >
                       <IconEntypo
                         name={"edit"}
                         size={8}
-                        color={colors.clr_gray}
+                        color={colors.clr_white}
                       />
                     </TouchableOpacity>
                   </View>
@@ -554,7 +542,7 @@ export default function ProfileScreen({ }) {
             >
               <View style={[ProfileScreenStyle.box_modal]}>
                 <View style={[ProfileScreenStyle.inside_box_modal]}>
-                  <Text style={[ProfileScreenStyle.modal_header_text_]}>
+                  <Text style={[ProfileScreenStyle.modal_header_text]}>
                     Edit Body Fat %.
                   </Text>
                   <TextInput
@@ -788,13 +776,48 @@ export default function ProfileScreen({ }) {
 
                
               </View>
-            </View>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonText]}
-              onPress={haddleLogout}
+            <View
+              style={[
+                ProfileScreenStyle.muscle__box,
+                { backgroundColor: "red" },
+              ]}
             >
-              <Text style={[styles.buttonText]}>Log out</Text>
-            </TouchableOpacity>
+              <View style={{gap:10}}>
+                <View style={[ProfileScreenStyle.header_box]}>
+                  <Text style={[ProfileScreenStyle.header_text]}>Muscle</Text>
+                </View>
+                <View style={[ProfileScreenStyle.body_box]}>
+                  <View style={[ProfileScreenStyle.body__data__box]}>
+                    <Text style={[ProfileScreenStyle.body_text_number]}>
+                      {fat}
+                    </Text>
+                    <Text style={[ProfileScreenStyle.body_text_unit]}>%</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text style={{ color: "white" }}>
+              Last update : {moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")}{" "}
+            </Text>
+            </View>
+          {/* Data health Section */}
+
+          {/* Analysist Section */}
+          <>
+            <Text style={[ProfileScreenStyle.text__topic]}>Analysist</Text>
+          </>
+          {/* Analysist Section */}
+
+          {/* Logout button Section */}
+          <>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonText]}
+                onPress={haddleLogout}
+              >
+                <Text style={[styles.buttonText]}>Log out</Text>
+              </TouchableOpacity>
+          </>
+          {/* Logout button Section */}
           </View>
 
         </View>
