@@ -103,6 +103,7 @@ function MyStack() {
       <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="Note" component={NoteScreen} />
+  
     </Stack.Navigator>
 
   );

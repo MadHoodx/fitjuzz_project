@@ -25,7 +25,9 @@ import CircularTimer from "../components/CircularTimer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import Icon from "react-native-vector-icons/FontAwesome";
-import CheckBox from "@react-native-community/checkbox";
+import CustomCheckbox from "../components/CustomCheckbox";
+
+
 export default function NoteScreen({ }) {
 
   const [error, setError] = useState('')
@@ -199,26 +201,26 @@ export default function NoteScreen({ }) {
     } else {
       setErrorLoading(0);
     }
-  
+
     // ✅ Ensure state updates only for the current exercise
     setExercisesBox((prevExercises) =>
       prevExercises.map((exercise, exIdx) =>
         exIdx === currentExerciseIndex
           ? {
-              ...exercise,
-              sets: exercise.sets.map((set, sIdx) =>
-                sIdx === currentSetIndex
-                  ? { ...set, [currentField]: inputValue } // Update only the current set
-                  : set
-              ),
-            }
+            ...exercise,
+            sets: exercise.sets.map((set, sIdx) =>
+              sIdx === currentSetIndex
+                ? { ...set, [currentField]: inputValue } // Update only the current set
+                : set
+            ),
+          }
           : exercise
       )
     );
-  
+
     // ✅ Reset input field
     setInputValue(0);
-  
+
     if (currentField === "weight") {
       setCurrentField("reps");
     } else if (currentField === "reps") {
@@ -227,7 +229,7 @@ export default function NoteScreen({ }) {
       setTimerDuration(inputValue);
       setIsStartVisible(0);
       setIsTimerVisible(1);
-  
+
       // ✅ Move to the next set if available
       if (currentSetIndex < exercisesBox[currentExerciseIndex].sets.length - 1) {
         setCurrentSetIndex((prevIndex) => prevIndex + 1);
@@ -238,21 +240,21 @@ export default function NoteScreen({ }) {
           prevExercises.map((exercise, exIdx) =>
             exIdx == currentExerciseIndex
               ? {
-                  ...exercise,
-                  sets: [
-                    ...exercise.sets,
-                    {
-                      setNumber: exercise.sets.length + 1,
-                      weight: 0,
-                      reps: 0,
-                      timer: 0,
-                    },
-                  ],
-                }
+                ...exercise,
+                sets: [
+                  ...exercise.sets,
+                  {
+                    setNumber: exercise.sets.length + 1,
+                    weight: 0,
+                    reps: 0,
+                    timer: 0,
+                  },
+                ],
+              }
               : exercise
           )
         );
-  
+
         setTimeout(() => {
           setCurrentSetIndex((prevIndex) => prevIndex + 1);
           setCurrentField("weight");
@@ -260,8 +262,8 @@ export default function NoteScreen({ }) {
       }
     }
   };
-  
-  
+
+
 
   const moveToNextExercise = async () => {
     console.log("Before filtering:", exercisesBox);
@@ -531,13 +533,8 @@ export default function NoteScreen({ }) {
                     >
 
 
-                      <CheckBox
-                        value={!!selectedExercises[item.name]} // Set checkbox state
-                        onValueChange={() => toggleSelection(item.name)} // Update state when checked/unchecked
-                        tintColors={{ true: "#007AFF", false: "#aaa" }} // Change checkbox color
-                      />
+                      <CustomCheckbox value={!!selectedExercises[item.name]} setValue={() => toggleSelection(item.name)}></CustomCheckbox>
 
-                      {/* <View style={{backgroundColor: 'blue', borderRadius: 10, borderColor: 'black', width: 14, height: 14, marginHorizontal: 10, item.name == 'black' && backgroundColor: 'red'}></View> */}
 
                       <ExerciseCard
                         name={item.name}

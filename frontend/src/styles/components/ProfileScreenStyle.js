@@ -20,6 +20,21 @@ const ProfileScreenStyle = StyleSheet.create({
     height: 130,
     width: "48%",
   },
+  longbox: {
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 13,
+    width: '100%'
+
+  },
 
   profile_box: {
     padding: 20,
@@ -121,7 +136,7 @@ const ProfileScreenStyle = StyleSheet.create({
   },
   bmi_text: {
     color: colors.clr_slate,
-    fontSize: sizes.size_2xl,
+    fontSize: sizes.size_xl,
     fontWeight: "bold",
   },
   textContainer: {
@@ -193,6 +208,26 @@ const ProfileScreenStyle = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
+  table_header: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    backgroundColor : 'lightblue',
+    marginTop: 8
+  },
+  table_header_cell: {
+    borderWidth: 1,
+    textAlign: 'center'
+  },
+  table_row: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    backgroundColor : 'lightgray',
+
+  },
+  table_row_cell: {
+    borderWidth: 1,
+    backgroundColor : 'lightgray',
+  }
 });
 
 export default ProfileScreenStyle;

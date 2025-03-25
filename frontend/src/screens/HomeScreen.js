@@ -11,18 +11,6 @@ import { jwtDecode } from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import NoteScreenStyle from '../styles/components/NoteScreenStyle';
-const exercise = [
-  {
-    id: 1, date: '20/4', name: 'chest', sets: [
-      { setNumber: 1, weight: 20 }
-    ]
-  },
-  {
-    id: 2, date: '23/4', name: 'chest', sets: [
-      { setNumber: 1, weight: 20 }
-    ]
-  }
-]
 
 
 export default function HomeScreen({ }) {
@@ -32,6 +20,8 @@ export default function HomeScreen({ }) {
   const [selectedExercises, setSelectedExercises] = useState(null)
   const [isModalVisible, setModalVisible] = useState(false)
 
+
+  const formattedDate = (dateString) => new Date(dateString).toISOString().split("T")[0]
 
   useEffect(() => {
     fetchUser();
@@ -82,7 +72,7 @@ export default function HomeScreen({ }) {
     <View style={[HomeScreenStyle.container]}>
       <Header></Header>
       <View style={[styles.container, { alignItems: 'center' }]}>
-        
+
         <FlatList
           data={exercisesHistory}
           keyExtractor={(item) => item.date}
@@ -95,7 +85,7 @@ export default function HomeScreen({ }) {
                     setSelectedExercises(item.exercises)
                 }}>
 
-                <Text>Exercise date: {item.date}</Text>
+                <Text>Exercise date: {formattedDate(item.date)}</Text>
 
 
 
@@ -143,14 +133,21 @@ export default function HomeScreen({ }) {
                           <View style={[HomeScreenStyle.box, { width: 250, height: 400, }]}>
 
                             <Text>{item.name}</Text>
-                            {item.sets.map((set) => (
-                              <View>
-                                <Text>set number: {set.setNumber}</Text>
-                                <Text>weight: {set.weight}</Text>
-                                <Text>reps: {set.reps}</Text>
-                                <Text>timer: {set.timer}</Text>
-                              </View>
-                            ))}
+
+
+                            <FlatList
+                              nestedScrollEnabled={true}
+                              data={item.sets}
+                              keyExtractor={(set, index) => index.toString()}
+                              renderItem={({ item: set }) => (
+                                <View>
+                                  <Text>Set number: {set.setNumber}</Text>
+                                  <Text>Weight: {set.weight}</Text>
+                                  <Text>Reps: {set.reps}</Text>
+                                  <Text>Timer: {set.timer}</Text>
+                                </View>
+                              )}
+                            />
 
                           </View>
                         </View>

@@ -8,6 +8,7 @@ import {
   TextInput,
   Alert,
   Image,
+  FlatList
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -24,7 +25,8 @@ import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 
-export default function ProfileScreen({}) {
+
+export default function ProfileScreen({ }) {
   const [username, setUsername] = useState("");
   const [weight, setWeight] = useState(0);
   const [tempWeight, setTempWeight] = useState(0);
@@ -37,6 +39,7 @@ export default function ProfileScreen({}) {
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const navigation = useNavigation();
+
 
   useEffect(() => {
     fetchUser();
@@ -241,6 +244,33 @@ export default function ProfileScreen({}) {
     setModalVisibleFat(true);
   };
 
+  const calLBM = () => {
+    const lbm = weight * (1 - (fat / 100))
+    return lbm
+  }
+
+  const calBMR = (activityLevel) => {
+    // Men
+    const bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * 22)
+    if(activityLevel === "sedentary") {
+      return (bmr * 1.2).toString().split(".")[0]
+    }
+    else if(activityLevel === "lightly") {
+      return (bmr * 1.375).toString().split(".")[0]
+    }
+    else if(activityLevel === "moderately") {
+      return (bmr * 1.55).toString().split(".")[0]
+    }
+    else if(activityLevel === "highintensity") {
+      return (bmr * 1.725).toString().split(".")[0]
+    }
+    else if(activityLevel === "extraintensity") {
+      return (bmr * 1.9).toString().split(".")[0]
+    }
+    // const bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age) // True formula
+    return bmr.toString().split(".")[0]
+  }
+
   const calBmi = () => {
     if (height > 0) {
       const calculatedBmi = weight / Math.pow(height / 100, 2);
@@ -250,6 +280,10 @@ export default function ProfileScreen({}) {
       return "0.00";
     }
   };
+
+
+
+
   const getBMIColor = (value) => {
     if (value < 18) return "lightgreen";
     if (value >= 18 && value < 23) return "green";
@@ -282,8 +316,8 @@ export default function ProfileScreen({}) {
   return (
     <View style={[ProfileScreenStyle.container]}>
       <Header />
-      <ScrollView style={[styles.container]}>
-        <View style={{ gap: 20 }}>
+      <ScrollView style={[styles.container,]}>
+        <View style={{ gap: 20, paddingBottom: 60 }}>
           <View style={[ProfileScreenStyle.profile_box]}>
             <TouchableOpacity
               style={[ProfileScreenStyle.profile_button_edit]}
@@ -473,7 +507,7 @@ export default function ProfileScreen({}) {
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "#F9FFCF" }]}
+              style={[ProfileScreenStyle.box, { backgroundColor: "#F9FFCF", }]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
@@ -501,7 +535,7 @@ export default function ProfileScreen({}) {
                   <View>
                     <TouchableOpacity
                       style={[ProfileScreenStyle.button_edit]}
-                      onPress={handleEditWeight}
+                      onPress={handleEditFat}
                     >
                       <IconEntypo
                         name={"edit"}
@@ -662,14 +696,111 @@ export default function ProfileScreen({}) {
                 </View>
               </View>
             </View>
+          
+              <View
+                style={[ProfileScreenStyle.longbox, { backgroundColor: "#F3FF9D", }]}
+              >
+                <View style={[ProfileScreenStyle.inside_box]}>
+                  <View>
+                    <View>
+                      <View style={[ProfileScreenStyle.header_box_bmi]}>
+                        <Text style={[ProfileScreenStyle.bmi_text]}>Lean Body Mass (LBM)</Text>
+
+                      </View>
+
+                      <View
+                        style={{ flexDirection: "row", alignItems: "flex-end" }}
+                      >
+                        <Text style={[ProfileScreenStyle.body_text_number, { fontSize: sizes.size_base }]}>
+                          Estimate LBM: {calLBM()}
+                        </Text>
+                        <Text style={[ProfileScreenStyle.body_text_unit]}>KG</Text>
+                      </View>
+
+
+                    </View>
+                  </View>
+
+
+                </View>
+              </View>
+              <View
+                style={[ProfileScreenStyle.longbox, { backgroundColor: "#F3FF9D", marginBottom: 20 }]}
+              >
+                <View style={[ProfileScreenStyle.inside_box]}>
+                  <View>
+                    <View>
+                      <View style={[ProfileScreenStyle.header_box_bmi]}>
+                        <Text style={[ProfileScreenStyle.bmi_text]}>Basal Metabolic Rate (BMR)</Text>
+
+                      </View>
+
+                      <View
+                        style={{ flexDirection: "row", alignItems: "flex-end" }}
+                      >
+                        <Text style={[ProfileScreenStyle.body_text_number, { fontSize: sizes.size_base }]}>
+                          BMR: {calBMR()}
+                        </Text>
+                        <Text style={[ProfileScreenStyle.body_text_unit]}> Calories/day</Text>
+                      </View>
+
+                      <View style={ProfileScreenStyle.table_header}>
+                        <Text style={[ProfileScreenStyle.table_header_cell, { flex: 0.8 }]}>Activity level</Text>
+                        <Text style={[ProfileScreenStyle.table_header_cell, { flex: 0.2 }]}>Calorie</Text>
+                      </View>
+                      <View style={ProfileScreenStyle.table_row}>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Sedentary: little or no exercise</Text>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center' }]}> {calBMR("sedentary")}</Text>
+
+                      </View>
+                      <View style={ProfileScreenStyle.table_row}>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Exercise 1-3 times/week</Text>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center' }]}> {calBMR("lighly")}</Text>
+
+                      </View>
+
+                      <View style={ProfileScreenStyle.table_row}>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Exercise 4-5 times/week</Text>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center' ,alignItems: 'center' }]}> {calBMR("moderately")}</Text>
+
+                      </View>
+
+                      <View style={ProfileScreenStyle.table_row}>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Intense exercise 6-7 times/week</Text>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center' }]}> {calBMR("highintensity")}</Text>
+
+                      </View>
+                      <View style={ProfileScreenStyle.table_row}>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Very intense exercise daily, or physical job</Text>
+                        <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center',  }]}> {calBMR("extraintensity")}</Text>
+
+                      </View>
+
+
+
+
+
+
+
+                    </View>
+                  </View>
+
+
+               
+              </View>
+            </View>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonText]}
+              onPress={haddleLogout}
+            >
+              <Text style={[styles.buttonText]}>Log out</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={[styles.button, styles.buttonText]}
-            onPress={haddleLogout}
-          >
-            <Text style={[styles.buttonText]}>Log out</Text>
-          </TouchableOpacity>
+
         </View>
+
+
+
       </ScrollView>
     </View>
   );
