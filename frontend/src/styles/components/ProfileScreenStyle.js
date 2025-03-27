@@ -20,10 +20,10 @@ const ProfileScreenStyle = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
-    paddingHorizontal: 15,
-    paddingVertical: 13,
-    height: 130,
-    width: "48%",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    height: 110,
+    width: "49%",
   },
   longbox: {
     borderRadius: 10,
@@ -37,8 +37,7 @@ const ProfileScreenStyle = StyleSheet.create({
     elevation: 8,
     paddingHorizontal: 15,
     paddingVertical: 13,
-    width: '100%'
-
+    width: "100%",
   },
 
   profile_box: {
@@ -82,6 +81,8 @@ const ProfileScreenStyle = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+    alignItems: "center",
+    gap: 10,
   },
   username_text: {
     color: colors.clr_white,
@@ -90,8 +91,22 @@ const ProfileScreenStyle = StyleSheet.create({
     paddingTop: 50,
     fontWeight: "bold",
   },
+  button: {
+    width: 100,
+    height:30,
+    backgroundColor: colors.clr_blue,
+    borderRadius:20,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap:5
+  },
+  button__text: {
+    color: colors.clr_lightgray,
+    fontSize: sizes.size_2xs,
+  },
   inside_box: {
-    gap: 10,
+    gap: 5,
     justifyContent: "center",
   },
   button_edit: {
@@ -111,7 +126,7 @@ const ProfileScreenStyle = StyleSheet.create({
     alignItems: "center",
   },
   header_text: {
-    color: colors.clr_slate,
+    color: colors.clr_lightgray,
     fontSize: sizes.size_xs,
     fontWeight: "bold",
   },
@@ -119,10 +134,11 @@ const ProfileScreenStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  body_box: {
+  body__box: {
     flexDirection: "row",
-    gap: 10,
     alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
   },
   body__data__box: {
     flexDirection: "row",
@@ -132,19 +148,15 @@ const ProfileScreenStyle = StyleSheet.create({
   body_text_number: {
     fontSize: sizes.size_4xl,
     fontWeight: "bold",
+    color: colors.clr_white,
   },
   body_text_unit: {
     fontSize: sizes.size_2xs,
-    color: "gray",
-  },
-  body_box_bmi: {
-    flexDirection: "row",
-    gap: 10,
-    alignItems: "center",
+    color: colors.clr_lightgray,
   },
   bmi_text: {
-    color: colors.clr_slate,
-    fontSize: sizes.size_xl,
+    color: colors.clr_white,
+    fontSize: sizes.size_2xl,
     fontWeight: "bold",
   },
   textContainer: {
@@ -152,17 +164,14 @@ const ProfileScreenStyle = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
-  text: {
-    fontSize: sizes.size_3xs,
-    marginRight: 5,
-  },
+
   pointer: {
     borderLeftWidth: 3,
     borderRightWidth: 5,
     borderBottomWidth: 10,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
-    borderBottomColor: "black",
+    borderBottomColor: colors.clr_lightgray,
     position: "absolute",
     transform: [{ translateX: -3 }],
     marginTop: 4,
@@ -173,6 +182,7 @@ const ProfileScreenStyle = StyleSheet.create({
   },
   rangeLabel: {
     fontSize: sizes.size_3xs,
+    color: colors.clr_lightgray,
   },
   barColors: {
     flexDirection: "row",
@@ -216,24 +226,23 @@ const ProfileScreenStyle = StyleSheet.create({
     borderRadius: 5,
   },
   table_header: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderWidth: 1,
-    backgroundColor : 'lightblue',
-    marginTop: 8
+    backgroundColor: "lightblue",
+    marginTop: 8,
   },
   table_header_cell: {
     borderWidth: 1,
-    textAlign: 'center'
+    textAlign: "center",
   },
   table_row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderWidth: 1,
-    backgroundColor : 'lightgray',
-
+    backgroundColor: "lightgray",
   },
   table_row_cell: {
     borderWidth: 1,
-    backgroundColor : 'lightgray',
+    backgroundColor: "lightgray",
   },
   muscle__box: {
     borderRadius: 10,
@@ -249,13 +258,13 @@ const ProfileScreenStyle = StyleSheet.create({
     paddingVertical: 13,
     height: 130,
     width: "100%",
-    flexDirection:'row',
-    justifyContent:'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  muscle__inside__box:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-  }
+  muscle__inside__box: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 });
 
 export default ProfileScreenStyle;

@@ -61,6 +61,27 @@ const userUpdateController = {
       res.status(500).json({ message: "Server error" });
     }
   },
+  updateMuscle: async (req, res) => {
+    const { id } = req.params;
+    const { muscle } = req.body;
+
+    try {
+      const user = await userModel.findByIdAndUpdate(
+        id,
+        { muscle },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json(user)
+    } catch (error) {
+      console.error("Error updating muscle:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
   updatePicture: async (req,res) => {
     const { id } = req.params
     const { picture } = req.body

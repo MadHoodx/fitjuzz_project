@@ -20,7 +20,7 @@ export const sizes = {
 
 export const colors = {
   clr_white: "#FFFFFF",
-  clr_lightgray: "#EFEFEF",
+  clr_lightgray: "#D3D3D3",
   clr_gray: "#C0C0C0",
   clr_black: "#1C2431",
   clr_slate: "#334357",
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   button: {
-
     width: "100%",
     backgroundColor: colors.clr_blue,
     borderRadius: 20,

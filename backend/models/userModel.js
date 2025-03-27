@@ -27,8 +27,8 @@ const userSchema = new mongoose.Schema({
   weight: { type: Number, default: 0 },
   height: { type: Number, default: 0 },
   fat: { type: Number, default: 0 },
-  // tat: { type: Number, default: 0 },
 
+  muscle: { type: Number, default: 0 },
 
 
 },

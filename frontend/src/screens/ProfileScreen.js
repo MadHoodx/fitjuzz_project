@@ -8,7 +8,7 @@ import {
   TextInput,
   Alert,
   Image,
-  FlatList
+  FlatList,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -23,9 +23,11 @@ import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import moment from "moment";
+import { LineChart } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
+const screenWidth = Dimensions.get("window").width;
 
-
-export default function ProfileScreen({ }) {
+export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
   const [weight, setWeight] = useState(0);
   const [tempWeight, setTempWeight] = useState(0);
@@ -39,7 +41,6 @@ export default function ProfileScreen({ }) {
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const navigation = useNavigation();
-
 
   useEffect(() => {
     fetchUser();
@@ -247,31 +248,27 @@ export default function ProfileScreen({ }) {
   };
 
   const calLBM = () => {
-    const lbm = weight * (1 - (fat / 100))
-    return lbm
-  }
+    const lbm = weight * (1 - fat / 100);
+    return lbm;
+  };
 
   const calBMR = (activityLevel) => {
     // Men
-    const bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * 22)
+    const bmr = 88.362 + 13.397 * weight + 4.799 * height - 5.677 * 22;
     if (activityLevel === "sedentary") {
-      return (bmr * 1.2).toString().split(".")[0]
-    }
-    else if (activityLevel === "lightly") {
-      return (bmr * 1.375).toString().split(".")[0]
-    }
-    else if (activityLevel === "moderately") {
-      return (bmr * 1.55).toString().split(".")[0]
-    }
-    else if (activityLevel === "highintensity") {
-      return (bmr * 1.725).toString().split(".")[0]
-    }
-    else if (activityLevel === "extraintensity") {
-      return (bmr * 1.9).toString().split(".")[0]
+      return (bmr * 1.2).toString().split(".")[0];
+    } else if (activityLevel === "lightly") {
+      return (bmr * 1.375).toString().split(".")[0];
+    } else if (activityLevel === "moderately") {
+      return (bmr * 1.55).toString().split(".")[0];
+    } else if (activityLevel === "highintensity") {
+      return (bmr * 1.725).toString().split(".")[0];
+    } else if (activityLevel === "extraintensity") {
+      return (bmr * 1.9).toString().split(".")[0];
     }
     // const bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age) // True formula
-    return bmr.toString().split(".")[0]
-  }
+    return bmr.toString().split(".")[0];
+  };
 
   const calBmi = () => {
     if (height > 0) {
@@ -282,9 +279,6 @@ export default function ProfileScreen({ }) {
       return "0.00";
     }
   };
-
-
-
 
   const getBMIColor = (value) => {
     if (value < 18) return "lightgreen";
@@ -310,15 +304,28 @@ export default function ProfileScreen({ }) {
       return 80 + ((value - 30) / (40 - 30)) * 20; // 80-100%
     }
   };
-
   const calculatedBmi = parseFloat(calBmi());
   const pointerPosition = getPointerPosition(calculatedBmi);
   const bmiColor = getBMIColor(calculatedBmi);
+  const chartConfig = {
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  };
+  const data = {
+    labels: ["January", "February", "March", "April", "May"],
+    datasets: [
+      {
+        data: [20, 45, 28, 80, 99, 43],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+        strokeWidth: 2,
+      },
+    ],
+    legend: ["Your Weight"],
+  };
 
   return (
     <View style={[ProfileScreenStyle.container]}>
       <Header />
-      <ScrollView style={[styles.container,]}>
+      <ScrollView style={[styles.container]}>
         <View style={{ gap: 20, paddingBottom: 60 }}>
           <View style={[ProfileScreenStyle.profile_box]}>
             <TouchableOpacity
@@ -336,44 +343,56 @@ export default function ProfileScreen({ }) {
             </View>
             <View style={[ProfileScreenStyle.profile_container]}>
               <Text style={[ProfileScreenStyle.username_text]}>{username}</Text>
+              <View
+                style={[{ alignItems: "center", justifyContent: "center" }]}
+              >
+                <TouchableOpacity style={[ProfileScreenStyle.button]}>
+                  <IconMaterialCommunityIcons
+                    name={"plus-thick"}
+                    size={10}
+                    color={"white"}
+                  />
+                  <Text style={[ProfileScreenStyle.button__text]}>
+                    Insert data
+                  </Text>
+                </TouchableOpacity>
+                <Text style={[{ color: "red", fontSize: sizes.size_3xs }]}>
+                  If you don’t insert data we can’t analysis data
+                </Text>
+              </View>
             </View>
           </View>
           {/* Profile Box Section */}
 
           {/* Data health Section */}
           <Text style={[ProfileScreenStyle.text__topic]}>Health Metrics</Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 4 }}>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "#FCCEFF" }]}
+              style={[ProfileScreenStyle.box, { backgroundColor: "#3A506B" }]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>Weight</Text>
+                  <TouchableOpacity
+                    style={[
+                      ProfileScreenStyle.button_edit,
+                      { backgroundColor: "#4C688B" },
+                    ]}
+                    onPress={handleEditWeight}
+                  >
+                    <IconEntypo
+                      name={"edit"}
+                      size={8}
+                      color={colors.clr_white}
+                    />
+                  </TouchableOpacity>
                 </View>
-                <View style={[ProfileScreenStyle.body_box]}>
+                <View style={[ProfileScreenStyle.body__box]}>
                   <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {weight}
                     </Text>
                     <Text style={[ProfileScreenStyle.body_text_unit]}>KG</Text>
-                  </View>
-                </View>
-                <View style={[ProfileScreenStyle.footer__box]}>
-                  <View></View>
-                  <View>
-                    <TouchableOpacity
-                      style={[
-                        ProfileScreenStyle.button_edit,
-                        { backgroundColor: "#fab3ff" },
-                      ]}
-                      onPress={handleEditWeight}
-                    >
-                      <IconEntypo
-                        name={"edit"}
-                        size={8}
-                        color={colors.clr_white}
-                      />
-                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -423,36 +442,31 @@ export default function ProfileScreen({ }) {
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "#CFFFEF" }]}
+              style={[ProfileScreenStyle.box, { backgroundColor: "#5C946E" }]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>Height</Text>
+                  <TouchableOpacity
+                    style={[
+                      ProfileScreenStyle.button_edit,
+                      { backgroundColor: "#6FB184" },
+                    ]}
+                    onPress={handleEditHeight}
+                  >
+                    <IconEntypo
+                      name={"edit"}
+                      size={8}
+                      color={colors.clr_white}
+                    />
+                  </TouchableOpacity>
                 </View>
-                <View style={[ProfileScreenStyle.body_box]}>
+                <View style={[ProfileScreenStyle.body__box]}>
                   <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {height}
                     </Text>
                     <Text style={[ProfileScreenStyle.body_text_unit]}>CM</Text>
-                  </View>
-                </View>
-                <View style={[ProfileScreenStyle.footer__box]}>
-                  <View></View>
-                  <View>
-                    <TouchableOpacity
-                      style={[
-                        ProfileScreenStyle.button_edit,
-                        { backgroundColor: "#9dfadb" },
-                      ]}
-                      onPress={handleEditHeight}
-                    >
-                      <IconEntypo
-                        name={"edit"}
-                        size={8}
-                        color={colors.clr_white}
-                      />
-                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -502,35 +516,33 @@ export default function ProfileScreen({ }) {
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "#F9FFCF", }]}
+              style={[ProfileScreenStyle.box, { backgroundColor: "#4B778D" }]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>
                     Body fat %
                   </Text>
+                  <TouchableOpacity
+                    style={[
+                      ProfileScreenStyle.button_edit,
+                      { backgroundColor: "#5A8DA7" },
+                    ]}
+                    onPress={handleEditWeight}
+                  >
+                    <IconEntypo
+                      name={"edit"}
+                      size={8}
+                      color={colors.clr_white}
+                    />
+                  </TouchableOpacity>
                 </View>
-                <View style={[ProfileScreenStyle.body_box]}>
+                <View style={[ProfileScreenStyle.body__box]}>
                   <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {fat}
                     </Text>
                     <Text style={[ProfileScreenStyle.body_text_unit]}>%</Text>
-                  </View>
-                </View>
-                <View style={[ProfileScreenStyle.footer__box]}>
-                  <View></View>
-                  <View>
-                    <TouchableOpacity
-                      style={[ProfileScreenStyle.button_edit]}
-                      onPress={handleEditWeight}
-                    >
-                      <IconEntypo
-                        name={"edit"}
-                        size={8}
-                        color={colors.clr_white}
-                      />
-                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -580,13 +592,13 @@ export default function ProfileScreen({ }) {
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "#F3FF9D" }]}
+              style={[ProfileScreenStyle.box, { backgroundColor: "#6A0572" }]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View>
                   <View>
                     <View style={[ProfileScreenStyle.header_box_bmi]}>
-                      <Text style={[ProfileScreenStyle.bmi_text]}>BMI</Text>
+                      <Text style={[ProfileScreenStyle.header_text]}>BMI</Text>
                       <View style={ProfileScreenStyle.textContainer}>
                         {calculatedBmi < 18 && (
                           <IconMaterialCommunityIcons
@@ -684,111 +696,230 @@ export default function ProfileScreen({ }) {
                 </View>
               </View>
             </View>
-
-            <View
-              style={[ProfileScreenStyle.longbox, { backgroundColor: "#F3FF9D", }]}
-            >
-              <View style={[ProfileScreenStyle.inside_box]}>
-                <View>
-                  <View>
-                    <View style={[ProfileScreenStyle.header_box_bmi]}>
-                      <Text style={[ProfileScreenStyle.bmi_text]}>Lean Body Mass (LBM)</Text>
-
-                    </View>
-
-                    <View
-                      style={{ flexDirection: "row", alignItems: "flex-end" }}
-                    >
-                      <Text style={[ProfileScreenStyle.body_text_number, { fontSize: sizes.size_base }]}>
-                        Estimate LBM: {calLBM()}
-                      </Text>
-                      <Text style={[ProfileScreenStyle.body_text_unit]}>KG</Text>
-                    </View>
-
-
-                  </View>
-                </View>
-
-
-              </View>
-            </View>
-            <View
-              style={[ProfileScreenStyle.longbox, { backgroundColor: "#F3FF9D", marginBottom: 20 }]}
-            >
-              <View style={[ProfileScreenStyle.inside_box]}>
-                <View>
-                  <View>
-                    <View style={[ProfileScreenStyle.header_box_bmi]}>
-                      <Text style={[ProfileScreenStyle.bmi_text]}>Basal Metabolic Rate (BMR)</Text>
-
-                    </View>
-
-                    <View
-                      style={{ flexDirection: "row", alignItems: "flex-end" }}
-                    >
-                      <Text style={[ProfileScreenStyle.body_text_number, { fontSize: sizes.size_base }]}>
-                        BMR: {calBMR()}
-                      </Text>
-                      <Text style={[ProfileScreenStyle.body_text_unit]}> Calories/day</Text>
-                    </View>
-
-                    <View style={ProfileScreenStyle.table_header}>
-                      <Text style={[ProfileScreenStyle.table_header_cell, { flex: 0.8 }]}>Activity level</Text>
-                      <Text style={[ProfileScreenStyle.table_header_cell, { flex: 0.2 }]}>Calorie</Text>
-                    </View>
-                    <View style={ProfileScreenStyle.table_row}>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Sedentary: little or no exercise</Text>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center' }]}> {calBMR("sedentary")}</Text>
-
-                    </View>
-                    <View style={ProfileScreenStyle.table_row}>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Exercise 1-3 times/week</Text>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center' }]}> {calBMR("lighly")}</Text>
-
-                    </View>
-
-                    <View style={ProfileScreenStyle.table_row}>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Exercise 4-5 times/week</Text>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center', alignItems: 'center' }]}> {calBMR("moderately")}</Text>
-
-                    </View>
-
-                    <View style={ProfileScreenStyle.table_row}>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Intense exercise 6-7 times/week</Text>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center' }]}> {calBMR("highintensity")}</Text>
-
-                    </View>
-                    <View style={ProfileScreenStyle.table_row}>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.8 }]}>Very intense exercise daily, or physical job</Text>
-                      <Text style={[ProfileScreenStyle.table_row_cell, { flex: 0.2, textAlign: 'center', }]}> {calBMR("extraintensity")}</Text>
-
-                    </View>
-
-                  </View>
-                </View>
-
-              </View>
-
-            </View>
             <View
               style={[
                 ProfileScreenStyle.muscle__box,
-                { backgroundColor: "red" },
+                { backgroundColor: "#4D3170" },
               ]}
             >
               <View style={{ gap: 10 }}>
                 <View style={[ProfileScreenStyle.header_box]}>
                   <Text style={[ProfileScreenStyle.header_text]}>Muscle</Text>
                 </View>
-                <View style={[ProfileScreenStyle.body_box]}>
+                <View style={[ProfileScreenStyle.body__box]}>
                   <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {fat}
                     </Text>
                     <Text style={[ProfileScreenStyle.body_text_unit]}>%</Text>
                   </View>
+                  <IconMaterialCommunityIcons
+                    name={"human"}
+                    size={50}
+                    color={"white"}
+                  />
+                  <View>
+                    <Text>Arm</Text>
+                  </View>
                 </View>
               </View>
+            </View>
+            <View
+              style={[
+                ProfileScreenStyle.longbox,
+                { backgroundColor: "#F3FF9D" },
+              ]}
+            >
+              <View style={[ProfileScreenStyle.inside_box]}>
+                <View>
+                  <View>
+                    <View style={[ProfileScreenStyle.header_box_bmi]}>
+                      <Text style={[ProfileScreenStyle.bmi_text]}>
+                        Lean Body Mass (LBM)
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{ flexDirection: "row", alignItems: "flex-end" }}
+                    >
+                      <Text
+                        style={[
+                          ProfileScreenStyle.body_text_number,
+                          { fontSize: sizes.size_base },
+                        ]}
+                      >
+                        Estimate LBM: {calLBM()}
+                      </Text>
+                      <Text style={[ProfileScreenStyle.body_text_unit]}>
+                        KG
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={[
+                ProfileScreenStyle.longbox,
+                { backgroundColor: "#F3FF9D", marginBottom: 20 },
+              ]}
+            >
+              <View style={[ProfileScreenStyle.inside_box]}>
+                <View>
+                  <View>
+                    <View style={[ProfileScreenStyle.header_box_bmi]}>
+                      <Text style={[ProfileScreenStyle.bmi_text]}>
+                        Basal Metabolic Rate (BMR)
+                      </Text>
+                    </View>
+                    <View
+                      style={{ flexDirection: "row", alignItems: "flex-end" }}
+                    >
+                      <Text
+                        style={[
+                          ProfileScreenStyle.body_text_number,
+                          { fontSize: sizes.size_base },
+                        ]}
+                      >
+                        BMR: {calBMR()}
+                      </Text>
+                      <Text style={[ProfileScreenStyle.body_text_unit]}>
+                        {" "}
+                        Calories/day
+                      </Text>
+                    </View>
+
+                    <View style={ProfileScreenStyle.table_header}>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_header_cell,
+                          { flex: 0.8 },
+                        ]}
+                      >
+                        Activity level
+                      </Text>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_header_cell,
+                          { flex: 0.2 },
+                        ]}
+                      >
+                        Calorie
+                      </Text>
+                    </View>
+                    <View style={ProfileScreenStyle.table_row}>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.8 },
+                        ]}
+                      >
+                        Sedentary: little or no exercise
+                      </Text>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.2, textAlign: "center" },
+                        ]}
+                      >
+                        {" "}
+                        {calBMR("sedentary")}
+                      </Text>
+                    </View>
+                    <View style={ProfileScreenStyle.table_row}>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.8 },
+                        ]}
+                      >
+                        Exercise 1-3 times/week
+                      </Text>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.2, textAlign: "center" },
+                        ]}
+                      >
+                        {" "}
+                        {calBMR("lighly")}
+                      </Text>
+                    </View>
+
+                    <View style={ProfileScreenStyle.table_row}>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.8 },
+                        ]}
+                      >
+                        Exercise 4-5 times/week
+                      </Text>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          {
+                            flex: 0.2,
+                            textAlign: "center",
+                            alignItems: "center",
+                          },
+                        ]}
+                      >
+                        {" "}
+                        {calBMR("moderately")}
+                      </Text>
+                    </View>
+
+                    <View style={ProfileScreenStyle.table_row}>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.8 },
+                        ]}
+                      >
+                        Intense exercise 6-7 times/week
+                      </Text>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.2, textAlign: "center" },
+                        ]}
+                      >
+                        {" "}
+                        {calBMR("highintensity")}
+                      </Text>
+                    </View>
+                    <View style={ProfileScreenStyle.table_row}>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.8 },
+                        ]}
+                      >
+                        Very intense exercise daily, or physical job
+                      </Text>
+                      <Text
+                        style={[
+                          ProfileScreenStyle.table_row_cell,
+                          { flex: 0.2, textAlign: "center" },
+                        ]}
+                      >
+                        {" "}
+                        {calBMR("extraintensity")}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View>
+              <LineChart
+                data={data}
+                width={screenWidth}
+                height={220}
+                chartConfig={chartConfig}
+              />
             </View>
             <Text style={{ color: "white" }}>
               Last update : {moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")}{" "}
@@ -812,11 +943,7 @@ export default function ProfileScreen({ }) {
             </>
             {/* Logout button Section */}
           </View>
-
         </View>
-
-
-
       </ScrollView>
     </View>
   );

@@ -55,7 +55,7 @@ export default function Header({ }) {
       setQuote(motivationalQuote[3]);
       setEmoji("moon");
     } else {
-      setGreeting("Time to bed");
+      setGreeting("Hey, Time to bed");
       setQuote(motivationalQuote[4]);
       setEmoji("battery-charging");
     }
@@ -128,7 +128,7 @@ export default function Header({ }) {
                   { fontSize: sizes.size_lg, fontWeight: "bold" },
                 ]}
               >
-                {greeting}: {username}
+                {greeting} {username}
               </Text>
               <Text
                 style={{
