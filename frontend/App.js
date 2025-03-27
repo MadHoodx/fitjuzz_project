@@ -15,13 +15,12 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import MainScreen from './src/screens/MainScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import ExerciseScreen from './src/screens/ExerciseScreen'
+import GuideScreen from './src/screens/GuideScreen'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
-
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -32,7 +31,6 @@ function MyTabs() {
         },
         tabBarActiveTintColor: colors.clr_brightblue,
         tabBarInActiveTintColor: colors.clr_gray,
-
       })}
     >
       <Tab.Screen
@@ -47,12 +45,12 @@ function MyTabs() {
       />
 
       <Tab.Screen
-        name="Exercise"
-        component={ExerciseScreen}
+        name="Guide"
+        component={GuideScreen}
         options={{
-          title: "Exercise",
+          title: "Guide",
           tabBarIcon: ({ color, size }) => {
-            return <Icon name={"sports-gymnastics"} size={size} color={color} />;
+            return <Icon name={"menu-book"} size={size} color={color} />;
           },
         }}
       />
@@ -93,19 +91,17 @@ function MyTabs() {
 
 function MyStack() {
   return (
-
     <Stack.Navigator screenOptions={{ headerShown: false }}
       initialRouteName='Welcome'>
-
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Main" component={MainScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="Note" component={NoteScreen} />
-  
+      <Stack.Screen name="Exercise" component={ExerciseScreen} />
+      <Stack.Screen name="Guide" component={GuideScreen} />
     </Stack.Navigator>
-
   );
 }
 
@@ -123,8 +119,5 @@ const app = StyleSheet.create({
     borderColor: 'black',
     shadowColor: 'white',
     elevation: 16
-
-
-
   },
 });
