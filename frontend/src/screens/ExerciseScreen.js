@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import Header from '../components/Header';
 import ExerciseScreenStyle from '../styles/components/ExerciseScreenStyle';
+import ExerciseDetailsModal from '../components/ExerciseDetailsModal';
 
 export default function ExerciseScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,9 +14,20 @@ export default function ExerciseScreen({ navigation }) {
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState(null);
 
   const categories = ['All', 'Leg', 'ABS', 'Back', 'Arms', 'Shoulders', 'Glutes'];
 
+  const openExerciseDetails = (exercise) => {
+    setSelectedExercise(exercise);
+    setModalVisible(true);
+  };
+
+  const closeExerciseDetails = () => {
+    setModalVisible(false);
+  };
 
   useEffect(() => {
     fetchExercises();
@@ -83,6 +95,15 @@ export default function ExerciseScreen({ navigation }) {
   return (
     <View style={[ExerciseScreenStyle.container]}>
       <Header />
+      
+      
+      <TouchableOpacity 
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
+      
       <View style={[ExerciseScreenStyle.content]}>
         <View style={ExerciseScreenStyle.searchSection}>
           <Text style={ExerciseScreenStyle.sectionTitle}>EXERCISE</Text>
@@ -160,6 +181,7 @@ export default function ExerciseScreen({ navigation }) {
                   <TouchableOpacity 
                     key={exercise._id} 
                     style={ExerciseScreenStyle.exerciseItem}
+                    onPress={() => openExerciseDetails(exercise)}
                   >
                     <Image 
                       source={{uri: exercise.picture || 'https://images.squarespace-cdn.com/content/v1/64c8035f53e9a56246c7c294/1723420893761-XYJVWOXL91SW5442P6RM/maxresdefault-29-1024x576.jpg'}} 
@@ -175,6 +197,7 @@ export default function ExerciseScreen({ navigation }) {
                     </View>
                     <TouchableOpacity 
                       style={ExerciseScreenStyle.infoButton}
+                      onPress={() => openExerciseDetails(exercise)}
                     >
                       <Ionicons name="information-circle-outline" size={24} color="white" />
                     </TouchableOpacity>
@@ -186,6 +209,23 @@ export default function ExerciseScreen({ navigation }) {
           </ScrollView>
         )}
       </View>
+
+      <ExerciseDetailsModal 
+        visible={modalVisible}
+        exercise={selectedExercise}
+        onClose={closeExerciseDetails}
+      />
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  backButton: {
+    position: 'absolute',
+    top: 20,
+    left: 15,
+    padding: 8,
+    zIndex: 10,
+  }
+});
