@@ -46,14 +46,15 @@ const ProfileScreenStyle = StyleSheet.create({
     alignItems: "center",
   },
   profile: {
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderWidth: 2,
     borderRadius: 100,
     position: "absolute",
     top: 2,
     zIndex: 1,
     overflow: "hidden",
+    backgroundColor: colors.clr_white,
   },
   profile_button_edit: {
     width: 20,
@@ -88,18 +89,18 @@ const ProfileScreenStyle = StyleSheet.create({
     color: colors.clr_white,
     fontSize: sizes.size_lg,
     textAlign: "center",
-    paddingTop: 50,
+    paddingTop: 40,
     fontWeight: "bold",
   },
   button: {
     width: 100,
-    height:30,
+    height: 30,
     backgroundColor: colors.clr_blue,
-    borderRadius:20,
+    borderRadius: 20,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap:5
+    gap: 5,
   },
   button__text: {
     color: colors.clr_lightgray,
@@ -164,7 +165,6 @@ const ProfileScreenStyle = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
-
   pointer: {
     borderLeftWidth: 3,
     borderRightWidth: 5,
@@ -202,29 +202,41 @@ const ProfileScreenStyle = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: 315,
-    height: 550,
-    backgroundColor: "black",
+    height: 540,
+    backgroundColor: colors.clr_background_modal,
+    alignItems: "center",
+    justifyContent: "center",
+    
   },
   modal_header_text: {
     fontSize: sizes.size_xl,
     fontWeight: "bold",
-    marginBottom: 10,
-    color: "white",
+    color: colors.clr_lightgray,
+    textAlign:'center'
   },
-  modal_input_box: {
-    borderBottomWidth: 1,
-    borderColor: "gray",
-    marginBottom: 20,
-  },
-  modal_text_input: {
-    fontSize: sizes.size_2xl,
-    fontWeight: "bold",
-    marginBottom: 5,
+  modal_subtitle:{
+    color:colors.clr_lightgray,
+    textAlign:'center'
   },
   modal_button: {
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
+    backgroundColor:colors.clr_brightblue,
+    width:110,
+    justifyContent:'center',
+    alignItems:'center'
   },
+  modal_sex_button: {
+    width: 110,
+    height: 110,
+    borderRadius: 100,
+    alignItems: "center",
+    backgroundColor:colors.clr_graybutton
+  },
+  selectedSex: {
+    backgroundColor: colors.clr_brightblue, 
+  },
+  
   table_header: {
     flexDirection: "row",
     borderWidth: 1,
@@ -264,6 +276,30 @@ const ProfileScreenStyle = StyleSheet.create({
   muscle__inside__box: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  dumbbell_top: {
+    position: "absolute",
+    top: 0,
+    right: 40,
+    opacity: 0.1,
+    zIndex: 0,
+    transform: [{ rotate: "-55deg" }],
+  },
+  dumbbell_middle: {
+    position: "absolute",
+    top: 20,
+    right: 80,
+    opacity: 0.2,
+    zIndex: 0,
+    transform: [{ rotate: "45deg" }],
+  },
+  dumbbell_bottom: {
+    position: "absolute",
+    top: 60,
+    right: 40,
+    opacity: 0.3,
+    zIndex: 0,
+    transform: [{ rotate: "-50deg" }],
   },
 });
 

@@ -18,6 +18,7 @@ import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
@@ -25,6 +26,7 @@ import axios from "axios";
 import moment from "moment";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import ScrollPicker from "react-native-wheel-scrollview-picker";
 const screenWidth = Dimensions.get("window").width;
 
 export default function ProfileScreen({}) {
@@ -35,11 +37,18 @@ export default function ProfileScreen({}) {
   const [tempHeight, setTempHeight] = useState(0);
   const [fat, setFat] = useState(0);
   const [tempFat, setTempFat] = useState(0);
+  const [sex, setSex] = useState(null);
+  const [tempSex, setTempSex] = useState(null);
+  const [age, setAge] = useState(0);
+  const [tempAge, setTempAge] = useState(0);
   const [updatedAt, setUpdatedAt] = useState("");
   const [isModalVisibleWeight, setModalVisibleWeight] = useState(false);
   const [isModalVisibleHeight, setModalVisibleHeight] = useState(false);
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
+  const [isModalVisibleSex, setModalVisibleSex] = useState(false);
+  const [isModalVisibleAge, setModalVisibleAge] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const ages = Array.from({ length: 83 }, (_, index) => 18 + index);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -137,6 +146,43 @@ export default function ProfileScreen({}) {
       Alert.alert("Error", "An error occurred while updating fat.", error);
     }
   };
+  const updateSexForUser = async (allUserToken) => {
+    const decodedAllUserToken = jwtDecode(allUserToken);
+    const userId = decodedAllUserToken.userId;
+
+    try {
+      await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateSex`,
+        {
+          sex: tempSex,
+        }
+      );
+      setSex(tempSex);
+      setModalVisibleSex(false);
+      setModalVisibleAge(true);
+    } catch (error) {
+      console.error("Error updating sex:", error);
+      Alert.alert("Error", "An error occurred while updating sex.", error);
+    }
+  };
+  const updateAgeForUser = async (allUserToken) => {
+    const decodedAllUserToken = jwtDecode(allUserToken);
+    const userId = decodedAllUserToken.userId;
+
+    try {
+      await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateAge`,
+        {
+          age: parseFloat(tempAge),
+        }
+      );
+      setSex(tempAge);
+      setModalVisibleAge(false);
+    } catch (error) {
+      console.error("Error updating age:", error);
+      Alert.alert("Error", "An error occurred while updating age.", error);
+    }
+  };
 
   const handleWeightUpdate = async () => {
     const userToken = await AsyncStorage.getItem("userToken");
@@ -177,6 +223,32 @@ export default function ProfileScreen({}) {
       await updateFatForUser(userGoogleToken);
     } else if (userXToken) {
       await updateFatForUser(userXToken);
+    }
+  };
+  const handleSexUpdate = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+    const userXToken = await AsyncStorage.getItem("userXToken");
+
+    if (userToken) {
+      await updateSexForUser(userToken);
+    } else if (userGoogleToken) {
+      await updateSexForUser(userGoogleToken);
+    } else if (userXToken) {
+      await updateSexForUser(userXToken);
+    }
+  };
+  const handleAgeUpdate = async () => {
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userGoogleToken = await AsyncStorage.getItem("userGoogleToken");
+    const userXToken = await AsyncStorage.getItem("userXToken");
+
+    if (userToken) {
+      await updateAgeForUser(userToken);
+    } else if (userGoogleToken) {
+      await updateAgeForUser(userGoogleToken);
+    } else if (userXToken) {
+      await updateAgeForUser(userXToken);
     }
   };
 
@@ -246,6 +318,9 @@ export default function ProfileScreen({}) {
   const handleEditFat = () => {
     setModalVisibleFat(true);
   };
+  const handleEditSex = () => {
+    setModalVisibleSex(true);
+  };
 
   const calLBM = () => {
     const lbm = weight * (1 - fat / 100);
@@ -287,6 +362,13 @@ export default function ProfileScreen({}) {
     if (value >= 25 && value < 30) return "orange";
     if (value >= 30) return "red";
   };
+  const getBMIIcon = (value) => {
+    if (value < 18) return "emoticon-sad";
+    if (value >= 18 && value < 23) return "emoticon-happy";
+    if (value >= 23 && value < 25) return "emoticon-confused";
+    if (value >= 25 && value < 30) return "emoticon-angry";
+    if (value >= 30) return "emoticon-dead";
+  };
 
   const getPointerPosition = (value) => {
     if (value < 0) return 0;
@@ -322,6 +404,30 @@ export default function ProfileScreen({}) {
     legend: ["Your Weight"],
   };
 
+  const Dumbbells = () => {
+    return (
+      <View style={[{position: "absolute", right:0, top:0}]}>
+        <IconFontAwesome5
+          name={"dumbbell"}
+          size={30}
+          color={colors.clr_lightgray}
+          style={ProfileScreenStyle.dumbbell_top}
+        />
+        <IconFontAwesome5
+          name={"dumbbell"}
+          size={30}
+          color={colors.clr_lightgray}
+          style={ProfileScreenStyle.dumbbell_middle}
+        />
+        <IconFontAwesome5
+          name={"dumbbell"}
+          size={40}
+          color={colors.clr_lightgray}
+          style={ProfileScreenStyle.dumbbell_bottom}
+        />
+      </View>
+    );
+  };
   return (
     <View style={[ProfileScreenStyle.container]}>
       <Header />
@@ -346,7 +452,10 @@ export default function ProfileScreen({}) {
               <View
                 style={[{ alignItems: "center", justifyContent: "center" }]}
               >
-                <TouchableOpacity style={[ProfileScreenStyle.button]}>
+                <TouchableOpacity
+                  style={[ProfileScreenStyle.button]}
+                  onPress={handleEditSex}
+                >
                   <IconMaterialCommunityIcons
                     name={"plus-thick"}
                     size={10}
@@ -362,6 +471,141 @@ export default function ProfileScreen({}) {
               </View>
             </View>
           </View>
+          <Modal
+            visible={isModalVisibleSex}
+            animationType="slide"
+            transparent={true}
+          >
+            <View style={ProfileScreenStyle.box_modal}>
+              <View style={[ProfileScreenStyle.inside_box_modal, { gap: 70 }]}>
+              <Dumbbells/>
+                <View>
+                  <Text style={ProfileScreenStyle.modal_header_text}>
+                    Tell us about yourself!
+                  </Text>
+                  <Text style={ProfileScreenStyle.modal_subtitle}>
+                    You can always change your height.
+                  </Text>
+                </View>
+                <View style={[{ gap: 20 }]}>
+                  <TouchableOpacity
+                    style={[
+                      ProfileScreenStyle.modal_sex_button,
+                      tempSex === "male" && ProfileScreenStyle.selectedSex,
+                    ]}
+                    onPress={() => setTempSex("male")}
+                  >
+                    <Text style={[{ fontSize: 60, color: colors.clr_white }]}>
+                      ♂
+                    </Text>
+                    <Text
+                      style={[
+                        { fontSize: sizes.size_xs, color: colors.clr_white },
+                      ]}
+                    >
+                      Male
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      ProfileScreenStyle.modal_sex_button,
+                      tempSex === "female" && ProfileScreenStyle.selectedSex,
+                    ]}
+                    onPress={() => setTempSex("female")}
+                  >
+                    <Text style={[{ fontSize: 60, color: colors.clr_white }]}>
+                      ♀
+                    </Text>
+                    <Text
+                      style={[
+                        { fontSize: sizes.size_xs, color: colors.clr_white },
+                      ]}
+                    >
+                      Female
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <TouchableOpacity
+                    style={ProfileScreenStyle.modal_button}
+                    onPress={handleSexUpdate}
+                  >
+                    <Text
+                      style={[
+                        { fontSize: sizes.size_xs, color: colors.clr_white },
+                      ]}
+                    >
+                      Done
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal
+            visible={isModalVisibleAge}
+            animationType="slide"
+            transparent={true}
+          >
+            <View style={ProfileScreenStyle.box_modal}>
+              <View style={[ProfileScreenStyle.inside_box_modal, { gap: 70 }]}>
+                <Dumbbells/>
+                <View>
+                  <Text style={ProfileScreenStyle.modal_header_text}>
+                    How old are you?
+                  </Text>
+                  <Text style={ProfileScreenStyle.modal_subtitle}>
+                    You can't change your age.
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 250,
+                    },
+                  ]}
+                >
+                  <ScrollPicker
+                    dataSource={ages}
+                    selectedIndex={1}
+                    renderItem={(data, index) => (
+                      <Text
+                        style={{
+                          fontSize: tempAge === data ? 40 : 22,
+                          color: tempAge === data ? colors.clr_brightblue : "#fff", 
+                          fontWeight: tempAge === data ? "bold" : "normal",
+                        }}
+                      >
+                        {data}
+                      </Text>
+                    )}
+                    onValueChange={setTempAge}
+                    wrapperBackground={"transparent"}
+                    itemHeight={50}
+                    highlightColor={"#d8d8d8"}
+                    highlightBorderWidth={2}
+                    highlightWidth={50}
+                  />
+                </View>
+                <View>
+                  <TouchableOpacity
+                    style={ProfileScreenStyle.modal_button}
+                    onPress={handleAgeUpdate}
+                  >
+                    <Text
+                      style={[
+                        { fontSize: sizes.size_xs, color: colors.clr_white },
+                      ]}
+                    >
+                      Done
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
           {/* Profile Box Section */}
 
           {/* Data health Section */}
@@ -600,41 +844,11 @@ export default function ProfileScreen({}) {
                     <View style={[ProfileScreenStyle.header_box_bmi]}>
                       <Text style={[ProfileScreenStyle.header_text]}>BMI</Text>
                       <View style={ProfileScreenStyle.textContainer}>
-                        {calculatedBmi < 18 && (
-                          <IconMaterialCommunityIcons
-                            name={"emoticon-sad"}
-                            size={30}
-                            color={bmiColor}
-                          />
-                        )}
-                        {calculatedBmi >= 18 && calculatedBmi < 23 && (
-                          <IconMaterialCommunityIcons
-                            name={"emoticon-happy"}
-                            size={30}
-                            color={bmiColor}
-                          />
-                        )}
-                        {calculatedBmi >= 23 && calculatedBmi < 25 && (
-                          <IconMaterialCommunityIcons
-                            name={"emoticon-confused"}
-                            size={30}
-                            color={bmiColor}
-                          />
-                        )}
-                        {calculatedBmi >= 25 && calculatedBmi < 30 && (
-                          <IconMaterialCommunityIcons
-                            name={"emoticon-angry"}
-                            size={30}
-                            color={bmiColor}
-                          />
-                        )}
-                        {calculatedBmi >= 30 && (
-                          <IconMaterialCommunityIcons
-                            name={"emoticon-dead"}
-                            size={30}
-                            color={bmiColor}
-                          />
-                        )}
+                        <IconMaterialCommunityIcons
+                          name={getBMIIcon(calculatedBmi)}
+                          size={30}
+                          color={bmiColor}
+                        />
                       </View>
                     </View>
                     <>
@@ -704,60 +918,38 @@ export default function ProfileScreen({}) {
             >
               <View style={{ gap: 10 }}>
                 <View style={[ProfileScreenStyle.header_box]}>
-                  <Text style={[ProfileScreenStyle.header_text]}>Muscle</Text>
+                  <Text style={[ProfileScreenStyle.header_text]}>
+                    Lean Body Mass (LBM)
+                  </Text>
                 </View>
                 <View style={[ProfileScreenStyle.body__box]}>
                   <View style={[ProfileScreenStyle.body__data__box]}>
                     <Text style={[ProfileScreenStyle.body_text_number]}>
-                      {fat}
+                      100{/* {calLBM()} */}
                     </Text>
-                    <Text style={[ProfileScreenStyle.body_text_unit]}>%</Text>
+                    <Text style={[ProfileScreenStyle.body_text_unit]}>KG</Text>
                   </View>
                   <IconMaterialCommunityIcons
                     name={"human"}
                     size={50}
                     color={"white"}
                   />
-                  <View>
-                    <Text>Arm</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View
-              style={[
-                ProfileScreenStyle.longbox,
-                { backgroundColor: "#F3FF9D" },
-              ]}
-            >
-              <View style={[ProfileScreenStyle.inside_box]}>
-                <View>
-                  <View>
-                    <View style={[ProfileScreenStyle.header_box_bmi]}>
-                      <Text style={[ProfileScreenStyle.bmi_text]}>
-                        Lean Body Mass (LBM)
-                      </Text>
-                    </View>
-
-                    <View
-                      style={{ flexDirection: "row", alignItems: "flex-end" }}
+                  <View style={[{ width: 60, height: 70 }]}>
+                    <Text
+                      style={[
+                        {
+                          color: colors.clr_lightgray,
+                          fontSize: sizes.size_2xs,
+                        },
+                      ]}
                     >
-                      <Text
-                        style={[
-                          ProfileScreenStyle.body_text_number,
-                          { fontSize: sizes.size_base },
-                        ]}
-                      >
-                        Estimate LBM: {calLBM()}
-                      </Text>
-                      <Text style={[ProfileScreenStyle.body_text_unit]}>
-                        KG
-                      </Text>
-                    </View>
+                      Armdsadasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdsadas
+                    </Text>
                   </View>
                 </View>
               </View>
             </View>
+
             <View
               style={[
                 ProfileScreenStyle.longbox,
@@ -920,16 +1112,16 @@ export default function ProfileScreen({}) {
                 height={220}
                 chartConfig={chartConfig}
               />
+              <Text style={{ color: "white" }}>
+                Last update : {moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")}{" "}
+              </Text>
             </View>
-            <Text style={{ color: "white" }}>
-              Last update : {moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")}{" "}
-            </Text>
             {/* Data health Section */}
 
             {/* Analysist Section */}
-            <>
+            <View>
               <Text style={[ProfileScreenStyle.text__topic]}>Analysist</Text>
-            </>
+            </View>
             {/* Analysist Section */}
 
             {/* Logout button Section */}

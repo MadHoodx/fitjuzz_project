@@ -15,12 +15,12 @@ const GuideScreenStyle = StyleSheet.create({
   },
   titleSection: {
     marginVertical: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   mainTitle: {
     marginTop: 25,
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: sizes.size_xl,
+    fontWeight: "bold",
     color: colors.clr_white,
     marginBottom: 25,
   },
@@ -28,32 +28,31 @@ const GuideScreenStyle = StyleSheet.create({
     height: 130,
     borderRadius: 8,
     marginBottom: 8,
-    overflow: 'hidden',
+    overflow: "hidden",
     elevation: 3,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
   categoryImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    opacity: 0.6,
   },
   categoryOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    position: "absolute",
+    width:'100%',
+    height:'100%',
+    justifyContent:'center',
+    paddingLeft:15
   },
   categoryTitle: {
     color: colors.clr_white,
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: sizes.size_lg,
+    fontWeight: "bold",
   },
 });
 
-export default GuideScreenStyle; 
+export default GuideScreenStyle;
