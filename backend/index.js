@@ -17,9 +17,10 @@ const exerciseModel = require('./models/exerciseModel')
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  dbName: 'fitjuzz'
 })
 .then(() => {
-  console.log('Connected to MongoDB');
+  console.log('Connected to MongoDB (fitjuzz database)');
 
   // Array of 10 exercises
   const exercises = [
@@ -36,9 +37,22 @@ mongoose.connect(process.env.MONGODB_URI, {
       { name: 'Fly', description: 'A chest exercise for middle and inner chest', category: 'chest' }
   ];
 
-
-  // return exerciseModel.insertMany(exercises);
+  // process to delete all data and insert new data
+  exerciseModel.deleteMany({})
+    .then(result => {
+      console.log(`delete all data ${result.deletedCount} data`);
+      return exerciseModel.insertMany(exercises);
+    })
+    .then(result => {
+      console.log(`insert new data ${result.length} data`);
+    })
+    .catch(err => {
+      console.error('error in data management:', err);
+    });
 })
+.catch(err => {
+  console.error('error in connection to MongoDB:', err);
+});
 
 
 app.use('/api/user', userRoute,userUpdateRoute)
