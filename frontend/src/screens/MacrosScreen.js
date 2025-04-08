@@ -35,14 +35,9 @@ export default function MacrosScreen() {
 
   return (
     <View style={GuideScreenStyle.container}>
-      <Header />
       
-      <TouchableOpacity 
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity>
+      
+
       
       <ScrollView 
         style={GuideScreenStyle.content} 
