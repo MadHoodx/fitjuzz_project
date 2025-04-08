@@ -21,6 +21,7 @@ const ExerciseScreenStyle = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
+    marginTop: 30,
   },
   sectionTitle: {
     fontSize: 22,
@@ -34,7 +35,7 @@ const ExerciseScreenStyle = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 8,
-    width: '45%',
+    
   },
   searchInput: {
     flex: 1,

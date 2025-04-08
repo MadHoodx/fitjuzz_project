@@ -16,12 +16,7 @@ export default function GuideScreen() {
       image: 'https://images.unsplash.com/photo-1558611848-73f7eb4001a1?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       screen: 'Exercise'
     },
-    {
-      id: 'protein',
-      title: 'protein',
-      image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=327&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      screen: 'Home'
-    },
+
     {
       id: 'food',
       title: 'Macros',
@@ -36,9 +31,9 @@ export default function GuideScreen() {
     },
     {
       id: 'medicine',
-      title: 'Para500',
+      title: 'Steroids',
       image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1130&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      screen: 'Home'
+      screen: 'Steroids'
     },
   ];
 

@@ -1,21 +1,22 @@
-import 'react-native-gesture-handler';
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet } from 'react-native';
-import HomeScreen from './src/screens/HomeScreen'
-import NoteScreen from './src/screens/NoteScreen';
-import WelcomeScreen from './src/screens/WelcomScreen';
-import TimerScreen from './src/screens/TimerScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
-import styles, { colors } from './src/styles/style'
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import MainScreen from './src/screens/MainScreen';
-import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
-import ExerciseScreen from './src/screens/ExerciseScreen'
-import GuideScreen from './src/screens/GuideScreen'
+import "react-native-gesture-handler";
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StyleSheet } from "react-native";
+import HomeScreen from "./src/screens/HomeScreen";
+import NoteScreen from "./src/screens/NoteScreen";
+import WelcomeScreen from "./src/screens/WelcomScreen";
+import TimerScreen from "./src/screens/TimerScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import styles, { colors } from "./src/styles/style";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import IconAntDesign from "react-native-vector-icons/AntDesign";
+import MainScreen from "./src/screens/MainScreen";
+import ForgetPasswordScreen from "./src/screens/ForgetPasswordScreen";
+import ExerciseScreen from "./src/screens/ExerciseScreen";
+import GuideScreen from "./src/screens/GuideScreen";
+import SteroidsScreen from "./src/screens/SteroidsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -91,15 +92,46 @@ function MyTabs() {
 
 function MyStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}
-      initialRouteName='Welcome'>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="Welcome"
+    >
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Main" component={MainScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="Note" component={NoteScreen} />
-      <Stack.Screen name="Exercise" component={ExerciseScreen} />
+  
+      <Stack.Screen
+        name="Steroids"
+        component={SteroidsScreen}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Exercise"
+        component={ExerciseScreen}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+
       <Stack.Screen name="Guide" component={GuideScreen} />
     </Stack.Navigator>
   );
@@ -116,8 +148,8 @@ export default function App() {
 const app = StyleSheet.create({
   tabBar: {
     backgroundColor: colors.clr_background,
-    borderColor: 'black',
-    shadowColor: 'white',
-    elevation: 16
+    borderColor: "black",
+    shadowColor: "white",
+    elevation: 16,
   },
 });

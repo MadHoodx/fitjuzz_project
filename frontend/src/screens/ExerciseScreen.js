@@ -27,6 +27,7 @@ export default function ExerciseScreen({ navigation }) {
 
   const closeExerciseDetails = () => {
     setModalVisible(false);
+    setSelectedExercise(null); // Clear the selected exercise data when closing 
   };
 
   useEffect(() => {
@@ -94,8 +95,7 @@ export default function ExerciseScreen({ navigation }) {
 
   return (
     <View style={[ExerciseScreenStyle.container]}>
-      <Header />
-      
+{/*     
       
       <TouchableOpacity 
         style={styles.backButton}
@@ -103,10 +103,10 @@ export default function ExerciseScreen({ navigation }) {
       >
         <Ionicons name="arrow-back" size={24} color="white" />
       </TouchableOpacity>
-      
+       */}
       <View style={[ExerciseScreenStyle.content]}>
         <View style={ExerciseScreenStyle.searchSection}>
-          <Text style={ExerciseScreenStyle.sectionTitle}>EXERCISE</Text>
+          {/* <Text style={ExerciseScreenStyle.sectionTitle}>EXERCISE</Text> */}
           <View style={ExerciseScreenStyle.searchBar}>
             <TextInput
               style={ExerciseScreenStyle.searchInput}
@@ -210,22 +210,14 @@ export default function ExerciseScreen({ navigation }) {
         )}
       </View>
 
-      <ExerciseDetailsModal 
-        visible={modalVisible}
-        exercise={selectedExercise}
-        onClose={closeExerciseDetails}
-      />
+      {modalVisible && selectedExercise && (
+        <ExerciseDetailsModal
+          visible={modalVisible}
+          exercise={selectedExercise}
+          onClose={closeExerciseDetails}
+        />
+      )}
     </View>
   );
 }
 
-
-const styles = StyleSheet.create({
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 15,
-    padding: 8,
-    zIndex: 10,
-  }
-});
