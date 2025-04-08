@@ -16,6 +16,10 @@ import MainScreen from './src/screens/MainScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import ExerciseScreen from './src/screens/ExerciseScreen'
 import GuideScreen from './src/screens/GuideScreen'
+import MacrosScreen from './src/screens/MacrosScreen'
+import CarbScreen from './src/screens/CarbScreen'
+import ProteinScreen from './src/screens/ProteinScreen'
+import FatScreen from './src/screens/FatScreen'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,6 +105,10 @@ function MyStack() {
       <Stack.Screen name="Note" component={NoteScreen} />
       <Stack.Screen name="Exercise" component={ExerciseScreen} />
       <Stack.Screen name="Guide" component={GuideScreen} />
+      <Stack.Screen name="Macros" component={MacrosScreen} />
+      <Stack.Screen name="Carb" component={CarbScreen} />
+      <Stack.Screen name="Protein" component={ProteinScreen} />
+      <Stack.Screen name="Fat" component={FatScreen} />
     </Stack.Navigator>
   );
 }

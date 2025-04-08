@@ -17,6 +17,9 @@ const GuideScreenStyle = StyleSheet.create({
   titleSection: {
     marginVertical: 5,
     alignItems: "center",
+    position: "relative",
+    flexDirection: "row",
+    justifyContent: "center",
   },
   mainTitle: {
     marginTop: 25,
@@ -30,7 +33,6 @@ const GuideScreenStyle = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     overflow: "hidden",
-    elevation: 3,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -40,7 +42,7 @@ const GuideScreenStyle = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-    opacity: 0.6,
+    opacity: 0.7,
   },
   categoryOverlay: {
     position: "absolute",
@@ -54,6 +56,17 @@ const GuideScreenStyle = StyleSheet.create({
     fontSize: sizes.size_lg,
     fontWeight: "bold",
   },
+  categoryDescription: {
+    color: colors.clr_white,
+    fontSize: sizes.size_sm,
+    marginTop: 5,
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    top: 25,
+    padding: 8,
+  }
 });
 
 export default GuideScreenStyle;
