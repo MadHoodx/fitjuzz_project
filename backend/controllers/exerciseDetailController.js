@@ -13,7 +13,7 @@ const exerciseDetailController = {
       
       if (!exercise) {
         console.log(`[DEBUG] Exercise with ID ${exerciseId} not found`);
-        return res.status(404).json({ message: 'ไม่พบท่าออกกำลังกายที่ระบุ' });
+        return res.status(404).json({ message: 'not found exercise with id' });
       }
       
       // create or find additional exercise details
