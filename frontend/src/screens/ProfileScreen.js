@@ -8,7 +8,6 @@ import {
   TextInput,
   Alert,
   Image,
-  FlatList,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -27,6 +26,11 @@ import moment from "moment";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
+<<<<<<< Updated upstream
+=======
+import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
+
+>>>>>>> Stashed changes
 const screenWidth = Dimensions.get("window").width;
 
 export default function ProfileScreen({}) {
@@ -50,6 +54,11 @@ export default function ProfileScreen({}) {
   const [selectedImage, setSelectedImage] = useState(null);
   const ages = Array.from({ length: 83 }, (_, index) => 18 + index);
   const navigation = useNavigation();
+  const heights = Array.from({ length: 161 }, (_, i) => 90 + i);
+  const weights = Array.from({ length: 251}, (_, i) => 0 + i);
+
+
+
 
   useEffect(() => {
     fetchUser();
@@ -326,6 +335,13 @@ export default function ProfileScreen({}) {
     const lbm = weight * (1 - fat / 100);
     return lbm;
   };
+
+  const renderItem = (data, index ) => (
+    <View style = {{width: 80, justifyContent:'center',alignItems:'center'}}>
+      <Text style = {{fontSize:20}}>{data}</Text>
+      </View>
+  );
+
 
   const calBMR = (activityLevel) => {
     // Men
@@ -649,13 +665,19 @@ export default function ProfileScreen({}) {
               <View style={[ProfileScreenStyle.box_modal]}>
                 <View style={[ProfileScreenStyle.inside_box_modal]}>
                   <Text style={[ProfileScreenStyle.modal_header_text]}>
-                    Edit Weight.
+                    Select Your Weight.
                   </Text>
-                  <TextInput
-                    style={[ProfileScreenStyle.modal_text_input]}
-                    keyboardType="numeric"
-                    onChangeText={(text) => setTempWeight(text)}
-                  />
+                  <Text style={{ color: "white" }}>
+                    you can always change your Weight
+                  </Text>
+                    <HorizontalPicker
+                      data = {weights}
+                      renderItem={renderItem}
+                      itemWidth={80}
+                      onChange={setTempWeight}
+                    />
+
+
                   <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
                     style={{
@@ -663,23 +685,15 @@ export default function ProfileScreen({}) {
                       justifyContent: "space-around",
                     }}
                   >
-                    <TouchableOpacity
-                      onPress={() => setModalVisibleWeight(false)}
-                      style={[
-                        ProfileScreenStyle.modal_button,
-                        { backgroundColor: "lightgray" },
-                      ]}
-                    >
-                      <Text>close</Text>
-                    </TouchableOpacity>
+                
                     <TouchableOpacity
                       onPress={handleWeightUpdate}
                       style={[
                         ProfileScreenStyle.modal_button,
-                        { backgroundColor: "green" },
+                        { backgroundColor: "blue" },
                       ]}
                     >
-                      <Text style={{ color: "white" }}>Save</Text>
+                      <Text style={{ color: "white" }}>Done</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -723,13 +737,26 @@ export default function ProfileScreen({}) {
               <View style={[ProfileScreenStyle.box_modal]}>
                 <View style={[ProfileScreenStyle.inside_box_modal]}>
                   <Text style={[ProfileScreenStyle.modal_header_text]}>
-                    Edit Height.
+                    Select Your Height
                   </Text>
-                  <TextInput
-                    style={[ProfileScreenStyle.modal_text_input]}
-                    keyboardType="numeric"
-                    onChangeText={(text) => setTempHeight(text)}
-                  />
+                  <Text style={{ color: "white" }}>
+                    you can always change your Height
+                  </Text>
+                  <View style = {{width:200 ,height:300, }}>
+                    <ScrollPicker
+                      dataSource={heights}
+                      selectedIndex={heights.indexOf(setHeight)}
+                      renderItem={(data, Index) => {
+                        return <Text style={{ fontSize: 20 }}>{data}</Text>;
+                      }}
+                      onValueChange={setTempHeight}
+                      wrapperHeight={200}
+                      wrapperBackground="#3A3A3A"
+                      itemHeight={60}
+                      highlightColor="#0046C2"
+                      highlightBorderWidth={3}
+                    />
+                    </View>
                   <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
                     style={{
@@ -738,22 +765,13 @@ export default function ProfileScreen({}) {
                     }}
                   >
                     <TouchableOpacity
-                      onPress={() => setModalVisibleHeight(false)}
-                      style={[
-                        ProfileScreenStyle.modal_button,
-                        { backgroundColor: "lightgray" },
-                      ]}
-                    >
-                      <Text>close</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
                       onPress={handleHeightUpdate}
                       style={[
                         ProfileScreenStyle.modal_button,
-                        { backgroundColor: "green" },
+                        { backgroundColor: "blue" },
                       ]}
                     >
-                      <Text style={{ color: "white" }}>Save</Text>
+                      <Text style={{ color: "white" }}>Done</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
