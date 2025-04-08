@@ -57,14 +57,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.clr_blue,
     borderRadius: 26,
-    elevation: 6,
+
   },
   button: {
     width: "100%",
     backgroundColor: colors.clr_blue,
     borderRadius: 20,
     paddingVertical: 14,
-    elevation: 6
+ 
   },
 
   buttonText: {

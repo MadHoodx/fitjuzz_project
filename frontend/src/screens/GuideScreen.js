@@ -50,10 +50,10 @@ export default function GuideScreen() {
         contentContainerStyle={GuideScreenStyle.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-
+{/* 
         <View style={GuideScreenStyle.titleSection}>
           <Text style={GuideScreenStyle.mainTitle}>Manual</Text>
-        </View>
+        </View> */}
 
         
         {categories.map((category) => (

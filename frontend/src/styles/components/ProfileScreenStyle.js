@@ -202,17 +202,9 @@ const ProfileScreenStyle = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: 315,
-<<<<<<< Updated upstream
-    height: 540,
-    backgroundColor: colors.clr_background_modal,
-    alignItems: "center",
-    justifyContent: "center",
-    
-=======
     height: 550,
     backgroundColor: "#3A3A3A",
     alignItems:'center'
->>>>>>> Stashed changes
   },
   modal_header_text: {
     fontSize: sizes.size_xl,
@@ -220,12 +212,6 @@ const ProfileScreenStyle = StyleSheet.create({
     color: colors.clr_lightgray,
     textAlign:'center'
   },
-<<<<<<< Updated upstream
-  modal_subtitle:{
-    color:colors.clr_lightgray,
-    textAlign:'center'
-  },
-=======
   modal_input_box: {
     borderBottomWidth: 1,
     borderColor: "gray",
@@ -233,20 +219,12 @@ const ProfileScreenStyle = StyleSheet.create({
   },
  
 
->>>>>>> Stashed changes
   modal_button: {
     alignItems:'center',
     width:128,
     height:39,
     padding: 10,
     borderRadius: 20,
-<<<<<<< Updated upstream
-    backgroundColor:colors.clr_brightblue,
-    width:110,
-    justifyContent:'center',
-    alignItems:'center'
-=======
->>>>>>> Stashed changes
   },
   modal_sex_button: {
     width: 110,

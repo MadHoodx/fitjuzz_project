@@ -26,11 +26,10 @@ import moment from "moment";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
-<<<<<<< Updated upstream
-=======
+
 import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
 
->>>>>>> Stashed changes
+
 const screenWidth = Dimensions.get("window").width;
 
 export default function ProfileScreen({}) {
