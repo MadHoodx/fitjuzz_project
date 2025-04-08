@@ -1,7 +1,7 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 const userController = {
   signin: async (req, res) => {
     const {
@@ -22,7 +22,7 @@ const userController = {
           email,
         });
 
-        console.log(userGoogle)
+        console.log(userGoogle);
         if (!userGoogle) {
           const newUser = new userModel({
             userType: "google",
@@ -43,7 +43,7 @@ const userController = {
               expiresIn: "1h",
             }
           );
-        
+
           return res.json({ token });
         }
         const token = jwt.sign(
@@ -60,7 +60,7 @@ const userController = {
           xId,
         });
 
-        console.log(userX)
+        console.log(userX);
         if (!userX) {
           const newUser = new userModel({
             userType: "x",
@@ -80,17 +80,13 @@ const userController = {
           );
           return res.json({ token });
         }
-        const token = jwt.sign(
-          { userId: userX.id },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: "1h",
-          }
-        );
+        const token = jwt.sign({ userId: userX.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
         return res.json({ token });
       } else {
         const user = await userModel.findOne({ userType: "normal", email });
-        console.log(user)
+        console.log(user);
         if (!user) {
           return res.status(400).json({
             message: "Sorry, looks like that’s the wrong email or password. ",
@@ -113,25 +109,26 @@ const userController = {
   signup: async (req, res) => {
     const { username, email, password } = req.body;
 
+   
     try {
       const user = await userModel.findOne({ userType: "normal", email });
-      console.log(user)
+      console.log(user);
       if (user) {
         return res.status(409).json({ message: "User already exist" });
       }
-     
+
       const hashedPassword = await bcrypt.hash(password, 12);
-      
+
       const newUser = new userModel({
         userType: "normal",
         username,
         email,
         password: hashedPassword,
       });
-          console.log('before saving new user');
-         await newUser.save();
-            
-         console.log('after saving new user');
+      console.log("before saving new user");
+      await newUser.save();
+
+      console.log("after saving new user");
 
       const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET);
 
@@ -145,7 +142,7 @@ const userController = {
 
     try {
       const user = await userModel.findById(userId).select("-password");
-     
+
       if (user) {
         return res.json(user);
       } else {

@@ -27,6 +27,36 @@ export default function SignupScreen({ updateActiveScreen }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+
+   // Function to validate username
+   const validateUsername = (username) => {
+    if (username.length < 5) {
+      return "Username must be at least 5 characters long.";
+    }
+    if (/\s/.test(username)) {
+      return "Username cannot contain spaces.";
+    }
+    return '';
+  };
+
+  // Function to validate password
+  const validatePassword = (password) => {
+    if (password.length < 8 || password.length > 16) {
+      return "Password must be 8 - 16 characters long.";
+    }
+   
+    return '';
+  };
+
+  // Function to validate email using regex
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return "Invalid email format.";
+    }
+    return '';
+  };
+
   const handleSignup = async () => {
     if (username == "" && email !== "" && password !== "") {
       setLoading(1);
@@ -60,6 +90,15 @@ export default function SignupScreen({ updateActiveScreen }) {
       setLoading(1);
       setError("Passwords do not match");
       return;
+    } 
+  
+    const usernameError = validateUsername(username);
+    const passwordError = validatePassword(password);
+    const emailError = validateEmail(email);
+
+    if (usernameError || passwordError || emailError) {
+      setError(usernameError || passwordError || emailError);
+      return;
     }
     try {
       const response = await axios.post(
@@ -72,16 +111,18 @@ export default function SignupScreen({ updateActiveScreen }) {
       );
 
       await AsyncStorage.setItem("userToken", response.data.token);
-      console.log(response.data)
-
+;
+    
       navigation.navigate("MyTabs");
+     
     } catch (error) {
       setLoading(1);
+
       if (error.status == 409) {
         setError("User already exists");
       } else if (error.status == 500) {
         setError("An unexpected error occurred");
-        console.log(error.status)
+        console.log(error.status);
       }
     }
   };
