@@ -82,6 +82,48 @@ const userUpdateController = {
       res.status(500).json({ message: "Server error" });
     }
   },
+  updateSex: async (req, res) => {
+    const { id } = req.params;
+    const { sex } = req.body;
+
+    try {
+      const user = await userModel.findByIdAndUpdate(
+        id,
+        { sex },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json(user)
+    } catch (error) {
+      console.error("Error updating sex:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+  updateAge: async (req, res) => {
+    const { id } = req.params;
+    const { age } = req.body;
+
+    try {
+      const user = await userModel.findByIdAndUpdate(
+        id,
+        { age },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json(user)
+    } catch (error) {
+      console.error("Error updating age:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
   updatePicture: async (req,res) => {
     const { id } = req.params
     const { picture } = req.body

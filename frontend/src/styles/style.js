@@ -29,7 +29,7 @@ export const colors = {
   clr_background: "#333333",
   clr_graybutton: "#575757",
   clr_brightblue: "#005eff",
-  clr_background_modal: "#242424"
+  clr_background_modal: "#3A3A3A"
 };
 
 const styles = StyleSheet.create({
