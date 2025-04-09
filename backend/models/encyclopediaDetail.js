@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const steroidDetailSchema = new mongoose.Schema({
+const encyclopediaSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -9,11 +9,7 @@ const steroidDetailSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    category:{
-        type: String,
-        enum: ['anabolic', 'oral', 'arms', 'injectable'],
-        required: true
-    },
+
     picture: {
         type: String,
         required: true,
@@ -23,6 +19,6 @@ const steroidDetailSchema = new mongoose.Schema({
     
 });
 
-const steroidDetailModel = mongoose.model('steroidDetailModel', steroidDetailSchema);
+const encyclopediaDetailModel = mongoose.model('encyclopediaDetailModel', encyclopediaSchema);
 
-module.exports = steroidDetailModel; 
+module.exports = encyclopediaDetailModel; 

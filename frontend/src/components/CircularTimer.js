@@ -15,7 +15,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 // Main timer component
 const CircularTimer = ({ duration = 200, setNextExercise }) => {
-  const navigation = useNavigation(); // Optional - not currently used
+
   const [timeLeft, setTimeLeft] = useState(duration); // Remaining seconds
   const progress = useSharedValue(1); // Animation progress from 1 (full circle) to 0 (empty)
 

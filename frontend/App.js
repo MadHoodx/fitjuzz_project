@@ -16,11 +16,19 @@ import MainScreen from "./src/screens/MainScreen";
 import ForgetPasswordScreen from "./src/screens/ForgetPasswordScreen";
 import ExerciseScreen from "./src/screens/ExerciseScreen";
 import GuideScreen from "./src/screens/GuideScreen";
-import SteroidsScreen from "./src/screens/SteroidsScreen";
+import SteroidsScreen from "./src/screens/SteroidsComponent/SteroidsScreen";
 import MacrosScreen from "./src/screens/MacrosScreen";
 import CarbScreen from "./src/screens/CarbScreen";
 import ProteinScreen from "./src/screens/ProteinScreen";
 import FatScreen from "./src/screens/FatScreen";
+
+import SteroidDetailScreen from "./src/screens/SteroidsComponent/SteroidDetailScreen";
+import SupplementScreen from "./src/screens/SupplementComponent/SupplementScreen";
+import SupplementDetailScreen from "./src/screens/SupplementComponent/SupplementDetailScreen";
+import SupplementCategoryScreen from "./src/screens/SupplementComponent/SupplementCategoryScreen";
+import SteroidCategoryScreen from "./src/screens/SteroidsComponent/SteroidCategoryScreen";
+import EncyclopediaScreen from "./src/screens/EncyclopediaComponent/EncyclopediaScreen";
+import EncyclopediaDetailScreen from "./src/screens/EncyclopediaComponent/EncyclopediaDetailScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,6 +64,15 @@ function MyTabs() {
           title: "Guide",
           tabBarIcon: ({ color, size }) => {
             return <Icon name={"menu-book"} size={size} color={color} />;
+          },
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
           },
         }}
       />
@@ -106,12 +123,88 @@ function MyStack() {
       <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="Note" component={NoteScreen} />
+      <Stack.Screen
+        name="Encyclopedia"
+        component={EncyclopediaScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+         <Stack.Screen
+        name="Encyclopedia detail"
+        component={EncyclopediaDetailScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Supplement"
+        component={SupplementScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Supplement category"
+        component={SupplementCategoryScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Supplement detail"
+        component={SupplementDetailScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
 
       <Stack.Screen
         name="Steroids"
         component={SteroidsScreen}
         options={{
           headerShown: true,
+          headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: colors.clr_black, // Header background
           },
@@ -126,6 +219,7 @@ function MyStack() {
         component={ExerciseScreen}
         options={{
           headerShown: true,
+          headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: colors.clr_black, // Header background
           },
@@ -142,6 +236,37 @@ function MyStack() {
         component={MacrosScreen}
         options={{
           headerShown: true,
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="Steroid category"
+        component={SteroidCategoryScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: colors.clr_black, // Header background
+          },
+          headerTintColor: "white", // Header text and back button
+          headerTitleStyle: {
+            fontWeight: "bold", // Bold title
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Steroid detail"
+        component={SteroidDetailScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: colors.clr_black, // Header background
           },
