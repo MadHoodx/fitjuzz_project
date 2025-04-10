@@ -18,7 +18,7 @@ export default function ExerciseScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
 
-  const categories = ['All', 'Leg', 'ABS', 'Back', 'Arms', 'Shoulders', 'Glutes'];
+  const categories = ['All', 'Chest', 'Leg', 'ABS', 'Back', 'Arms', 'Shoulders', 'Glutes'];
 
   const openExerciseDetails = (exercise) => {
     setSelectedExercise(exercise);
@@ -41,15 +41,39 @@ export default function ExerciseScreen({ navigation }) {
   const fetchExercises = async () => {
     try {
       setLoading(true);
+      console.log('Fetching exercises...');
+      console.log('API URL:', `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/getExercises`);
+      
       const response = await axios.get(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/getExercises`
       );
+      
+      console.log('Received data:', response.data);
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        console.log('Sample exercise:', response.data[0]);
+      } else {
+        console.log('No exercises found or data is not an array');
+      }
       setExercises(response.data);
       setLoading(false);
     } catch (err) {
-      setError('Unable to fetch exercises');
-      setLoading(false);
       console.error('Error fetching exercises:', err);
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response data:', err.response.data);
+        console.error('Error response status:', err.response.status);
+        setError(`Unable to fetch exercises (${err.response.status}): ${JSON.stringify(err.response.data)}`);
+      } else if (err.request) {
+        // The request was made but no response was received
+        console.error('No response received:', err.request);
+        setError('Network error: No response from server. Check your connection.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error config:', err.config);
+        setError(`Error: ${err.message}`);
+      }
+      setLoading(false);
     }
   };
 
