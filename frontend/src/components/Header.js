@@ -15,11 +15,11 @@ export default function Header({ }) {
   const [emoji, setEmoji] = useState("");
 
   const motivationalQuote = [
-    " As twilight paints the sky, let your spirit take flight.",
-    " The worldis a stage, and your workout is your spotlight.",
-    " As stars begin to gleam, chase the dreams that shimmer within.",
-    " Let your workout be a dance of dedication.",
-    " Sleep is the best meditation.",
+    "As twilight paints the sky, let your spirit take flight.",
+    "The worldis a stage, and your workout is your spotlight.",
+    "As stars begin to gleam, chase the dreams that shimmer within.",
+    "Let your workout be a dance of dedication.",
+    "Sleep is the best meditation.",
   ];
 
   useEffect(() => {
@@ -136,9 +136,9 @@ export default function Header({ }) {
                   width: 300,
                 }}
               >
-                Motavaltional quote:
+                Motivational quote :{" "}
                 <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
-                  {quote}
+                  "{quote}"
                 </Text>
               </Text>
             </View>

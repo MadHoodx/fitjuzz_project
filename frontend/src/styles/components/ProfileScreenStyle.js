@@ -46,25 +46,34 @@ const ProfileScreenStyle = StyleSheet.create({
     alignItems: "center",
   },
   profile: {
-    width: 80,
-    height: 80,
-    borderWidth: 2,
-    borderRadius: 100,
+    width: 90,
+    height: 90,
+    position: "absolute",
+    top: 2,
+    zIndex: 1,
+  },
+  profile__img: {
+    width: 90,
+    height: 90,
     position: "absolute",
     top: 2,
     zIndex: 1,
     overflow: "hidden",
     backgroundColor: colors.clr_white,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: colors.clr_lightgray,
   },
   profile_button_edit: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     backgroundColor: colors.clr_brightblue,
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    left: 180,
+    left: 65,
+    top: 75,
     zIndex: 2,
   },
 
@@ -83,18 +92,21 @@ const ProfileScreenStyle = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
     alignItems: "center",
-    gap: 10,
   },
   username_text: {
     color: colors.clr_white,
     fontSize: sizes.size_lg,
     textAlign: "center",
-    paddingTop: 40,
+    paddingTop: 55,
     fontWeight: "bold",
   },
+  data__text: {
+    fontSize: sizes.size_xs,
+    color: colors.clr_lightgray,
+  },
   button: {
-    width: 100,
-    height: 30,
+    width: 75,
+    height: 25,
     backgroundColor: colors.clr_blue,
     borderRadius: 20,
     flexDirection: "row",
@@ -104,7 +116,7 @@ const ProfileScreenStyle = StyleSheet.create({
   },
   button__text: {
     color: colors.clr_lightgray,
-    fontSize: sizes.size_2xs,
+    fontSize: sizes.size_3xs,
   },
   inside_box: {
     gap: 5,
@@ -116,6 +128,7 @@ const ProfileScreenStyle = StyleSheet.create({
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
+    opacity:0.5
   },
   footer__box: {
     flexDirection: "row",
@@ -152,7 +165,7 @@ const ProfileScreenStyle = StyleSheet.create({
     color: colors.clr_white,
   },
   body_text_unit: {
-    fontSize: sizes.size_2xs,
+    fontSize: sizes.size_3xs,
     color: colors.clr_lightgray,
   },
   bmi_text: {
@@ -200,43 +213,46 @@ const ProfileScreenStyle = StyleSheet.create({
   },
   inside_box_modal: {
     borderRadius: 10,
-    padding: 20,
+    padding: 30,
     width: 315,
     height: 550,
     backgroundColor: "#3A3A3A",
-    alignItems:'center'
+    alignItems: "center",
   },
   modal_header_text: {
     fontSize: sizes.size_xl,
     fontWeight: "bold",
     color: colors.clr_lightgray,
-    textAlign:'center'
+    textAlign: "center",
+  },
+  modal_subtitle: {
+    color: colors.clr_lightgray,
   },
   modal_input_box: {
     borderBottomWidth: 1,
     borderColor: "gray",
     marginBottom: 20,
   },
- 
-
   modal_button: {
-    alignItems:'center',
-    width:128,
-    height:39,
+    alignItems: "center",
+    width: 128,
+    height: 39,
     padding: 10,
     borderRadius: 20,
+    backgroundColor: colors.clr_brightblue,
+  },
+  modal__button__text: {
+    fontSize: sizes.size_xs,
+    color: colors.clr_white,
+    fontWeight: "bold",
   },
   modal_sex_button: {
     width: 110,
     height: 110,
     borderRadius: 100,
     alignItems: "center",
-    backgroundColor:colors.clr_graybutton
+    backgroundColor: colors.clr_graybutton,
   },
-  selectedSex: {
-    backgroundColor: colors.clr_brightblue, 
-  },
-  
   table_header: {
     flexDirection: "row",
     borderWidth: 1,

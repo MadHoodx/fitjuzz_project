@@ -27,8 +27,7 @@ import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
 
-import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
-
+import HorizontalPicker from "@vseslav/react-native-horizontal-picker";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -54,10 +53,8 @@ export default function ProfileScreen({}) {
   const ages = Array.from({ length: 83 }, (_, index) => 18 + index);
   const navigation = useNavigation();
   const heights = Array.from({ length: 161 }, (_, i) => 90 + i);
-  const weights = Array.from({ length: 251}, (_, i) => 0 + i);
-
-
-
+  const weights = Array.from({ length: 251 }, (_, i) => 0 + i);
+  const fats = Array.from({length: 30}, (_, i) => 5 + i)
 
   useEffect(() => {
     fetchUser();
@@ -86,7 +83,7 @@ export default function ProfileScreen({}) {
       const response = await axios.get(
         `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
       );
-      const { username, weight, height, fat, picture, updatedAt } =
+      const { username, weight, height, fat, picture, updatedAt, sex, age } =
         response.data;
       setUsername(username || response.data.givenName || response.data.name);
       setWeight(weight);
@@ -94,6 +91,8 @@ export default function ProfileScreen({}) {
       setFat(fat);
       setSelectedImage(picture);
       setUpdatedAt(updatedAt);
+      setSex(sex);
+      setAge(age);
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }
@@ -184,7 +183,7 @@ export default function ProfileScreen({}) {
           age: parseFloat(tempAge),
         }
       );
-      setSex(tempAge);
+      setAge(tempAge);
       setModalVisibleAge(false);
     } catch (error) {
       console.error("Error updating age:", error);
@@ -335,13 +334,6 @@ export default function ProfileScreen({}) {
     return lbm;
   };
 
-  const renderItem = (data, index ) => (
-    <View style = {{width: 80, justifyContent:'center',alignItems:'center'}}>
-      <Text style = {{fontSize:20}}>{data}</Text>
-      </View>
-  );
-
-
   const calBMR = (activityLevel) => {
     // Men
     const bmr = 88.362 + 13.397 * weight + 4.799 * height - 5.677 * 22;
@@ -421,7 +413,7 @@ export default function ProfileScreen({}) {
 
   const Dumbbells = () => {
     return (
-      <View style={[{position: "absolute", right:0, top:0}]}>
+      <View style={[{ position: "absolute", right: 0, top: 0 }]}>
         <IconFontAwesome5
           name={"dumbbell"}
           size={30}
@@ -450,40 +442,70 @@ export default function ProfileScreen({}) {
         <View style={{ gap: 20, paddingBottom: 60 }}>
           <View style={[ProfileScreenStyle.profile_box]}>
             <TouchableOpacity
-              style={[ProfileScreenStyle.profile_button_edit]}
+              style={[ProfileScreenStyle.profile]}
               onPress={handleImagePicker}
             >
-              <IconEntypo name={"edit"} size={10} color={colors.clr_gray} />
+              <View style={[ProfileScreenStyle.profile__img]}>
+                <Image
+                  source={{ uri: selectedImage }}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </View>
+              <View style={[ProfileScreenStyle.profile_button_edit]}>
+                <IconEntypo name={"edit"} size={8} color={colors.clr_gray} />
+              </View>
             </TouchableOpacity>
 
-            <View style={[ProfileScreenStyle.profile]}>
-              <Image
-                source={{ uri: selectedImage }}
-                style={{ width: "100%", height: "100%" }}
-              />
-            </View>
             <View style={[ProfileScreenStyle.profile_container]}>
               <Text style={[ProfileScreenStyle.username_text]}>{username}</Text>
-              <View
-                style={[{ alignItems: "center", justifyContent: "center" }]}
-              >
-                <TouchableOpacity
-                  style={[ProfileScreenStyle.button]}
-                  onPress={handleEditSex}
-                >
-                  <IconMaterialCommunityIcons
-                    name={"plus-thick"}
-                    size={10}
-                    color={"white"}
-                  />
-                  <Text style={[ProfileScreenStyle.button__text]}>
-                    Insert data
+              {sex != null && age != 0 ? (
+                <View>
+                  <Text style={[ProfileScreenStyle.data__text]}>
+                    Age : {age} {"  "} Sex :{" "}
+                    <Text
+                      style={{
+                        color:
+                          sex === "male" ? colors.clr_brightblue : "#FF3399",
+                        fontSize: sizes.size_lg,
+                      }}
+                    >
+                      {sex === "male" ? "♂" : "♀"}
+                    </Text>
                   </Text>
-                </TouchableOpacity>
-                <Text style={[{ color: "red", fontSize: sizes.size_3xs }]}>
-                  If you don’t insert data we can’t analysis data
-                </Text>
-              </View>
+                </View>
+              ) : (
+                <View
+                  style={[
+                    {
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      marginTop: 10,
+                    },
+                  ]}
+                >
+                  <TouchableOpacity
+                    style={[ProfileScreenStyle.button]}
+                    onPress={handleEditSex}
+                  >
+                    <IconMaterialCommunityIcons
+                      name={"plus-thick"}
+                      size={7}
+                      color={"white"}
+                    />
+                    <Text style={[ProfileScreenStyle.button__text]}>
+                      Set profile
+                    </Text>
+                  </TouchableOpacity>
+                  <Text
+                    style={[
+                      { color: colors.clr_lightgray, fontSize: sizes.size_3xs },
+                    ]}
+                  >
+                    If you don’t insert data we can’t analysis data
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
           <Modal
@@ -493,7 +515,7 @@ export default function ProfileScreen({}) {
           >
             <View style={ProfileScreenStyle.box_modal}>
               <View style={[ProfileScreenStyle.inside_box_modal, { gap: 70 }]}>
-              <Dumbbells/>
+                <Dumbbells />
                 <View>
                   <Text style={ProfileScreenStyle.modal_header_text}>
                     Tell us about yourself!
@@ -506,7 +528,9 @@ export default function ProfileScreen({}) {
                   <TouchableOpacity
                     style={[
                       ProfileScreenStyle.modal_sex_button,
-                      tempSex === "male" && ProfileScreenStyle.selectedSex,
+                      tempSex === "male" && {
+                        backgroundColor: colors.clr_brightblue,
+                      },
                     ]}
                     onPress={() => setTempSex("male")}
                   >
@@ -524,7 +548,7 @@ export default function ProfileScreen({}) {
                   <TouchableOpacity
                     style={[
                       ProfileScreenStyle.modal_sex_button,
-                      tempSex === "female" && ProfileScreenStyle.selectedSex,
+                      tempSex === "female" && { backgroundColor: "#FF3399" },
                     ]}
                     onPress={() => setTempSex("female")}
                   >
@@ -545,11 +569,7 @@ export default function ProfileScreen({}) {
                     style={ProfileScreenStyle.modal_button}
                     onPress={handleSexUpdate}
                   >
-                    <Text
-                      style={[
-                        { fontSize: sizes.size_xs, color: colors.clr_white },
-                      ]}
-                    >
+                    <Text style={[ProfileScreenStyle.modal__button__text]}>
                       Done
                     </Text>
                   </TouchableOpacity>
@@ -564,7 +584,7 @@ export default function ProfileScreen({}) {
           >
             <View style={ProfileScreenStyle.box_modal}>
               <View style={[ProfileScreenStyle.inside_box_modal, { gap: 70 }]}>
-                <Dumbbells/>
+                <Dumbbells />
                 <View>
                   <Text style={ProfileScreenStyle.modal_header_text}>
                     How old are you?
@@ -576,9 +596,8 @@ export default function ProfileScreen({}) {
                 <View
                   style={[
                     {
-                      justifyContent: "center",
-                      alignItems: "center",
                       height: 250,
+                      width: 80,
                     },
                   ]}
                 >
@@ -589,8 +608,10 @@ export default function ProfileScreen({}) {
                       <Text
                         style={{
                           fontSize: tempAge === data ? 40 : 22,
-                          color: tempAge === data ? colors.clr_brightblue : "#fff", 
+                          color:
+                            tempAge === data ? colors.clr_brightblue : "#fff",
                           fontWeight: tempAge === data ? "bold" : "normal",
+                          textAlign: "center",
                         }}
                       >
                         {data}
@@ -599,8 +620,8 @@ export default function ProfileScreen({}) {
                     onValueChange={setTempAge}
                     wrapperBackground={"transparent"}
                     itemHeight={50}
-                    highlightColor={"#d8d8d8"}
-                    highlightBorderWidth={2}
+                    highlightColor={colors.clr_brightblue}
+                    highlightBorderWidth={3}
                     highlightWidth={50}
                   />
                 </View>
@@ -609,11 +630,7 @@ export default function ProfileScreen({}) {
                     style={ProfileScreenStyle.modal_button}
                     onPress={handleAgeUpdate}
                   >
-                    <Text
-                      style={[
-                        { fontSize: sizes.size_xs, color: colors.clr_white },
-                      ]}
-                    >
+                    <Text style={[ProfileScreenStyle.modal__button__text]}>
                       Done
                     </Text>
                   </TouchableOpacity>
@@ -666,33 +683,57 @@ export default function ProfileScreen({}) {
                   <Text style={[ProfileScreenStyle.modal_header_text]}>
                     Select Your Weight.
                   </Text>
-                  <Text style={{ color: "white" }}>
+                  <Text style={[ProfileScreenStyle.modal_subtitle]}>
                     you can always change your Weight
                   </Text>
-                    <HorizontalPicker
-                      data = {weights}
-                      renderItem={renderItem}
-                      itemWidth={80}
-                      onChange={setTempWeight}
-                    />
-
-
-                  <View style={[ProfileScreenStyle.modal_input_box]} />
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-around",
+                      height: 250,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flex: 1,
                     }}
                   >
-                
+                    <View style={{ width: 240, alignSelf: "center" }}>
+                      <HorizontalPicker
+                        data={weights}
+                        renderItem={(item, index) => (
+                          <View
+                            style={{
+                              width: 80,
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: tempWeight === item ? 40 : 20,
+                                color:
+                                  tempWeight === item
+                                    ? colors.clr_brightblue
+                                    : colors.clr_lightgray,
+                                textAlign: "center",
+                              }}
+                            >
+                              {String(item).padStart(3, " ")}
+                            </Text>
+                          </View>
+                        )}
+                        itemWidth={80}
+                        defaultIndex={Math.floor(weights.length / 2)}
+                        animatedScrollToDefaultIndex={true}
+                        onChange={setTempWeight}
+                      />
+                    </View>
+                  </View>
+                  <View>
                     <TouchableOpacity
+                      style={ProfileScreenStyle.modal_button}
                       onPress={handleWeightUpdate}
-                      style={[
-                        ProfileScreenStyle.modal_button,
-                        { backgroundColor: "blue" },
-                      ]}
                     >
-                      <Text style={{ color: "white" }}>Done</Text>
+                      <Text style={[ProfileScreenStyle.modal__button__text]}>
+                        Done
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -734,43 +775,60 @@ export default function ProfileScreen({}) {
               transparent={true}
             >
               <View style={[ProfileScreenStyle.box_modal]}>
-                <View style={[ProfileScreenStyle.inside_box_modal]}>
-                  <Text style={[ProfileScreenStyle.modal_header_text]}>
-                    Select Your Height
-                  </Text>
-                  <Text style={{ color: "white" }}>
-                    you can always change your Height
-                  </Text>
-                  <View style = {{width:200 ,height:300, }}>
+                <View
+                  style={[ProfileScreenStyle.inside_box_modal, { gap: 70 }]}
+                >
+                  <View>
+                    <Text style={[ProfileScreenStyle.modal_header_text]}>
+                      Select Your Height
+                    </Text>
+                    <Text style={{ color: "white" }}>
+                      you can always change your Height
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      {
+                        height: 250,
+                        width: 80,
+                      },
+                    ]}
+                  >
                     <ScrollPicker
                       dataSource={heights}
-                      selectedIndex={heights.indexOf(setHeight)}
-                      renderItem={(data, Index) => {
-                        return <Text style={{ fontSize: 20 }}>{data}</Text>;
-                      }}
+                      selectedIndex={1}
+                      renderItem={(data, index) => (
+                        <Text
+                          style={{
+                            fontSize: tempHeight === data ? 40 : 22,
+                            color:
+                              tempHeight === data
+                                ? colors.clr_brightblue
+                                : "#fff",
+                            fontWeight: tempHeight === data ? "bold" : "normal",
+                            textAlign: "center",
+                          }}
+                        >
+                          {data}
+                        </Text>
+                      )}
                       onValueChange={setTempHeight}
-                      wrapperHeight={200}
-                      wrapperBackground="#3A3A3A"
-                      itemHeight={60}
-                      highlightColor="#0046C2"
+                      wrapperBackground={"transparent"}
+                      itemHeight={50}
+                      highlightColor={colors.clr_brightblue}
                       highlightBorderWidth={3}
+                      highlightWidth={50}
                     />
-                    </View>
-                  <View style={[ProfileScreenStyle.modal_input_box]} />
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-around",
-                    }}
-                  >
+                  </View>
+
+                  <View>
                     <TouchableOpacity
+                      style={ProfileScreenStyle.modal_button}
                       onPress={handleHeightUpdate}
-                      style={[
-                        ProfileScreenStyle.modal_button,
-                        { backgroundColor: "blue" },
-                      ]}
                     >
-                      <Text style={{ color: "white" }}>Done</Text>
+                      <Text style={[ProfileScreenStyle.modal__button__text]}>
+                        Done
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -789,7 +847,7 @@ export default function ProfileScreen({}) {
                       ProfileScreenStyle.button_edit,
                       { backgroundColor: "#5A8DA7" },
                     ]}
-                    onPress={handleEditWeight}
+                    onPress={handleEditFat}
                   >
                     <IconEntypo
                       name={"edit"}
@@ -814,46 +872,65 @@ export default function ProfileScreen({}) {
               transparent={true}
             >
               <View style={[ProfileScreenStyle.box_modal]}>
-                <View style={[ProfileScreenStyle.inside_box_modal]}>
+                <View style={[ProfileScreenStyle.inside_box_modal, {gap:70}]}>
+                  <View>
                   <Text style={[ProfileScreenStyle.modal_header_text]}>
                     Edit Body Fat %.
                   </Text>
-                  <TextInput
-                    style={[ProfileScreenStyle.modal_text_input]}
-                    keyboardType="numeric"
-                    onChangeText={(text) => setTempFat(text)}
-                  />
-                  <View style={[ProfileScreenStyle.modal_input_box]} />
+                  <Text style={[ProfileScreenStyle.modal_subtitle]}>
+                    You can always change your Fat
+                  </Text>
+                  </View>
                   <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-around",
-                    }}
+                    style={[
+                      {
+                        height: 250,
+                        width: 80,
+                      },
+                    ]}
                   >
+                    <ScrollPicker
+                      dataSource={fats}
+                      selectedIndex={1}
+                      renderItem={(data, index) => (
+                        <Text
+                          style={{
+                            fontSize: tempFat === data ? 40 : 22,
+                            color:
+                            tempFat === data
+                                ? colors.clr_brightblue
+                                : "#fff",
+                            fontWeight: tempFat === data ? "bold" : "normal",
+                            textAlign: "center",
+                          }}
+                        >
+                          {data}
+                        </Text>
+                      )}
+                      onValueChange={setTempFat}
+                      wrapperBackground={"transparent"}
+                      itemHeight={50}
+                      highlightColor={colors.clr_brightblue}
+                      highlightBorderWidth={3}
+                      highlightWidth={50}
+                    />
+                  </View>
+
+                  <View>
                     <TouchableOpacity
-                      onPress={() => setModalVisibleFat(false)}
-                      style={[
-                        ProfileScreenStyle.modal_button,
-                        { backgroundColor: "lightgray" },
-                      ]}
-                    >
-                      <Text>close</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
+                      style={ProfileScreenStyle.modal_button}
                       onPress={handleFatUpdate}
-                      style={[
-                        ProfileScreenStyle.modal_button,
-                        { backgroundColor: "green" },
-                      ]}
                     >
-                      <Text style={{ color: "white" }}>Save</Text>
+                      <Text style={[ProfileScreenStyle.modal__button__text]}>
+                        Done
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "#6A0572" }]}
+              style={[ProfileScreenStyle.box, { backgroundColor: "#8E44AD" }]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View>
