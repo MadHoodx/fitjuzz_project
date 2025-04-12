@@ -12,17 +12,17 @@ const ProfileScreenStyle = StyleSheet.create({
   },
   box: {
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 4,
+    // },
+    // shadowOpacity: 0.3,
+    // shadowRadius: 4.65,
+    // elevation: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    height: 110,
+    height: 100,
     width: "49%",
   },
   longbox: {
@@ -38,6 +38,7 @@ const ProfileScreenStyle = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 13,
     width: "100%",
+    height:100
   },
 
   profile_box: {
@@ -67,7 +68,7 @@ const ProfileScreenStyle = StyleSheet.create({
   profile_button_edit: {
     width: 15,
     height: 15,
-    backgroundColor: colors.clr_brightblue,
+    backgroundColor: colors.clr_lightgray,
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
@@ -94,7 +95,7 @@ const ProfileScreenStyle = StyleSheet.create({
     alignItems: "center",
   },
   username_text: {
-    color: colors.clr_white,
+    color: colors.clr_lightgray,
     fontSize: sizes.size_lg,
     textAlign: "center",
     paddingTop: 55,
@@ -128,7 +129,7 @@ const ProfileScreenStyle = StyleSheet.create({
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
-    opacity:0.5
+    opacity: 0.3,
   },
   footer__box: {
     flexDirection: "row",
@@ -160,8 +161,7 @@ const ProfileScreenStyle = StyleSheet.create({
     gap: 5,
   },
   body_text_number: {
-    fontSize: sizes.size_4xl,
-    fontWeight: "bold",
+    fontSize: sizes.size_3xl,
     color: colors.clr_white,
   },
   body_text_unit: {
@@ -170,8 +170,8 @@ const ProfileScreenStyle = StyleSheet.create({
   },
   bmi_text: {
     color: colors.clr_white,
-    fontSize: sizes.size_2xl,
-    fontWeight: "bold",
+    fontSize: sizes.size_lg,
+    marginTop: 5,
   },
   textContainer: {
     flexDirection: "row",
@@ -271,27 +271,6 @@ const ProfileScreenStyle = StyleSheet.create({
   table_row_cell: {
     borderWidth: 1,
     backgroundColor: "lightgray",
-  },
-  muscle__box: {
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-    paddingHorizontal: 15,
-    paddingVertical: 13,
-    height: 130,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  muscle__inside__box: {
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   dumbbell_top: {
     position: "absolute",
