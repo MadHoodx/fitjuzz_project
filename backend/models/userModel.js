@@ -1,6 +1,15 @@
 
 const mongoose = require("mongoose");
 
+const weightEntrySchema = new mongoose.Schema({
+  weight: { type: Number, required: true },
+  date: { type: Date, default: Date.now }
+});
+const heightEntrySchema = new mongoose.Schema({
+  height: { type: Number, required: true },
+  date: { type: Date, default: Date.now }
+});
+
 const userSchema = new mongoose.Schema({
   userType: { type: String, enum: ['normal', 'google', 'x'], required: true },
   googleId: { type: String, sparse: true },
@@ -30,6 +39,8 @@ const userSchema = new mongoose.Schema({
   sex: { type: String, default: null },
   age: {type: Number, default: 0},
   muscle: { type: Number, default: 0 },
+  weightHistory: [weightEntrySchema],
+  heightHistory: [heightEntrySchema],
 },
   { timestamps: true });
 

@@ -7,40 +7,26 @@ const ProfileScreenStyle = StyleSheet.create({
   },
   text__topic: {
     color: colors.clr_white,
-    fontSize: sizes.size_lg,
-    fontWeight: "bold",
+    fontSize: sizes.size_base,
+  },
+  text__seeall:{
+color:colors.clr_brightblue
   },
   box: {
     borderRadius: 10,
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 4,
-    // },
-    // shadowOpacity: 0.3,
-    // shadowRadius: 4.65,
-    // elevation: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
     height: 100,
     width: "49%",
   },
   longbox: {
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-    paddingHorizontal: 15,
-    paddingVertical: 13,
+    paddingHorizontal: 20,
     width: "100%",
-    height:100
+    height: 100,
+    alignItems: "center",
+    justifyContent: "center",
   },
-
   profile_box: {
     padding: 20,
     height: 200,
@@ -129,7 +115,7 @@ const ProfileScreenStyle = StyleSheet.create({
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
-    opacity: 0.3,
+    opacity: 0.6,
   },
   footer__box: {
     flexDirection: "row",

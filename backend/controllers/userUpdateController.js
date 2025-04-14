@@ -3,18 +3,21 @@ const userUpdateController = {
   updateWeight: async (req, res) => {
     const { id } = req.params;
     const { weight } = req.body;
+
     try {
-      const user = await userModel.findByIdAndUpdate(
-          id,
-        { weight },
-        { new: true }
-      )
-     
+      const user = await userModel.findById(id);
+
       if (!user) {
-        console.log("User not found")
-           res.status(404).json({ message: "User not found" });
+        console.log("User not found");
+        return res.status(404).json({ message: "User not found" });
       }
-      res.json(user)
+
+      user.weightHistory.push({ weight, date: new Date() });
+
+      user.weight = weight;
+      await user.save();
+
+      res.json(user);
     } catch (error) {
       console.error("Error updating weight:", error);
       res.status(500).json({ message: "Server error" });
@@ -33,8 +36,10 @@ const userUpdateController = {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-
-      res.json(user)
+      user.heightHistory.push({ height, date: new Date() });
+      user.height = height;
+      await user.save();
+      res.json(user);
     } catch (error) {
       console.error("Error updating height:", error);
       res.status(500).json({ message: "Server error" });
@@ -55,7 +60,7 @@ const userUpdateController = {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user)
+      res.json(user);
     } catch (error) {
       console.error("Error updating fat:", error);
       res.status(500).json({ message: "Server error" });
@@ -76,7 +81,7 @@ const userUpdateController = {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user)
+      res.json(user);
     } catch (error) {
       console.error("Error updating muscle:", error);
       res.status(500).json({ message: "Server error" });
@@ -97,7 +102,7 @@ const userUpdateController = {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user)
+      res.json(user);
     } catch (error) {
       console.error("Error updating sex:", error);
       res.status(500).json({ message: "Server error" });
@@ -118,33 +123,30 @@ const userUpdateController = {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user)
+      res.json(user);
     } catch (error) {
       console.error("Error updating age:", error);
       res.status(500).json({ message: "Server error" });
     }
   },
-  updatePicture: async (req,res) => {
-    const { id } = req.params
-    const { picture } = req.body
+  updatePicture: async (req, res) => {
+    const { id } = req.params;
+    const { picture } = req.body;
     try {
-      
       const user = await userModel.findByIdAndUpdate(
         id,
         { picture },
-        { new : true }
-      )
+        { new: true }
+      );
 
-      if(!user) {
-        return res.status(400).json({message : "User not found"})
+      if (!user) {
+        return res.status(400).json({ message: "User not found" });
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error updating picture:", error);
       res.status(500).json({ message: "Server error" });
     }
-  }
-
+  },
 };
 
 module.exports = userUpdateController;

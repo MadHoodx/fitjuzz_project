@@ -5,11 +5,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
-  TextInput,
   Alert,
   Image,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import styles, { sizes, colors } from "../styles/style";
 import Header from "../components/Header";
@@ -18,7 +17,6 @@ import IconEntypo from "react-native-vector-icons/Entypo";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -49,6 +47,7 @@ export default function ProfileScreen({}) {
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
   const [isModalVisibleSex, setModalVisibleSex] = useState(false);
   const [isModalVisibleAge, setModalVisibleAge] = useState(false);
+  const [isVisibleMetric, setVisibleMetric] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null);
   const ages = Array.from({ length: 83 }, (_, index) => 18 + index);
   const navigation = useNavigation();
@@ -328,6 +327,9 @@ export default function ProfileScreen({}) {
   const handleEditSex = () => {
     setModalVisibleSex(true);
   };
+  const handleMetric =() =>{
+    navigation.navigate("Metric");
+  }
 
   const calLBM = () => {
     if (sex === "male" && fat == 0) {
@@ -649,10 +651,19 @@ export default function ProfileScreen({}) {
           {/* Profile Box Section */}
 
           {/* Data health Section */}
-          <Text style={[ProfileScreenStyle.text__topic]}>Health Metrics</Text>
+          <View style={[{justifyContent:"space-between", flexDirection:'row'}]}>
+            <Text style={[ProfileScreenStyle.text__topic]}>Health Metrics</Text>
+            <TouchableOpacity onPress={handleMetric}>
+              <Text style={[ProfileScreenStyle.text__seeall]}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 4 }}>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "rgba(58, 80, 107, 0.6)" }]}
+              style={[
+                ProfileScreenStyle.box,
+                { backgroundColor: "rgba(58, 80, 107, 0.6)" },
+              ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
@@ -749,7 +760,10 @@ export default function ProfileScreen({}) {
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "rgba(92, 148, 110, 0.6)" }]}
+              style={[
+                ProfileScreenStyle.box,
+                { backgroundColor: "rgba(92, 148, 110, 0.6)" },
+              ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
@@ -845,7 +859,10 @@ export default function ProfileScreen({}) {
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "rgba(75, 119, 141, 0.6)" }]}
+              style={[
+                ProfileScreenStyle.box,
+                { backgroundColor: "rgba(75, 119, 141, 0.6)" },
+              ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View style={[ProfileScreenStyle.header_box]}>
@@ -941,17 +958,22 @@ export default function ProfileScreen({}) {
               </View>
             </Modal>
             <View
-              style={[ProfileScreenStyle.box, { backgroundColor: "rgba(142, 68, 173, 0.6)" }]}
+              style={[
+                ProfileScreenStyle.box,
+                { backgroundColor: "rgba(142, 68, 173, 0.6)" },
+              ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
                 <View>
                   <View>
                     <View style={[ProfileScreenStyle.header_box_bmi]}>
                       <View>
-                      <Text style={[ProfileScreenStyle.header_text]}>BMI</Text>
-                      <Text style={[ProfileScreenStyle.bmi_text]}>
-                      {calBmi()}
-                    </Text>
+                        <Text style={[ProfileScreenStyle.header_text]}>
+                          BMI
+                        </Text>
+                        <Text style={[ProfileScreenStyle.bmi_text]}>
+                          {calBmi()}
+                        </Text>
                       </View>
                       <IconMaterialCommunityIcons
                         name={getBMIIcon(calculatedBmi)}
@@ -1013,7 +1035,8 @@ export default function ProfileScreen({}) {
                 </View>
               </View>
             </View>
-            <View
+            
+<View
               style={[
                 ProfileScreenStyle.longbox,
                 { backgroundColor: "#4D3170" },
@@ -1045,11 +1068,9 @@ export default function ProfileScreen({}) {
                 </View>
               </View>
             </View>
+            
             <View
-              style={[
-                ProfileScreenStyle.longbox,
-                { backgroundColor: "red" },
-              ]}
+              style={[ProfileScreenStyle.longbox, { backgroundColor: "red" }]}
             >
               <View>
                 <View style={[ProfileScreenStyle.header_box]}>
@@ -1082,6 +1103,10 @@ export default function ProfileScreen({}) {
                 </View>
               </View>
             </View>
+           
+            
+            
+            
 
             <View>
               <LineChart

@@ -132,12 +132,13 @@ export default function Header({ }) {
               </Text>
               <Text
                 style={{
-                  color: colors.clr_gray,
+                  color: colors.clr_white,
                   width: 300,
+                  fontWeight: "bold" 
                 }}
               >
                 Motivational quote :{" "}
-                <Text style={[styles.whiteText, { fontWeight: "bold" }]}>
+                <Text style={[{color:colors.clr_lightgray}]}>
                   "{quote}"
                 </Text>
               </Text>
