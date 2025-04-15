@@ -59,7 +59,9 @@ const userUpdateController = {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-
+      user.fatHistory.push({ fat, date: new Date() });
+      user.fat = fat;
+      await user.save();
       res.json(user);
     } catch (error) {
       console.error("Error updating fat:", error);

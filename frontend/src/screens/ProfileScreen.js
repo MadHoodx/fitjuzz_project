@@ -21,13 +21,8 @@ import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import moment from "moment";
-import { LineChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
-
 import HorizontalPicker from "@vseslav/react-native-horizontal-picker";
-
-const screenWidth = Dimensions.get("window").width;
 
 export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
@@ -47,13 +42,12 @@ export default function ProfileScreen({}) {
   const [isModalVisibleFat, setModalVisibleFat] = useState(false);
   const [isModalVisibleSex, setModalVisibleSex] = useState(false);
   const [isModalVisibleAge, setModalVisibleAge] = useState(false);
-  const [isVisibleMetric, setVisibleMetric] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null);
   const ages = Array.from({ length: 83 }, (_, index) => 18 + index);
   const navigation = useNavigation();
   const heights = Array.from({ length: 161 }, (_, i) => 90 + i);
   const weights = Array.from({ length: 251 }, (_, i) => 0 + i);
-  const fats = Array.from({ length: 30 }, (_, i) => 5 + i);
+  const fats = Array.from({ length: 60 }, (_, i) => 5 + i);
 
   useEffect(() => {
     fetchUser();
@@ -327,39 +321,8 @@ export default function ProfileScreen({}) {
   const handleEditSex = () => {
     setModalVisibleSex(true);
   };
-  const handleMetric =() =>{
+  const handleMetric = () => {
     navigation.navigate("Metric");
-  }
-
-  const calLBM = () => {
-    if (sex === "male" && fat == 0) {
-      const lbm = 0.407 * weight + 0.267 * height - 19.2;
-      return lbm;
-    } else if (sex === "female" && fat == 0) {
-      const lbm = 0.252 * weight + 0.473 * height - 48.3;
-      return lbm;
-    } else {
-      const lbm = weight - weight * fat;
-      return lbm;
-    }
-  };
-
-  const calBMR = (activityLevel) => {
-    // Men
-    const bmr = 88.362 + 13.397 * weight + 4.799 * height - 5.677 * 22;
-    if (activityLevel === "sedentary") {
-      return (bmr * 1.2).toString().split(".")[0];
-    } else if (activityLevel === "lightly") {
-      return (bmr * 1.375).toString().split(".")[0];
-    } else if (activityLevel === "moderately") {
-      return (bmr * 1.55).toString().split(".")[0];
-    } else if (activityLevel === "highintensity") {
-      return (bmr * 1.725).toString().split(".")[0];
-    } else if (activityLevel === "extraintensity") {
-      return (bmr * 1.9).toString().split(".")[0];
-    }
-    // const bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age) // True formula
-    return bmr.toString().split(".")[0];
   };
 
   const calBmi = () => {
@@ -651,7 +614,9 @@ export default function ProfileScreen({}) {
           {/* Profile Box Section */}
 
           {/* Data health Section */}
-          <View style={[{justifyContent:"space-between", flexDirection:'row'}]}>
+          <View
+            style={[{ justifyContent: "space-between", flexDirection: "row" }]}
+          >
             <Text style={[ProfileScreenStyle.text__topic]}>Health Metrics</Text>
             <TouchableOpacity onPress={handleMetric}>
               <Text style={[ProfileScreenStyle.text__seeall]}>See all</Text>
@@ -1035,97 +1000,13 @@ export default function ProfileScreen({}) {
                 </View>
               </View>
             </View>
-            
-<View
-              style={[
-                ProfileScreenStyle.longbox,
-                { backgroundColor: "#4D3170" },
-              ]}
-            >
-              <View>
-                <View style={[ProfileScreenStyle.header_box]}>
-                  <Text style={[ProfileScreenStyle.header_text]}>
-                    Lean Body Mass (LBM)
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    ProfileScreenStyle.body__box,
-                    { marginTop: 5, paddingHorizontal: 5 },
-                  ]}
-                >
-                  <View style={[ProfileScreenStyle.body__data__box]}>
-                    <Text style={[ProfileScreenStyle.body_text_number]}>
-                      {calLBM()}
-                    </Text>
-                    <Text style={[ProfileScreenStyle.body_text_unit]}>KG</Text>
-                  </View>
-                  <IconMaterialCommunityIcons
-                    name={"human"}
-                    size={40}
-                    color={"white"}
-                  />
-                </View>
-              </View>
-            </View>
-            
-            <View
-              style={[ProfileScreenStyle.longbox, { backgroundColor: "red" }]}
-            >
-              <View>
-                <View style={[ProfileScreenStyle.header_box]}>
-                  <Text style={[ProfileScreenStyle.header_text]}>
-                    Basal Metabolic Rate (BMR)
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    ProfileScreenStyle.body__box,
-                    { marginTop: 5, paddingHorizontal: 5 },
-                  ]}
-                >
-                  <View style={[ProfileScreenStyle.body__data__box]}>
-                    <Text style={[ProfileScreenStyle.body_text_number]}>
-                      {calBMR()}
-                    </Text>
-                    <Text style={[ProfileScreenStyle.body_text_unit]}>
-                      Calories/day
-                    </Text>
-                  </View>
-                  <View>
-                    <IconMaterialCommunityIcons
-                      name={"table"}
-                      size={40}
-                      color={"white"}
-                    />
-                    <Text>Tab to see table</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-           
-            
-            
-            
 
             <View>
-              <LineChart
-                data={data}
-                width={screenWidth}
-                height={220}
-                chartConfig={chartConfig}
-              />
-              <Text style={{ color: "white" }}>
+              <Text style={{ color: colors.clr_lightgray, fontSize:sizes.size_xs }}>
                 Last update : {moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")}{" "}
               </Text>
             </View>
             {/* Data health Section */}
-
-            {/* Analysist Section */}
-            <View>
-              <Text style={[ProfileScreenStyle.text__topic]}>Analysist</Text>
-            </View>
-            {/* Analysist Section */}
 
             {/* Logout button Section */}
             <>

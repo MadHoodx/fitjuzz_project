@@ -196,6 +196,7 @@ color:colors.clr_brightblue
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+backgroundColor: 'rgba(0,0, 0, 0.9)'
   },
   inside_box_modal: {
     borderRadius: 10,
@@ -242,12 +243,17 @@ color:colors.clr_brightblue
   table_header: {
     flexDirection: "row",
     borderWidth: 1,
-    backgroundColor: "lightblue",
+    backgroundColor: colors.clr_brightblue,
     marginTop: 8,
+    height:40,
   },
   table_header_cell: {
     borderWidth: 1,
     textAlign: "center",
+    color: colors.clr_lightgray,
+    fontWeight:'bold',
+    height:40,
+    paddingVertical:8
   },
   table_row: {
     flexDirection: "row",
@@ -257,6 +263,10 @@ color:colors.clr_brightblue
   table_row_cell: {
     borderWidth: 1,
     backgroundColor: "lightgray",
+    textAlign:'center',
+    height:50,
+    alignItems:'center',
+    paddingVertical:13
   },
   dumbbell_top: {
     position: "absolute",
