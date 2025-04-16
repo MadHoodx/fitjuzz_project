@@ -292,6 +292,7 @@ const MetricScreen = () => {
   const handleBack = () => {
     navigation.navigate("Profile");
   };
+ 
   const handleBMR = () => {
     setIsModalVisibleBMR(true);
   };
@@ -325,7 +326,7 @@ const MetricScreen = () => {
       <ScrollView style={[styles.container]}>
         <View style={[{ paddingBottom: 60 }]}>
           <Dumbbells />
-          <View style={[{ paddingTop: 20, gap: 40 }]}>
+          <View style={[{ paddingTop: 20, gap: 30 }]}>
             <View>
               <TouchableOpacity
                 style={[MetricScreenStyles.goback__button]}
@@ -336,12 +337,12 @@ const MetricScreen = () => {
                   size={20}
                   color={"white"}
                 />
-              </TouchableOpacity>
-            </View>
-            <View style={[{ gap: 10 }]}>
               <Text style={[MetricScreenStyles.text__topic]}>
                 My Health Metric
               </Text>
+              </TouchableOpacity>
+            </View>
+            <View>
               <Text style={[MetricScreenStyles.text__detail]}>
                 See detail about your health metric
               </Text>
@@ -744,7 +745,7 @@ const MetricScreen = () => {
                       },
                     ]}
                   >
-                    {calLBM() != 0 && weight != 0 ? (
+                    {calLBM() != 0 && weight != 0 && sex != 'null' ? (
                       <View style={[{ paddingRight: 15 }]}>
                         <Text style={[{ fontSize: 60 }]}>{LBMIcon()}</Text>
                       </View>
@@ -991,14 +992,15 @@ const MetricScreenStyles = StyleSheet.create({
     flex: 1,
   },
   goback__button: {
-    width: 30,
-    height: 30,
+    width: '100%',
+    height:30,
     borderRadius: 100,
-    justifyContent: "center",
+    flexDirection:'row',
     alignItems: "center",
+    gap:5
   },
   text__topic: {
-    fontSize: sizes.size_3xl,
+    fontSize: sizes.size_base,
     color: colors.clr_white,
     fontWeight: "bold",
   },
@@ -1056,6 +1058,7 @@ const MetricScreenStyles = StyleSheet.create({
   text__error: {
     fontSize: sizes.size_xs,
     color: colors.clr_lightgray,
+    paddingRight:20
   },
   dumbbell_top: {
     position: "absolute",

@@ -10,6 +10,8 @@ import WelcomeScreen from "./src/screens/WelcomScreen";
 import TimerScreen from "./src/screens/TimerScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import MetricScreen from "./src/screens/MetricScreen"
+import PrivacyScreen from "./src/screens/PrivacyScreen";
+import HelpScreen from "./src/screens/HelpScreen";
 import styles, { colors } from "./src/styles/style";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import IconAntDesign from "react-native-vector-icons/AntDesign";
@@ -122,6 +124,8 @@ function MyStack() {
       <Stack.Screen name="Main" component={MainScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Metric" component={MetricScreen}/>
+      <Stack.Screen name="Privacy" component={PrivacyScreen}/>
+      <Stack.Screen name="Help" component={HelpScreen}/>
       <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="Note" component={NoteScreen} />

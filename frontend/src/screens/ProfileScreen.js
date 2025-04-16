@@ -15,8 +15,10 @@ import Header from "../components/Header";
 import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import IconAntDesign from "react-native-vector-icons/AntDesign";
+import IconIonicons from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -325,6 +327,7 @@ export default function ProfileScreen({}) {
     navigation.navigate("Metric");
   };
 
+
   const calBmi = () => {
     if (height > 0) {
       const calculatedBmi = weight / Math.pow(height / 100, 2);
@@ -369,20 +372,31 @@ export default function ProfileScreen({}) {
   const calculatedBmi = parseFloat(calBmi());
   const pointerPosition = getPointerPosition(calculatedBmi);
   const bmiColor = getBMIColor(calculatedBmi);
-  const chartConfig = {
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  };
-  const data = {
-    labels: ["January", "February", "March", "April", "May"],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-        strokeWidth: 2,
-      },
-    ],
-    legend: ["Your Weight"],
-  };
+
+  const otherButton = [
+    {
+      id: "privacy",
+      subTitle: "Privacy Policy",
+      Icon: "lock",
+      screen :'Privacy'
+    },
+    {
+      id: "setting",
+      subTitle: "Setting",
+      Icon: "setting",
+    },
+    {
+      id: "help",
+      subTitle: "Help",
+      Icon: "customerservice",
+      screen: 'Help'
+    },
+    {
+      id: "logout",
+      subTitle: "Logout",
+      Icon: "logout",
+    },
+  ];
 
   const Dumbbells = () => {
     return (
@@ -1001,22 +1015,48 @@ export default function ProfileScreen({}) {
               </View>
             </View>
 
-            <View>
-              <Text style={{ color: colors.clr_lightgray, fontSize:sizes.size_xs }}>
-                Last update : {moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")}{" "}
+            <View style={[{ paddingBottom: 30 }]}>
+              <Text
+                style={{ color: colors.clr_lightgray, fontSize: sizes.size_xs }}
+              >
+                Last update : {moment(updatedAt).format("DD/MM/YYYY HH:mm")}
               </Text>
             </View>
             {/* Data health Section */}
 
             {/* Logout button Section */}
-            <>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonText]}
-                onPress={haddleLogout}
-              >
-                <Text style={[styles.buttonText]}>Log out</Text>
-              </TouchableOpacity>
-            </>
+            <View style={[{ gap: 15 }]}>
+              <Text style={[ProfileScreenStyle.text__topic]}>Other</Text>
+              {otherButton.map((otherButtons) => (
+                <TouchableOpacity
+                  key={otherButtons.id}
+                  style={[
+                    ProfileScreenStyle.button__Other,
+                    ProfileScreenStyle.buttonText__Other,
+                  ]}
+                  onPress={() => navigation.navigate(otherButtons.screen)}
+                >
+                  <View style={[ProfileScreenStyle.box__left__Other]}>
+                    <View style={[ProfileScreenStyle.box__icon__Other]}>
+                      <IconAntDesign
+                        name={otherButtons.Icon}
+                        size={15}
+                        color={colors.clr_lightgray}
+                      />
+                    </View>
+                    <Text style={[ProfileScreenStyle.buttonText__Other]}>
+                      {otherButtons.subTitle}
+                    </Text>
+                  </View>
+                  <IconIonicons
+                    name={"arrow-redo-sharp"}
+                    size={15}
+                    color={colors.clr_brightblue}
+                    style={[{ paddingRight: 10 }]}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
             {/* Logout button Section */}
           </View>
         </View>

@@ -45,7 +45,7 @@ export default function GuideScreen() {
 
   return (
     <View style={GuideScreenStyle.container}>
-      {/* <Header /> */}
+      <Header /> 
       <ScrollView 
         style={GuideScreenStyle.content} 
         contentContainerStyle={GuideScreenStyle.contentContainer}

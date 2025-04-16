@@ -9,8 +9,9 @@ const ProfileScreenStyle = StyleSheet.create({
     color: colors.clr_white,
     fontSize: sizes.size_base,
   },
-  text__seeall:{
-color:colors.clr_brightblue
+  text__seeall: {
+    color: colors.clr_brightblue,
+    textDecorationLine: 'underline'
   },
   box: {
     borderRadius: 10,
@@ -196,7 +197,7 @@ color:colors.clr_brightblue
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-backgroundColor: 'rgba(0,0, 0, 0.9)'
+    backgroundColor: "rgba(0,0, 0, 0.9)",
   },
   inside_box_modal: {
     borderRadius: 10,
@@ -245,15 +246,15 @@ backgroundColor: 'rgba(0,0, 0, 0.9)'
     borderWidth: 1,
     backgroundColor: colors.clr_brightblue,
     marginTop: 8,
-    height:40,
+    height: 40,
   },
   table_header_cell: {
     borderWidth: 1,
     textAlign: "center",
     color: colors.clr_lightgray,
-    fontWeight:'bold',
-    height:40,
-    paddingVertical:8
+    fontWeight: "bold",
+    height: 40,
+    paddingVertical: 8,
   },
   table_row: {
     flexDirection: "row",
@@ -263,10 +264,10 @@ backgroundColor: 'rgba(0,0, 0, 0.9)'
   table_row_cell: {
     borderWidth: 1,
     backgroundColor: "lightgray",
-    textAlign:'center',
-    height:50,
-    alignItems:'center',
-    paddingVertical:13
+    textAlign: "center",
+    height: 50,
+    alignItems: "center",
+    paddingVertical: 13,
   },
   dumbbell_top: {
     position: "absolute",
@@ -291,6 +292,46 @@ backgroundColor: 'rgba(0,0, 0, 0.9)'
     opacity: 0.3,
     zIndex: 0,
     transform: [{ rotate: "-50deg" }],
+  },
+  button__Other: {
+    width: "100%",
+    backgroundColor: colors.clr_background_modal,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+    flexDirection: "row",
+    height: 40,
+    alignItems:'center',
+    paddingHorizontal:5,
+    gap:7,
+    justifyContent:'space-between',
+  },
+  buttonText__Other: {
+    fontSize: sizes.size_xs,
+    
+    textAlign: "center",
+    color: colors.clr_white,
+    color: colors.clr_lightgray,
+  },
+  box__left__Other:{
+flexDirection:'row',
+justifyContent:'center',
+alignItems:'center',
+gap:5
+  },
+  box__icon__Other: {
+    backgroundColor: '#494949',
+    width: 35,
+    height: 35,
+    borderRadius: 100,
+    justifyContent:'center',
+    alignItems:'center'
   },
 });
 
