@@ -1,5 +1,19 @@
 const mongoose = require('mongoose');
 
+// กำหนดโครงสร้างข้อมูลในรูปแบบ JSON เพื่อสะดวกในการใช้กับ frontend
+const exerciseDetailJson = {
+    "_id": "ObjectId", // ไอดีของรายละเอียดท่าออกกำลังกาย
+    "name": "String", // ชื่อท่าออกกำลังกาย
+    "description": "String", // รายละเอียดท่าออกกำลังกาย
+    "picture1": "String", // รูปหลักในหน้ารายละเอียด (รูปแรกใน slider)
+    "picture2": "String", // รูปที่สองในหน้ารายละเอียด (รูปที่สองใน slider)
+    "category": "String", // หมวดหมู่ (chest, back, arms, abs, leg, shoulder)
+    "steps": ["String"], // ขั้นตอนการทำท่าออกกำลังกาย
+    "targetMuscles": "String", // กล้ามเนื้อเป้าหมาย
+    "tips": "String", // เคล็ดลับในการทำท่าออกกำลังกาย
+    "__v": "Number" // เวอร์ชันของข้อมูล (ใช้สำหรับ Mongoose)
+};
+
 const exerciseDetailSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -9,10 +23,15 @@ const exerciseDetailSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    picture: {
+    picture1: {
         type: String,
-        required: true,
-        default: "https://images.squarespace-cdn.com/content/v1/64c8035f53e9a56246c7c294/1723420893761-XYJVWOXL91SW5442P6RM/maxresdefault-29-1024x576.jpg"
+        default: "",
+        description: "รูปหลักสำหรับแสดงในหน้ารายละเอียด (รูปแรกใน Slider)"
+    },
+    picture2: {
+        type: String,
+        default: "",
+        description: "รูปที่สองสำหรับแสดงในหน้ารายละเอียด (รูปที่สองใน Slider)"
     },
     category: {
         type: String,
@@ -38,6 +57,38 @@ const exerciseDetailSchema = new mongoose.Schema({
     }
 });
 
+// ฟังก์ชันแปลง Document เป็น JSON ที่ใช้ได้กับ Modal
+exerciseDetailSchema.methods.toModalJSON = function() {
+    // แปลง targetMuscles เป็นรูปแบบที่เหมาะสม
+    let parsedTargetMuscles = this.targetMuscles;
+    
+    // ถ้าเป็น string และมีรูปแบบที่แบ่งด้วย , ให้แปลงเป็น object
+    if (typeof this.targetMuscles === 'string' && this.targetMuscles.includes(',')) {
+        const muscleList = this.targetMuscles.split(',').map(m => m.trim());
+        parsedTargetMuscles = {
+            primary: muscleList.slice(0, Math.ceil(muscleList.length / 2)),
+            secondary: muscleList.slice(Math.ceil(muscleList.length / 2))
+        };
+    }
+    
+    return {
+        _id: this._id,
+        name: this.name,
+        description: this.description,
+        picture1: this.picture1 || "",
+        picture2: this.picture2 || "",
+        category: this.category,
+        steps: this.steps,
+        targetMuscles: parsedTargetMuscles,
+        tips: this.tips,
+        __v: this.__v
+    };
+};
+
 const exerciseDetailModel = mongoose.model('exerciseDetailModel', exerciseDetailSchema);
 
-module.exports = exerciseDetailModel; 
+// ส่งออกทั้งโมเดลและโครงสร้าง JSON
+module.exports = { 
+    exerciseDetailModel,
+    exerciseDetailJson
+}; 

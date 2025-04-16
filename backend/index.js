@@ -250,5 +250,5 @@ app.use("/api/user", exerciseRoute);
 app.use("/api/user", workoutRoute);
 app.use("/api/user", guideRoute);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -22,8 +22,6 @@ const exerciseSchema = new mongoose.Schema({
    
 });
 
-
-
 const exerciseModel = mongoose.model('exerciseModel', exerciseSchema);
 
 module.exports = exerciseModel;

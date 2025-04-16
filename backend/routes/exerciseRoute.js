@@ -7,4 +7,6 @@ router.get("/getExercises", exerciseController.exercises);
 
 router.get('/getExerciseDetails/:id', exerciseDetailController.getExerciseDetails);
 
+router.post('/addExercise', exerciseController.addExercise);
+
 module.exports = router;

@@ -1,5 +1,5 @@
-const Exercise = require('../models/exerciseModel');
-const ExerciseDetail = require('../models/exerciseDetail');
+const exerciseModel = require('../models/exerciseModel');
+const { exerciseDetailModel } = require('../models/exerciseDetail');
 
 const exerciseDetailController = {
   getExerciseDetails: async (req, res) => {
@@ -8,7 +8,7 @@ const exerciseDetailController = {
       console.log(`[DEBUG] Received request for exercise details with ID: ${exerciseId}`);
       
       // find exercise by id
-      const exercise = await Exercise.findById(exerciseId);
+      const exercise = await exerciseModel.findById(exerciseId);
       console.log(`[DEBUG] Exercise found:`, exercise ? 'Yes' : 'No');
       
       if (!exercise) {
@@ -17,15 +17,16 @@ const exerciseDetailController = {
       }
       
       // create or find additional exercise details
-      let exerciseDetail = await ExerciseDetail.findOne({ name: exercise.name });
+      let exerciseDetail = await exerciseDetailModel.findOne({ name: exercise.name });
       
       // if no additional exercise details, create new one
       if (!exerciseDetail) {
         console.log(`[DEBUG] Creating new exercise detail for: ${exercise.name}`);
-        exerciseDetail = new ExerciseDetail({
+        exerciseDetail = new exerciseDetailModel({
           name: exercise.name,
           description: exercise.description,
-          picture: exercise.picture,
+          picture1: "",
+          picture2: "",
           category: exercise.category,
         });
         await exerciseDetail.save();
@@ -33,6 +34,8 @@ const exerciseDetailController = {
       
       const exerciseDetails = {
         ...exercise._doc,
+        picture1: exerciseDetail.picture1 || "",
+        picture2: exerciseDetail.picture2 || "",
         steps: exerciseDetail.steps,
         targetMuscles: exerciseDetail.targetMuscles || getDefaultTargetMuscles(exercise.category),
         tips: exerciseDetail.tips

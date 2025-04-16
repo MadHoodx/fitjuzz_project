@@ -120,27 +120,28 @@ const ExerciseDetailsModal = ({ visible, exercise, onClose }) => {
   
   // ฟังก์ชันสำหรับรับ URL รูปภาพแสดงกล้ามเนื้อตามหมวดหมู่
   const getMuscleImageUrl = () => {
+    // ใช้ muscleImageUrl หรือ muscleImage จากข้อมูลรายละเอียดเป็นอันดับแรก
     if (details && details.muscleImageUrl) {
       return details.muscleImageUrl;
     }
     
-    // ตรวจสอบชื่อ property อื่นๆ ที่อาจใช้
     if (details && details.muscleImage) {
       return details.muscleImage;
     }
     
-    // URL เริ่มต้นสำหรับรูปภาพแสดงกล้ามเนื้อตามหมวดหมู่
-    const defaultImages = {
-      'chest': 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955',
-      'back': 'https://images.unsplash.com/photo-1594381898411-846e7d193883',
-      'shoulders': 'https://images.unsplash.com/photo-1581122584612-713f89daa8eb',
-      'arms': 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61',
-      'legs': 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a',
-      'core': 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955'
+    // ถ้าไม่มีข้อมูลจากรายละเอียด ใช้รูปตามประเภทกล้ามเนื้อ
+    const muscleImages = {
+      'chest': 'https://images.unsplash.com/photo-1585842378054-ee2e52f94ba2',
+      'back': 'https://images.unsplash.com/photo-1600677396660-e090697d7638',
+      'shoulders': 'https://images.unsplash.com/photo-1598971639058-bb1962a42cd6',
+      'arms': 'https://images.unsplash.com/photo-1590507621108-433608c97823',
+      'legs': 'https://images.unsplash.com/photo-1434682881908-b43d0467b798',
+      'abs': 'https://images.unsplash.com/photo-1577221084712-45b0445d2b00',
+      'core': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b'
     };
     
     const category = exercise?.category?.toLowerCase() || 'chest';
-    return defaultImages[category] || defaultImages['chest'];
+    return muscleImages[category] || muscleImages['chest'];
   };
 
   // ข้อมูลขั้นตอนการทำท่าออกกำลังกาย
@@ -162,18 +163,40 @@ const ExerciseDetailsModal = ({ visible, exercise, onClose }) => {
 
   // Render slide items (รูปภาพท่า และ รูปภาพกล้ามเนื้อ)
   const renderImageItem = ({ item, index }) => {
+    console.log('Rendering image item', index);
+    console.log('Details available:', details ? 'Yes' : 'No');
+    if (details) {
+      console.log('Picture1:', details.picture1);
+      console.log('Picture2:', details.picture2);
+    }
+    
     return (
       <View style={[styles.slideItemContainer, { width: width * 0.85 }]}>
         <Image
           source={{ uri: index === 0 
-            ? (exercise?.picture || 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955')
-            : getMuscleImageUrl()
+            ? (details?.picture1 || exercise?.picture || getDefaultImageByCategory())
+            : (details?.picture2 || getMuscleImageUrl())
           }}
           style={styles.slideImage}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       </View>
     );
+  };
+
+  // รูปเริ่มต้นสำหรับหน้าแรกตาม category
+  const getDefaultImageByCategory = () => {
+    const defaultImages = {
+      'chest': 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955',
+      'back': 'https://images.unsplash.com/photo-1594381898411-846e7d193883',
+      'shoulders': 'https://images.unsplash.com/photo-1581122584612-713f89daa8eb',
+      'arms': 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61',
+      'legs': 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a',
+      'core': 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955'
+    };
+    
+    const category = exercise?.category?.toLowerCase() || 'chest';
+    return defaultImages[category] || defaultImages['chest'];
   };
 
   const handleScroll = (event) => {
@@ -196,7 +219,7 @@ const ExerciseDetailsModal = ({ visible, exercise, onClose }) => {
         <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.modalBackground}>
             <BlurView 
-              intensity={Platform.OS === 'ios' ? 70 : 90} 
+              intensity={Platform.OS === 'ios' ? 100 : 140} 
               tint="dark"
               style={{...StyleSheet.absoluteFillObject}}
             />
@@ -397,7 +420,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
   },
   imageCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     borderRadius: 15,
     overflow: 'hidden',
     width: '100%',
@@ -407,12 +430,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   slideItemContainer: {
-    height: width * 0.65,
+    height: width * 0.9,
     overflow: 'hidden',
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 15,
   },
   slideImage: {
     width: '100%',
     height: '100%',
+    backgroundColor: 'transparent',
+    borderRadius: 15,
   },
   paginationContainer: {
     flexDirection: 'row',
