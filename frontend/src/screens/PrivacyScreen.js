@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 const PrivacyScreen = () => {
   const navigation = useNavigation();
   const handleBack = () => {
-    navigation.navigate("Profile");
+    navigation.navigate("MyTabs", { screen: "Profile" });
   };
   const dataPolicy = [
     {

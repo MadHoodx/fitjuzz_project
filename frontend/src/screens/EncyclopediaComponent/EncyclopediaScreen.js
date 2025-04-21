@@ -60,7 +60,7 @@ export default function Encyclopedia({ navigation }) {
           <View style={styles.searchBar}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search Steroids"
+              placeholder="Search Encyclopedia"
               value={searchQuery}
               onChangeText={setSearchQuery}
             />

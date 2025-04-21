@@ -290,7 +290,7 @@ const MetricScreen = () => {
     ],
   };
   const handleBack = () => {
-    navigation.navigate("Profile");
+    navigation.navigate("MyTabs", { screen: "Profile" });
   };
  
   const handleBMR = () => {

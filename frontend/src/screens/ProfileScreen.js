@@ -1025,26 +1025,33 @@ export default function ProfileScreen({}) {
             {/* Data health Section */}
 
             {/* Logout button Section */}
+
             <View style={[{ gap: 15 }]}>
-              <Text style={[ProfileScreenStyle.text__topic]}>Other</Text>
+              <Text style={[ProfileScreenStyle.texttopic]}>Other</Text>
               {otherButton.map((otherButtons) => (
                 <TouchableOpacity
                   key={otherButtons.id}
                   style={[
-                    ProfileScreenStyle.button__Other,
-                    ProfileScreenStyle.buttonText__Other,
+                    ProfileScreenStyle.buttonOther,
+                    ProfileScreenStyle.buttonTextOther,
                   ]}
-                  onPress={() => haddleLogout()}
+                  onPress={()=>{
+                    if (otherButtons.subTitle !== 'Logout') {
+                      navigation.navigate(otherButtons.screen)
+                    }else{
+                      haddleLogout();
+                    }
+                  }}
                 >
-                  <View style={[ProfileScreenStyle.box__left__Other]}>
-                    <View style={[ProfileScreenStyle.box__icon__Other]}>
+                  <View style={[ProfileScreenStyle.boxleftOther]}>
+                    <View style={[ProfileScreenStyle.boxiconOther]}>
                       <IconAntDesign
                         name={otherButtons.Icon}
                         size={15}
                         color={colors.clr_lightgray}
                       />
                     </View>
-                    <Text style={[ProfileScreenStyle.buttonText__Other]}>
+                    <Text style={[ProfileScreenStyle.buttonTextOther]}>
                       {otherButtons.subTitle}
                     </Text>
                   </View>

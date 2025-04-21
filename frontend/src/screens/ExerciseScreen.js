@@ -34,7 +34,6 @@ export default function ExerciseScreen({ navigation }) {
     "Abs",
     "Arms",
     "Shoulders",
-    "Glutes",
     "Cardio",
   ];
 
