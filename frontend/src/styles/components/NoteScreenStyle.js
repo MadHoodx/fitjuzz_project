@@ -134,6 +134,7 @@ const NoteScreenStyle = StyleSheet.create({
   modal_category_box: {
     marginTop: 15,
     marginBottom: 15,
+    justifyContent: 'center',
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,
@@ -144,7 +145,7 @@ const NoteScreenStyle = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    width: 50,
+    width: 60,
   },
   modal_category_inside_text: {
     fontSize: sizes.size_xs,
@@ -161,7 +162,7 @@ const NoteScreenStyle = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: "100%",
-    height: 70,
+    height: 90,
     marginBottom: 8,
     backgroundColor: "#fff",
     borderRadius: 10,

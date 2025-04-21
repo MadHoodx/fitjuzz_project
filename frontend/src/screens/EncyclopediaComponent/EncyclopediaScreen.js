@@ -85,7 +85,7 @@ export default function Encyclopedia({ navigation }) {
               }
             >
               <Image
-                source={{ uri: encyclopedia.image || 'https://medlineplus.gov/images/AnabolicSteroids_share.jpg'}}
+                source={{ uri: encyclopedia.picture || 'https://medlineplus.gov/images/AnabolicSteroids_share.jpg'}}
                 style={GuideScreenStyle.categoryImage}
               />
               <View style={GuideScreenStyle.categoryOverlay}>

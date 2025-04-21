@@ -33,6 +33,15 @@ export default function SupplementScreen({ navigation }) {
         "Improves strength, increases lean muscle mass, and helps muscles recover faster.",
       category: "creatine",
     },
+    {
+      id: 3,
+      title: "BCAA",
+      image:
+        "https://cdn.staticans.com/image/tr:e-sharpen-01,h-1350,w-1080,cm-pad_resize/catalog/optimum/product/1145171/1142951_1.jpg",
+      description:
+        "BCAA.",
+      category: "bcaa",
+    },
     
   ]);
 

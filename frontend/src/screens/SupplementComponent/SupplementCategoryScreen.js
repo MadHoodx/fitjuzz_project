@@ -8,8 +8,12 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRoute, useNavigation } from '@react-navigation/native';
+import Constants from 'expo-constants';
 
 import { sizes, colors } from "../../styles/style";
 
@@ -19,6 +23,7 @@ export default function SupplementCategoryScreen({ navigation, route }) {
 
   const [supplementList, setSupplementList] = useState([]);
   const [storeSupplement, setStoreSupplement] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Fetch steroid data from API
   useEffect(() => {
@@ -27,8 +32,9 @@ export default function SupplementCategoryScreen({ navigation, route }) {
 
   const fetchSupplement = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/getSupplementDetails`
+        `${Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API}/api/user/getSupplementDetails`
       );
 
       const filtered = response.data.filter((supplement) =>
@@ -64,7 +70,7 @@ export default function SupplementCategoryScreen({ navigation, route }) {
           <View style={styles.searchBar}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search Steroids"
+              placeholder={`Search ${category}`}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
@@ -89,7 +95,7 @@ export default function SupplementCategoryScreen({ navigation, route }) {
               <Image
                 source={{
                   uri:
-                    supplement.image ||
+                    supplement.picture ||
                     "https://medlineplus.gov/images/AnabolicSteroids_share.jpg",
                 }}
                 style={styles.cardImage}
@@ -131,11 +137,15 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     paddingLeft: 15,
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
   cardTitle: {
     color: colors.clr_white,
     fontSize: sizes.size_lg,
     fontWeight: "bold",
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
   },
   container: {
     flex: 1,

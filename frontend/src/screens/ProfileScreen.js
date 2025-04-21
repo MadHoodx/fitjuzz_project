@@ -1034,7 +1034,7 @@ export default function ProfileScreen({}) {
                     ProfileScreenStyle.button__Other,
                     ProfileScreenStyle.buttonText__Other,
                   ]}
-                  onPress={() => navigation.navigate(otherButtons.screen)}
+                  onPress={() => haddleLogout()}
                 >
                   <View style={[ProfileScreenStyle.box__left__Other]}>
                     <View style={[ProfileScreenStyle.box__icon__Other]}>

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
-
 import { sizes, colors } from "../../styles/style";
 
-export default function EncyclopediaDetailScreen({ navigation, route }) {
-  const { encyclopedia } = route.params;
+export default function SteroidDetailScreen({ route }) {
+  const { steroid } = route.params;
 
   return (
     <View style={[styles.container]}>
@@ -13,14 +12,24 @@ export default function EncyclopediaDetailScreen({ navigation, route }) {
           <Image
             source={{
               uri:
-              encyclopedia.picture ||
+                steroid.image ||
                 "https://medlineplus.gov/images/AnabolicSteroids_share.jpg",
             }}
             style={styles.image}
           />
           <View style={styles.section}>
-            <Text style={styles.title}>{encyclopedia.name}</Text>
-            <Text style={styles.description}>{encyclopedia.description}</Text>
+            <Text style={styles.title}>{steroid.name}</Text>
+            <Text style={styles.description}>{steroid.description}</Text>
+          </View>
+          <View>
+            <Text>ประโยชน์</Text>
+            {steroid.map((item, index) => (
+              <View key={index}>
+                {item.benefits.map((benefit, idx) => (
+                  <Text key={idx}>{benefit}</Text>
+                ))}
+              </View>
+            ))}
           </View>
         </View>
       </ScrollView>

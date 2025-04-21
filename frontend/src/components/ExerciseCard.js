@@ -5,16 +5,16 @@ import { sizes } from "../styles/style";
 
 const ExerciseCard = (props) => {
   return (
-    <View style={[ExerciseCardstyles.box]}>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
+    <View style={[ExerciseCardstyles.box, {marginLeft:10 ,width: 180, height:80,}]}>
+      <View >
         <Image
           source={{uri: props.picture}}
           style={{ width: 70, height: 50 }}
         />
       </View>
-      <View>
+      <View >
         <Text style={[ExerciseCardstyles.text_name]}>{props.name}</Text>
-        <Text style={[ExerciseCardstyles.text_category]}>{props.category}</Text>
+        {/* <Text style={[ExerciseCardstyles.text_category]}>{props.category}</Text> */}
       </View>
     </View>
   );
@@ -28,7 +28,7 @@ const ExerciseCardstyles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 5,
     paddingVertical: 5,
-    justifyContent: "center",
+
     alignItems: "center",
     gap: 8
   },

@@ -86,7 +86,7 @@ export default function NoteScreen({}) {
     const filteredExercises = databaseExercises.filter(
       (ex) =>
         (!selectedExercises.includes(ex.name) || ex.name === "Exercise") &&
-        (selectedCategory === "all" || ex.category === selectedCategory)
+        (selectedCategory === "all" || ex.bodyPart === selectedCategory)
     );
     return filteredExercises;
   };
@@ -302,7 +302,6 @@ export default function NoteScreen({}) {
         const response = await axios.post(
           `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
           {
-            userId: userId,
             exercises: filteredExercises,
           }
         );
@@ -493,10 +492,10 @@ export default function NoteScreen({}) {
                     "all",
                     "chest",
                     "back",
-                    "shoulder",
+                    "shoulders",
                     "arms",
                     "abs",
-                    "leg",
+                    "legs",
                   ].map((category) => (
                     <TouchableOpacity
                       key={category}
@@ -544,8 +543,8 @@ export default function NoteScreen({}) {
 
                       <ExerciseCard
                         name={item.name}
-                        category={item.category}
-                        picture={item.picture}
+
+                        picture={item.gifUrl}
                       />
                     </TouchableOpacity>
                   )}

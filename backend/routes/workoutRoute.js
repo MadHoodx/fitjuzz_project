@@ -2,7 +2,7 @@ const workoutController = require('../controllers/workoutController')
 const express = require("express");
 const router = express.Router();
 
-router.post("/:id/updateWorkout", workoutController.updateWorkout);
-router.get("/:id/getExercisesHistory/", workoutController.getExercisesHistory);
+router.post("/:userId/updateWorkout", workoutController.updateWorkout);
+router.get("/:userId/getExercisesHistory/", workoutController.getExercisesHistory);
 
 module.exports = router;

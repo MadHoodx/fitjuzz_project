@@ -3,7 +3,7 @@ const workoutModel = require("../models/workoutModel");
 
 const workoutController = {
     updateWorkout: async (req, res) => {
-        const { userId } = req.body
+        const { userId } = req.params
         const { exercises } = req.body
    
         try {
@@ -26,7 +26,7 @@ const workoutController = {
         const { userId } = req.params
 
         try {
-            const user = await workoutModel.find(userId)
+            const user = await workoutModel.find({userId : userId})
 
             if (user) {
                 return res.json(user);

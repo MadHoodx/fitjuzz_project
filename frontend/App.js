@@ -20,10 +20,10 @@ import ForgetPasswordScreen from "./src/screens/ForgetPasswordScreen";
 import ExerciseScreen from "./src/screens/ExerciseScreen";
 import GuideScreen from "./src/screens/GuideScreen";
 import SteroidsScreen from "./src/screens/SteroidsComponent/SteroidsScreen";
-import MacrosScreen from "./src/screens/MacrosScreen";
-import CarbScreen from "./src/screens/CarbScreen";
-import ProteinScreen from "./src/screens/ProteinScreen";
-import FatScreen from "./src/screens/FatScreen";
+import MacrosScreen from "./src/screens/MacroComponent/MacrosScreen";
+import CarbScreen from "./src/screens/MacroComponent/CarbScreen";
+import ProteinScreen from "./src/screens/MacroComponent/ProteinScreen";
+import FatScreen from "./src/screens/MacroComponent/FatScreen";
 
 import SteroidDetailScreen from "./src/screens/SteroidsComponent/SteroidDetailScreen";
 import SupplementScreen from "./src/screens/SupplementComponent/SupplementScreen";
