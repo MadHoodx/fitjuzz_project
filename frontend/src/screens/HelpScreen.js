@@ -171,7 +171,7 @@ const HelpScreen = () => {
                     />
                   </View>
                   <View>
-                    <Text style={[HelpScreenstyles.text__body]}>6505xxxx</Text>
+                    <Text style={[HelpScreenstyles.text__body]}>65057474</Text>
                     <Text style={[HelpScreenstyles.text__body_sub]}>
                       Nopporn Phutjaroen
                     </Text>

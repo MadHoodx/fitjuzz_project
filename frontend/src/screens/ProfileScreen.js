@@ -641,7 +641,7 @@ export default function ProfileScreen({}) {
             <View
               style={[
                 ProfileScreenStyle.box,
-                { backgroundColor: "rgba(58, 80, 107, 0.6)" },
+                { backgroundColor: "rgba(0, 188, 212, 1)" },
               ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
@@ -650,7 +650,7 @@ export default function ProfileScreen({}) {
                   <TouchableOpacity
                     style={[
                       ProfileScreenStyle.button_edit,
-                      { backgroundColor: "#4C688B" },
+                      { backgroundColor: "rgb(63, 142, 179)" },
                     ]}
                     onPress={handleEditWeight}
                   >
@@ -741,7 +741,7 @@ export default function ProfileScreen({}) {
             <View
               style={[
                 ProfileScreenStyle.box,
-                { backgroundColor: "rgba(92, 148, 110, 0.6)" },
+                { backgroundColor: "rgba(139, 195, 74, 1)" },
               ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
@@ -750,7 +750,7 @@ export default function ProfileScreen({}) {
                   <TouchableOpacity
                     style={[
                       ProfileScreenStyle.button_edit,
-                      { backgroundColor: "#6FB184" },
+                      { backgroundColor: "rgb(109, 153, 58)" },
                     ]}
                     onPress={handleEditHeight}
                   >
@@ -840,7 +840,7 @@ export default function ProfileScreen({}) {
             <View
               style={[
                 ProfileScreenStyle.box,
-                { backgroundColor: "rgba(75, 119, 141, 0.6)" },
+                { backgroundColor: "rgba(255, 152, 0, 1)" },
               ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
@@ -851,7 +851,7 @@ export default function ProfileScreen({}) {
                   <TouchableOpacity
                     style={[
                       ProfileScreenStyle.button_edit,
-                      { backgroundColor: "#5A8DA7" },
+                      { backgroundColor: "rgb(192, 116, 1)" },
                     ]}
                     onPress={handleEditFat}
                   >
@@ -867,7 +867,7 @@ export default function ProfileScreen({}) {
                     <Text style={[ProfileScreenStyle.body_text_number]}>
                       {fat}
                     </Text>
-                    <Text style={[ProfileScreenStyle.body_text_unit]}>%</Text>
+                    <Text style={[ProfileScreenStyle.body_text_unit_unique]}>%</Text>
                   </View>
                 </View>
               </View>
@@ -939,7 +939,7 @@ export default function ProfileScreen({}) {
             <View
               style={[
                 ProfileScreenStyle.box,
-                { backgroundColor: "rgba(142, 68, 173, 0.6)" },
+                { backgroundColor: "rgb(184, 54, 207)" },
               ]}
             >
               <View style={[ProfileScreenStyle.inside_box]}>
@@ -976,32 +976,32 @@ export default function ProfileScreen({}) {
                     <View
                       style={[
                         ProfileScreenStyle.colorBlock,
-                        { backgroundColor: "lightgreen" },
+                        { backgroundColor: "rgb(28, 115, 245)" },
                       ]}
                     />
 
                     <View
                       style={[
                         ProfileScreenStyle.colorBlock,
-                        { backgroundColor: "green" },
+                        { backgroundColor: "rgb(1, 236, 253)" },
                       ]}
                     />
                     <View
                       style={[
                         ProfileScreenStyle.colorBlock,
-                        { backgroundColor: "pink" },
+                        { backgroundColor: "rgba(255, 235, 59, 1)" },
                       ]}
                     />
                     <View
                       style={[
                         ProfileScreenStyle.colorBlock,
-                        { backgroundColor: "orange" },
+                        { backgroundColor: "rgba(255, 152, 0, 1)" },
                       ]}
                     />
                     <View
                       style={[
                         ProfileScreenStyle.colorBlock,
-                        { backgroundColor: "red" },
+                        { backgroundColor: "rgba(244, 67, 54, 1)" },
                       ]}
                     />
                     <View

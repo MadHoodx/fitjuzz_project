@@ -359,7 +359,7 @@ const MetricScreen = () => {
                       <IconMaterialIcons
                         name={"monitor-weight"}
                         size={20}
-                        color={"rgb(58, 80, 107)"}
+                        color={"rgba(0, 188, 212, 1)"}
                       />
 
                       <Text style={[MetricScreenStyles.header_text]}>
@@ -439,7 +439,7 @@ const MetricScreen = () => {
                       <IconMaterialCommunityIcons
                         name={"human-male-height"}
                         size={20}
-                        color={"rgb(92, 148, 110)"}
+                        color={"rgba(139, 195, 74, 1)"}
                       />
                       <Text style={[MetricScreenStyles.header_text]}>
                         Height
@@ -518,7 +518,7 @@ const MetricScreen = () => {
                       <IconFontAwesome5
                         name={"percent"}
                         size={15}
-                        color={"rgb(118, 164, 187)"}
+                        color={"rgba(255, 152, 0, 1)"}
                       />
                       <Text style={[MetricScreenStyles.header_text]}>Fat</Text>
                     </View>
@@ -647,52 +647,42 @@ const MetricScreen = () => {
                         <View style={ProfileScreenStyle.bmiRange}>
                           <View style={ProfileScreenStyle.rangeLabels}>
                             <Text style={ProfileScreenStyle.rangeLabel}>0</Text>
-                            <Text style={ProfileScreenStyle.rangeLabel}>
-                              18
-                            </Text>
-                            <Text style={ProfileScreenStyle.rangeLabel}>
-                              23
-                            </Text>
-                            <Text style={ProfileScreenStyle.rangeLabel}>
-                              25
-                            </Text>
-                            <Text style={ProfileScreenStyle.rangeLabel}>
-                              30
-                            </Text>
-                            <Text style={ProfileScreenStyle.rangeLabel}>
-                              40
-                            </Text>
+                            <Text style={ProfileScreenStyle.rangeLabel}>18</Text>
+                            <Text style={ProfileScreenStyle.rangeLabel}>23</Text>
+                            <Text style={ProfileScreenStyle.rangeLabel}>25</Text>
+                            <Text style={ProfileScreenStyle.rangeLabel}>30</Text>
+                            <Text style={ProfileScreenStyle.rangeLabel}>40</Text>
                           </View>
                           <View style={ProfileScreenStyle.barColors}>
                             <View
                               style={[
                                 ProfileScreenStyle.colorBlock,
-                                { backgroundColor: "lightgreen" },
+                                { backgroundColor: "rgb(28, 115, 245)" },
                               ]}
                             />
 
                             <View
                               style={[
                                 ProfileScreenStyle.colorBlock,
-                                { backgroundColor: "green" },
+                                { backgroundColor: "rgb(1, 236, 253)" },
                               ]}
                             />
                             <View
                               style={[
                                 ProfileScreenStyle.colorBlock,
-                                { backgroundColor: "pink" },
+                                { backgroundColor: "rgba(255, 235, 59, 1)" },
                               ]}
                             />
                             <View
                               style={[
                                 ProfileScreenStyle.colorBlock,
-                                { backgroundColor: "orange" },
+                                { backgroundColor: "rgba(255, 152, 0, 1)" },
                               ]}
                             />
                             <View
                               style={[
                                 ProfileScreenStyle.colorBlock,
-                                { backgroundColor: "red" },
+                                { backgroundColor: "rgba(244, 67, 54, 1)" },
                               ]}
                             />
                             <View
@@ -1016,14 +1006,7 @@ const MetricScreenStyles = StyleSheet.create({
     paddingVertical: 16,
     justifyContent: "space-between",
     flexDirection: "row",
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 4,
-    // },
-    // shadowOpacity: 0.3,
-    // shadowRadius: 4.65,
-    // elevation: 8,
+    boxShadow:'5 5 5 5 rgba(0, 0, 0, 0.5)',
     backgroundColor: "rgba(211, 211, 211,0.3)",
   },
   header_box: {

@@ -5,10 +5,6 @@ const ProfileScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
-  text__topic: {
-    color: colors.clr_white,
-    fontSize: sizes.size_base,
-  },
   text__seeall: {
     color: colors.clr_brightblue,
     textDecorationLine: 'underline'
@@ -19,14 +15,6 @@ const ProfileScreenStyle = StyleSheet.create({
     paddingVertical: 12,
     height: 100,
     width: "49%",
-  },
-  longbox: {
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    width: "100%",
-    height: 100,
-    alignItems: "center",
-    justifyContent: "center",
   },
   profile_box: {
     padding: 20,
@@ -152,8 +140,13 @@ const ProfileScreenStyle = StyleSheet.create({
     color: colors.clr_white,
   },
   body_text_unit: {
-    fontSize: sizes.size_3xs,
+    fontSize: sizes.size_sm,
     color: colors.clr_lightgray,
+  },
+  body_text_unit_uqiue:{
+    marginBottom:4,
+    fontSize: sizes.size_base,
+    color: colors.clr_white,
   },
   bmi_text: {
     color: colors.clr_white,
