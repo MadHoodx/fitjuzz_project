@@ -6,7 +6,6 @@ import GuideScreenStyle from '../../styles/components/GuideScreenStyle';
 import { useNavigation } from '@react-navigation/native';
 import FoodCategoryList from '../../components/FoodCategoryList';
 import axios from 'axios';
-import Constants from 'expo-constants';
 
 export default function ProteinScreen() {
   const navigation = useNavigation();
@@ -16,7 +15,7 @@ export default function ProteinScreen() {
   const [loading, setLoading] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [sortType, setSortType] = useState('default'); // default, carbHigh, carbLow, proteinHigh, proteinLow, fatHigh, fatLow, caloriesHigh, caloriesLow
-  const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
+  const EXPO_PUBLIC_ENDPOINT_API = process.env.EXPO_PUBLIC_ENDPOINT_API;
 
   useEffect(() => {
     if (searchQuery.trim()) {

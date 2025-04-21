@@ -23,7 +23,7 @@ export default function FoodCategoryList({
   loading: externalLoading = false,
   sortType = 'default'
 }) {
-  const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
+  const EXPO_PUBLIC_ENDPOINT_API = process.env.EXPO_PUBLIC_ENDPOINT_API;
   const [loading, setLoading] = useState(externalLoading);
   const [error, setError] = useState(null);
   const [foods, setFoods] = useState(initialFoods || []);
@@ -44,7 +44,7 @@ export default function FoodCategoryList({
   }, [initialFoods, externalLoading]);
 
   useEffect(() => {
-    // กรองข้อมูลอาหารตามคำค้นหา
+    // filter foods
     let resultFoods = [];
     
     if (searchText.trim() === '') {
@@ -52,13 +52,13 @@ export default function FoodCategoryList({
     } else {
       const searchLower = searchText.toLowerCase();
       resultFoods = foods.filter(food => {
-        // ค้นหาจากชื่ออาหาร - รองรับทั้งภาษาไทยและภาษาอังกฤษ
+        // search from food name - support both Thai and English
         const nameMatch = food.name && food.name.toLowerCase().includes(searchLower);
         
-        // ค้นหาจากคำอธิบายถ้ามี - รองรับทั้งภาษาไทยและภาษาอังกฤษ
+        // search from food description - support both Thai and English
         const descMatch = food.description && food.description.toLowerCase().includes(searchLower);
         
-        // ค้นหาจากแท็ก (ถ้ามี)
+        // search from food tags - support both Thai and English
         const tagMatch = food.tags && Array.isArray(food.tags) && 
                         food.tags.some(tag => tag.toLowerCase().includes(searchLower));
         
@@ -66,7 +66,7 @@ export default function FoodCategoryList({
       });
     }
     
-    // เรียงลำดับข้อมูลตามที่เลือก
+    // sort foods
     const sortedFoods = sortFoods(resultFoods, sortType);
     setFilteredFoods(sortedFoods);
   }, [searchText, foods, sortType]);
@@ -102,7 +102,7 @@ export default function FoodCategoryList({
         sortedFoods.sort((a, b) => (a.nutritionPer100g?.calories || 0) - (b.nutritionPer100g?.calories || 0));
         break;
       default:
-        // ค่าเริ่มต้น ไม่ต้องเรียงลำดับ
+        // default value, no sorting
         break;
     }
     
@@ -112,7 +112,12 @@ export default function FoodCategoryList({
   const fetchFoods = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${EXPO_PUBLIC_ENDPOINT_API}${apiPath}`);
+      const apiUrl = `${EXPO_PUBLIC_ENDPOINT_API}${apiPath}`;
+      console.log(`[DEBUG URL] API URL ที่กำลังเรียกใช้: ${apiUrl}`);
+      console.log(`[DEBUG URL] apiPath: ${apiPath}`);
+      console.log(`[DEBUG URL] EXPO_PUBLIC_ENDPOINT_API: ${EXPO_PUBLIC_ENDPOINT_API}`);
+      
+      const response = await axios.get(apiUrl);
       
       if (response.data && response.data.foods) {
         const sortedFoods = sortFoods(response.data.foods, sortType);
@@ -125,6 +130,9 @@ export default function FoodCategoryList({
       setError(null);
     } catch (err) {
       console.error(`Error fetching ${categoryName} foods:`, err);
+      console.log(`[DEBUG URL] Error message: ${err.message}`);
+      console.log(`[DEBUG URL] Error status: ${err.response?.status}`);
+      console.log(`[DEBUG URL] Error data: ${JSON.stringify(err.response?.data)}`);
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -149,7 +157,7 @@ export default function FoodCategoryList({
     setFilterModalVisible(!filterModalVisible);
   };
 
-  // สร้างแถวของรายการอาหาร (2 คอลัมน์)
+  // create food row (2 columns)
   const renderFoodItem = ({ item, index }) => (
     <TouchableOpacity
       style={[styles.foodCard, { width: cardWidth }]}
@@ -204,7 +212,7 @@ export default function FoodCategoryList({
     </TouchableOpacity>
   );
 
-  // Modal สำหรับการเลือกเรียงลำดับ
+  // Modal for sorting
   const renderFilterModal = () => (
     <Modal
       visible={filterModalVisible}
@@ -308,7 +316,7 @@ export default function FoodCategoryList({
     </Modal>
   );
 
-  // แสดงหน้าจอ loading
+  // show loading screen
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -318,7 +326,7 @@ export default function FoodCategoryList({
     );
   }
 
-  // แสดงหน้าจอ error
+  // show error screen
   if (error) {
     return (
       <View style={styles.errorContainer}>
@@ -515,7 +523,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#757575',
   },
-  // Styles สำหรับ Filter Modal
+  // Styles for Filter Modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

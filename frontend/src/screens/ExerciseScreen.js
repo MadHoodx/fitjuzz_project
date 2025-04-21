@@ -29,13 +29,13 @@ export default function ExerciseScreen({ navigation }) {
   const categories = [
     "All",
     "Chest",
-    "Lats",
-    "Leg",
-    "ABS",
     "Back",
+    "Legs",
+    "Abs",
     "Arms",
     "Shoulders",
     "Glutes",
+    "Cardio",
   ];
 
   const openExerciseDetails = (exercise) => {

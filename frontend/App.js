@@ -24,7 +24,6 @@ import MacrosScreen from "./src/screens/MacroComponent/MacrosScreen";
 import CarbScreen from "./src/screens/MacroComponent/CarbScreen";
 import ProteinScreen from "./src/screens/MacroComponent/ProteinScreen";
 import FatScreen from "./src/screens/MacroComponent/FatScreen";
-
 import SteroidDetailScreen from "./src/screens/SteroidsComponent/SteroidDetailScreen";
 import SupplementScreen from "./src/screens/SupplementComponent/SupplementScreen";
 import SupplementDetailScreen from "./src/screens/SupplementComponent/SupplementDetailScreen";

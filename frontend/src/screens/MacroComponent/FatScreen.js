@@ -1,43 +1,117 @@
-import * as React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView, Text, TextInput, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../../components/Header';
 import GuideScreenStyle from '../../styles/components/GuideScreenStyle';
 import { useNavigation } from '@react-navigation/native';
+import FoodCategoryList from '../../components/FoodCategoryList';
+import axios from 'axios';
 
 export default function FatScreen() {
   const navigation = useNavigation();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searching, setSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [sortType, setSortType] = useState('default'); // default, carbHigh, carbLow, proteinHigh, proteinLow, fatHigh, fatLow, caloriesHigh, caloriesLow
+  const EXPO_PUBLIC_ENDPOINT_API = process.env.EXPO_PUBLIC_ENDPOINT_API;
+
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      searchFoods();
+    } else {
+      setSearching(false);
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+
+  const searchFoods = async () => {
+    if (searchQuery.trim().length < 2) return;
+    
+    setLoading(true);
+    setSearching(true);
+    
+    try {
+      const response = await axios.get(
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/foods/search?query=${encodeURIComponent(searchQuery)}&minFat=10`
+      );
+      
+      if (response.data && response.data.foods) {
+        setSearchResults(response.data.foods);
+      } else {
+        setSearchResults([]);
+      }
+    } catch (err) {
+      console.error('Error searching foods:', err);
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
   
-  // example of healthy fats
-  const healthyFats = [
-    {
-      id: 'avocado',
-      title: 'อะโวคาโด (Avocado)',
-      image: 'https://images.pexels.com/photos/2228553/pexels-photo-2228553.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'อุดมไปด้วยไขมันไม่อิ่มตัวเชิงเดี่ยว อะโวคาโดครึ่งลูกมีไขมันประมาณ 15 กรัม ช่วยลดคอเลสเตอรอลที่ไม่ดีและเพิ่มคอเลสเตอรอลที่ดี'
-    },
-    {
-      id: 'nuts',
-      title: 'ถั่วและเมล็ดพืช (Nuts & Seeds)',
-      image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'มีไขมันไม่อิ่มตัว โอเมก้า-3 และวิตามินอี ถั่วต่างๆ 30 กรัมมีไขมันประมาณ 15 กรัม ช่วยในเรื่องการอักเสบและสุขภาพหัวใจ'
-    },
-    {
-      id: 'oliveoil',
-      title: 'น้ำมันมะกอก (Olive Oil)',
-      image: 'https://images.pexels.com/photos/33783/olive-oil-salad-dressing-cooking.jpg?auto=compress&cs=tinysrgb&w=800',
-      description: 'อุดมไปด้วยกรดไขมันไม่อิ่มตัวเชิงเดี่ยว มีสารต้านอนุมูลอิสระ 1 ช้อนโต๊ะมีไขมันประมาณ 14 กรัม'
-    },
-    {
-      id: 'fish',
-      title: 'ปลามัน (Fatty Fish)',
-      image: 'https://images.pexels.com/photos/3296434/pexels-photo-3296434.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'ปลาแซลมอน ปลาทูน่า ปลาแมคเคอเรล อุดมไปด้วยกรดไขมันโอเมก้า-3 ซึ่งมีประโยชน์ต่อสมองและหัวใจ'
-    },
-  ];
+  const clearSearch = () => {
+    setSearchQuery('');
+    setSearching(false);
+    setSearchResults([]);
+  };
+
+  const toggleFilterModal = () => {
+    setFilterModalVisible(!filterModalVisible);
+  };
+
+  const handleSort = (newSortType) => {
+    setSortType(newSortType);
+    setFilterModalVisible(false);
+    // หากมีผลการค้นหาอยู่แล้ว ให้เรียงลำดับตัวนั้น
+    if (searching && searchResults.length > 0) {
+      const sortedResults = sortFoods([...searchResults], newSortType);
+      setSearchResults(sortedResults);
+    }
+  };
+
+  const sortFoods = (foodsToSort, type) => {
+    let sortedFoods = [...foodsToSort];
+    
+    switch (type) {
+      case 'carbHigh':
+        sortedFoods.sort((a, b) => (b.nutritionPer100g?.carbohydrates || 0) - (a.nutritionPer100g?.carbohydrates || 0));
+        break;
+      case 'carbLow':
+        sortedFoods.sort((a, b) => (a.nutritionPer100g?.carbohydrates || 0) - (b.nutritionPer100g?.carbohydrates || 0));
+        break;
+      case 'proteinHigh':
+        sortedFoods.sort((a, b) => (b.nutritionPer100g?.protein || 0) - (a.nutritionPer100g?.protein || 0));
+        break;
+      case 'proteinLow':
+        sortedFoods.sort((a, b) => (a.nutritionPer100g?.protein || 0) - (b.nutritionPer100g?.protein || 0));
+        break;
+      case 'fatHigh':
+        sortedFoods.sort((a, b) => (b.nutritionPer100g?.fat || 0) - (a.nutritionPer100g?.fat || 0));
+        break;
+      case 'fatLow':
+        sortedFoods.sort((a, b) => (a.nutritionPer100g?.fat || 0) - (b.nutritionPer100g?.fat || 0));
+        break;
+      case 'caloriesHigh':
+        sortedFoods.sort((a, b) => (b.nutritionPer100g?.calories || 0) - (a.nutritionPer100g?.calories || 0));
+        break;
+      case 'caloriesLow':
+        sortedFoods.sort((a, b) => (a.nutritionPer100g?.calories || 0) - (b.nutritionPer100g?.calories || 0));
+        break;
+      default:
+        // ค่าเริ่มต้น ไม่ต้องเรียงลำดับ
+        break;
+    }
+    
+    return sortedFoods;
+  };
 
   return (
-    <View style={GuideScreenStyle.container}>
+    <KeyboardAvoidingView 
+      style={GuideScreenStyle.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
       <Header />
       
       <TouchableOpacity 
@@ -47,76 +121,161 @@ export default function FatScreen() {
         <Ionicons name="arrow-back" size={24} color="white" />
       </TouchableOpacity>
       
-      <ScrollView 
-        style={GuideScreenStyle.content} 
-        contentContainerStyle={GuideScreenStyle.contentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={GuideScreenStyle.titleSection}>
-          <Text style={GuideScreenStyle.mainTitle}>Healthy Fats</Text>
-        </View>
-        
-        <View style={styles.infoSection}>
-          <Text style={styles.infoText}>
-            ไขมันเป็นสารอาหารที่จำเป็นต่อร่างกาย ไม่ใช่สิ่งที่ควรหลีกเลี่ยงทั้งหมด ไขมันมีหน้าที่สำคัญหลายอย่าง เช่น
-            เป็นแหล่งพลังงานสำรอง ช่วยในการดูดซึมวิตามินที่ละลายในไขมัน (A, D, E, K) และเป็นส่วนประกอบของผนังเซลล์
-          </Text>
-          
-          <Text style={styles.subTitle}>ประเภทของไขมัน</Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.boldText}>1. ไขมันไม่อิ่มตัว (Unsaturated Fats):</Text>{'\n'}
-            • ไขมันไม่อิ่มตัวเชิงเดี่ยว (Monounsaturated) - พบในน้ำมันมะกอก อะโวคาโด ถั่ว{'\n'}
-            • ไขมันไม่อิ่มตัวเชิงซ้อน (Polyunsaturated) - พบในน้ำมันพืช ปลา เมล็ดพืช{'\n'}
-            • กรดไขมันโอเมก้า-3 - พบในปลาทะเล เมล็ดเจีย เมล็ดแฟลกซ์{'\n'}
-            {'\n'}
-            <Text style={styles.boldText}>2. ไขมันอิ่มตัว (Saturated Fats):</Text>{'\n'}
-            • พบในเนื้อสัตว์ นมและผลิตภัณฑ์จากนม น้ำมันมะพร้าว{'\n'}
-            • ควรจำกัดปริมาณการบริโภค แต่ไม่จำเป็นต้องงดทั้งหมด{'\n'}
-            {'\n'}
-            <Text style={styles.boldText}>3. ไขมันทรานส์ (Trans Fats):</Text>{'\n'}
-            • เกิดจากกระบวนการเติมไฮโดรเจนในน้ำมันพืช{'\n'}
-            • พบในอาหารแปรรูป เบเกอรี่ อาหารทอด{'\n'}
-            • ควรหลีกเลี่ยงเนื่องจากเพิ่มความเสี่ยงต่อโรคหัวใจ
-          </Text>
-        </View>
-        
-        <Text style={styles.subTitle}>แหล่งไขมันที่ดีต่อสุขภาพ</Text>
-        
-        {healthyFats.map((fat) => (
-          <View key={fat.id} style={styles.foodCard}>
-            <Image
-              source={{ uri: fat.image }}
-              style={styles.foodImage}
+      <View style={styles.searchContainer}>
+        <View style={styles.searchSection}>
+          <View style={styles.searchBar}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="ค้นหาไขมัน..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
             />
-            <View style={styles.foodInfo}>
-              <Text style={styles.foodTitle}>{fat.title}</Text>
-              <Text style={styles.foodDescription}>{fat.description}</Text>
-            </View>
+            {searchQuery ? (
+              <TouchableOpacity onPress={clearSearch}>
+                <Ionicons name="close-circle" size={20} color="gray" style={styles.searchIcon} />
+              </TouchableOpacity>
+            ) : (
+              <>
+                <Ionicons name="search" size={20} color="gray" style={styles.searchIcon} />
+                <TouchableOpacity onPress={toggleFilterModal} style={styles.filterButton}>
+                  <Ionicons name="filter" size={20} color="#1976D2" />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
-        ))}
-        
-        <View style={styles.infoSection}>
-          <Text style={styles.subTitle}>ไขมันกับการออกกำลังกาย</Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.boldText}>• ไขมันเป็นแหล่งพลังงานสำคัญ:</Text>{'\n'}
-            ระหว่างการออกกำลังกายที่มีความเข้มข้นต่ำถึงปานกลาง ร่างกายจะใช้ไขมันเป็นแหล่งพลังงานหลัก โดยเฉพาะหลังจากออกกำลังกายไปแล้ว 20 นาทีขึ้นไป
-            {'\n\n'}
-            <Text style={styles.boldText}>• ไขมันช่วยในการฟื้นฟู:</Text>{'\n'}
-            กรดไขมันโอเมก้า-3 มีคุณสมบัติต้านการอักเสบ ช่วยลดการอักเสบของกล้ามเนื้อหลังการออกกำลังกายหนัก
-            {'\n\n'}
-            <Text style={styles.boldText}>• ฮอร์โมนจากไขมัน:</Text>{'\n'}
-            ไขมันจำเป็นต่อการผลิตฮอร์โมนหลายชนิด รวมถึงฮอร์โมนเทสโทสเตอโรนซึ่งมีบทบาทสำคัญในการสร้างกล้ามเนื้อ
-          </Text>
-          
-          <Text style={styles.subTitle}>ปริมาณที่แนะนำต่อวัน</Text>
-          <Text style={styles.infoText}>
-            ผู้ใหญ่ทั่วไปควรบริโภคไขมันประมาณ 20-35% ของแคลอรี่ทั้งหมดต่อวัน โดยควรเน้นไขมันไม่อิ่มตัว จำกัดไขมันอิ่มตัวให้น้อยกว่า 10% ของแคลอรี่ และหลีกเลี่ยงไขมันทรานส์ให้มากที่สุด
-            {'\n\n'}
-            สำหรับนักกีฬาและผู้ที่ออกกำลังกายอย่างหนัก อาจต้องการไขมันในสัดส่วนที่สูงขึ้นเพื่อให้ร่างกายมีพลังงานเพียงพอ แต่ควรปรึกษาผู้เชี่ยวชาญด้านโภชนาการสำหรับคำแนะนำเฉพาะบุคคล
-          </Text>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+      
+      <View style={styles.contentContainer}>
+        {searching ? (
+          <FoodCategoryList
+            categoryName="ผลการค้นหา"
+            apiPath="/mock-path" // ไม่ได้ใช้เพราะเราส่งข้อมูลโดยตรง
+            initialFoods={searchResults}
+            macroColor="#1976D2"
+            emptyMessage="ไม่พบข้อมูลอาหารที่ตรงกับคำค้นหา"
+            errorMessage="ไม่สามารถค้นหาอาหารได้"
+            loading={loading}
+            navigation={navigation}
+            disableSearch={true}
+            sortType={sortType}
+          />
+        ) : (
+          <FoodCategoryList
+            categoryName="ไขมัน"
+            apiPath="/api/user/foodsdirect/fat"
+            macroColor="#1976D2"
+            emptyMessage="ไม่พบข้อมูลอาหารประเภทไขมัน"
+            errorMessage="ไม่สามารถโหลดข้อมูลอาหารประเภทไขมันได้"
+            navigation={navigation}
+            disableSearch={true}
+            sortType={sortType}
+          />
+        )}
+      </View>
+
+      {/* Filter Modal */}
+      <Modal
+        visible={filterModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={toggleFilterModal}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay} 
+          activeOpacity={1} 
+          onPress={toggleFilterModal}
+        >
+          <View style={styles.filterModalContainer}>
+            <Text style={styles.filterModalTitle}>เรียงลำดับตาม</Text>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'default' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('default')}
+            >
+              <Text style={styles.filterOptionText}>เริ่มต้น</Text>
+              {sortType === 'default' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+
+            <View style={styles.filterDivider} />
+            <Text style={styles.filterSectionTitle}>แคลอรี่</Text>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'caloriesHigh' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('caloriesHigh')}
+            >
+              <Text style={styles.filterOptionText}>แคลอรี่ (มาก → น้อย)</Text>
+              {sortType === 'caloriesHigh' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'caloriesLow' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('caloriesLow')}
+            >
+              <Text style={styles.filterOptionText}>แคลอรี่ (น้อย → มาก)</Text>
+              {sortType === 'caloriesLow' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+
+            <View style={styles.filterDivider} />
+            <Text style={styles.filterSectionTitle}>คาร์โบไฮเดรต</Text>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'carbHigh' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('carbHigh')}
+            >
+              <Text style={styles.filterOptionText}>คาร์โบไฮเดรต (มาก → น้อย)</Text>
+              {sortType === 'carbHigh' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'carbLow' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('carbLow')}
+            >
+              <Text style={styles.filterOptionText}>คาร์โบไฮเดรต (น้อย → มาก)</Text>
+              {sortType === 'carbLow' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+
+            <View style={styles.filterDivider} />
+            <Text style={styles.filterSectionTitle}>โปรตีน</Text>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'proteinHigh' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('proteinHigh')}
+            >
+              <Text style={styles.filterOptionText}>โปรตีน (มาก → น้อย)</Text>
+              {sortType === 'proteinHigh' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'proteinLow' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('proteinLow')}
+            >
+              <Text style={styles.filterOptionText}>โปรตีน (น้อย → มาก)</Text>
+              {sortType === 'proteinLow' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+
+            <View style={styles.filterDivider} />
+            <Text style={styles.filterSectionTitle}>ไขมัน</Text>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'fatHigh' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('fatHigh')}
+            >
+              <Text style={styles.filterOptionText}>ไขมัน (มาก → น้อย)</Text>
+              {sortType === 'fatHigh' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.filterOption, sortType === 'fatLow' && styles.selectedFilterOption]} 
+              onPress={() => handleSort('fatLow')}
+            >
+              <Text style={styles.filterOptionText}>ไขมัน (น้อย → มาก)</Text>
+              {sortType === 'fatLow' && <Ionicons name="checkmark" size={20} color="#1976D2" />}
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -128,52 +287,87 @@ const styles = StyleSheet.create({
     padding: 8,
     zIndex: 10,
   },
-  infoSection: {
-    backgroundColor: 'rgba(30, 30, 30, 0.6)',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 20,
+  searchContainer: {
+    paddingHorizontal: 15,
+    marginTop: 40,
   },
-  infoText: {
-    color: 'white',
-    fontSize: 16,
-    lineHeight: 24,
+  searchSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
   },
-  boldText: {
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  subTitle: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    marginTop: 5,
-  },
-  foodCard: {
-    backgroundColor: 'rgba(30, 30, 30, 0.6)',
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginBottom: 15,
-  },
-  foodImage: {
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
     width: '100%',
-    height: 180,
-    resizeMode: 'cover',
   },
-  foodInfo: {
-    padding: 15,
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
   },
-  foodTitle: {
-    color: 'white',
+  searchIcon: {
+    marginLeft: 5,
+  },
+  filterButton: {
+    marginLeft: 10,
+    padding: 5,
+  },
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
+  },
+  // Filter Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  filterModalContainer: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 30,
+    maxHeight: '80%',
+  },
+  filterModalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#333',
+    textAlign: 'center',
+  },
+  filterOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 5,
+  },
+  filterOptionText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  selectedFilterOption: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+  },
+  filterDivider: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
+    marginVertical: 10,
+  },
+  filterSectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#666',
     marginBottom: 5,
   },
-  foodDescription: {
-    color: 'white',
-    fontSize: 14,
-    lineHeight: 20,
-  }
 }); 
