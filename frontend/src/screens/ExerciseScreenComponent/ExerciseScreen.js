@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { SectionList } from "react-native";
 import {
   View,
   Text,
@@ -14,9 +15,11 @@ import axios from "axios";
 import Header from "../../components/Header";
 import ExerciseScreenStyle from "../../styles/components/ExerciseScreenStyle";
 import ExerciseDetailsModal from "../../components/ExerciseDetailsModal";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import styles from "../../styles/style";
-const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
+import { useFocusEffect } from "@react-navigation/native";
+const EXPO_PUBLIC_ENDPOINT_API =
+  Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function ExerciseScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,7 +57,6 @@ export default function ExerciseScreen({ navigation }) {
     filterExercises();
   }, [selectedCategory, searchQuery, exercises]);
 
-  
   useEffect(() => {
     fetchExercises();
   }, []);
@@ -132,16 +134,15 @@ export default function ExerciseScreen({ navigation }) {
     return Object.keys(groups)
       .sort()
       .map((letter) => ({
-        letter,
-        exercises: groups[letter],
+        title: letter, // <-- for SectionList header
+        data: groups[letter], // <-- for SectionList data array
       }));
   };
-
   const exerciseGroups = groupExercisesByFirstLetter();
 
   return (
     <View style={[ExerciseScreenStyle.container]}>
-          {/* <TouchableOpacity 
+      {/* <TouchableOpacity 
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
@@ -224,57 +225,50 @@ export default function ExerciseScreen({ navigation }) {
         ) : error ? (
           <Text style={ExerciseScreenStyle.errorText}>{error}</Text>
         ) : (
-          <ScrollView
-            style={ExerciseScreenStyle.exerciseList}
+          <SectionList
+            sections={exerciseGroups}
+            keyExtractor={(item) => item._id}
             showsVerticalScrollIndicator={false}
-          >
-            {exerciseGroups.map((group) => (
-              <View key={group.letter}>
-                <Text style={ExerciseScreenStyle.sectionHeader}>
-                  {group.letter}
-                </Text>
-                {group.exercises.map((exercise) => (
-                  <TouchableOpacity
-                    key={exercise._id}
-                    style={ExerciseScreenStyle.exerciseItem}
-                    onPress={() => openExerciseDetails(exercise)}
-                  >
-                    <Image
-                      source={{
-                        uri:
-                          exercise.gifUrl ||
-                          "https://images.squarespace-cdn.com/content/v1/64c8035f53e9a56246c7c294/1723420893761-XYJVWOXL91SW5442P6RM/maxresdefault-29-1024x576.jpg",
-                      }}
-                      style={ExerciseScreenStyle.exerciseImage}
-                    />
-                    <View style={ExerciseScreenStyle.exerciseInfo}>
-                      <Text style={ExerciseScreenStyle.exerciseName}>
-                        {exercise.name}
-                      </Text>
-                      <Text style={ExerciseScreenStyle.exerciseCategory}>
-                        {exercise.bodyPart.charAt(0).toUpperCase() +
-                          exercise.bodyPart.slice(1)}
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      style={ExerciseScreenStyle.infoButton}
-                      onPress={() => openExerciseDetails(exercise)}
-                    >
-                      <Ionicons
-                        name="information-circle-outline"
-                        size={24}
-                        color="white"
-                      />
-                    </TouchableOpacity>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            ))}
-
-
-            
-            <View style={{ height: 20 }} />
-          </ScrollView>
+            style={ExerciseScreenStyle.exerciseList}
+            renderSectionHeader={({ section: { title } }) => (
+              <Text style={ExerciseScreenStyle.sectionHeader}>{title}</Text>
+            )}
+            renderItem={({ item: exercise }) => (
+              <TouchableOpacity
+                style={ExerciseScreenStyle.exerciseItem}
+                onPress={() => openExerciseDetails(exercise)}
+              >
+                <Image
+                  source={{
+                    uri:
+                      exercise.gifUrl ||
+                      "https://images.squarespace-cdn.com/content/v1/64c8035f53e9a56246c7c294/1723420893761-XYJVWOXL91SW5442P6RM/maxresdefault-29-1024x576.jpg",
+                  }}
+                  style={ExerciseScreenStyle.exerciseImage}
+                />
+                <View style={ExerciseScreenStyle.exerciseInfo}>
+                  <Text style={ExerciseScreenStyle.exerciseName}>
+                    {exercise.name}
+                  </Text>
+                  <Text style={ExerciseScreenStyle.exerciseCategory}>
+                    {exercise.bodyPart.charAt(0).toUpperCase() +
+                      exercise.bodyPart.slice(1)}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={ExerciseScreenStyle.infoButton}
+                  onPress={() => openExerciseDetails(exercise)}
+                >
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={24}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            )}
+            ListFooterComponent={<View style={{ height: 20 }} />}
+          />
         )}
       </View>
 
