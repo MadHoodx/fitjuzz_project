@@ -8,7 +8,7 @@ import {
   Alert,
   Image,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useRef,useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import styles, { sizes, colors } from "../styles/style";
 import Header from "../components/Header";
@@ -28,11 +28,18 @@ import HorizontalPicker from "@vseslav/react-native-horizontal-picker";
 
 export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
-  const [weight, setWeight] = useState(0);
-  const [tempWeight, setTempWeight] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [tempHeight, setTempHeight] = useState(0);
+  
+  const [weight, setWeight] = useState(75);
+  const [lastEditedWeight, setLastEditedWeight] = useState(null);
+  const [previousWeight, setPreviousWeight] = useState(null);
+  const [tempWeight, setTempWeight] = useState(75);
+  const [height, setHeight] = useState(150);
+  const [lastEditedHeight, setLastEditedHeight] = useState(null);
+  const [previousHeight, setPreviousHeight] = useState(null);
+  const [tempHeight, setTempHeight] = useState(150);
   const [fat, setFat] = useState(0);
+  const [lastEditedFat, setLastEditedFat] = useState(null);
+  const [previousFat, setPreviousFat] = useState(null); 
   const [tempFat, setTempFat] = useState(0);
   const [sex, setSex] = useState(null);
   const [tempSex, setTempSex] = useState(null);
@@ -50,6 +57,7 @@ export default function ProfileScreen({}) {
   const heights = Array.from({ length: 161 }, (_, i) => 90 + i);
   const weights = Array.from({ length: 251 }, (_, i) => 0 + i);
   const fats = Array.from({ length: 60 }, (_, i) => 5 + i);
+  const pickerRef = useRef(null);
 
   useEffect(() => {
     fetchUser();
@@ -102,8 +110,10 @@ export default function ProfileScreen({}) {
         {
           weight: parseFloat(tempWeight),
         }
-      );
+      )
+      setPreviousWeight(weight);
       setWeight(tempWeight);
+      setLastEditedWeight(tempWeight); // เก็บน้ำหนักล่าสุดที่แก้ไข
       setModalVisibleWeight(false);
     } catch (error) {
       console.error("Error updating weight:", error);
@@ -122,7 +132,9 @@ export default function ProfileScreen({}) {
           height: parseFloat(tempHeight),
         }
       );
+      setPreviousHeight(height);
       setHeight(tempHeight);
+      setLastEditedHeight(tempHeight); // เก็บส่วนสูงล่าสุดที่แก้ไข 
       setModalVisibleHeight(false);
     } catch (error) {
       console.error("Error updating height:", error);
@@ -141,7 +153,9 @@ export default function ProfileScreen({}) {
           fat: parseFloat(tempFat),
         }
       );
+      setPreviousFat(fat);
       setFat(tempFat);
+      setLastEditedFat(tempFat); // เก็บไขมันล่าสุดที่แก้ไข
       setModalVisibleFat(false);
     } catch (error) {
       console.error("Error updating fat:", error);
@@ -310,14 +324,37 @@ export default function ProfileScreen({}) {
   };
 
   const handleEditWeight = () => {
+    const valueToEdit = lastEditedWeight !== null ? lastEditedWeight : weight;
+    setTempWeight(valueToEdit);
+
+    const index = weights.indexOf(valueToEdit);
+    if (index !== -1 && pickerRef.current?.scrollToIndex) {
+      pickerRef.current.scrollToIndex(index);
+    }
+
     setModalVisibleWeight(true);
   };
 
   const handleEditHeight = () => {
+    const valueToEdit = lastEditedHeight !== null ? lastEditedHeight : height;
+    setTempHeight(valueToEdit);
+
+    const index = heights.indexOf(valueToEdit);
+    if (index !== -1 && pickerRef.current?.scrollToIndex) {
+      pickerRef.current.scrollToIndex(index);
+    }
+
     setModalVisibleHeight(true);
   };
 
   const handleEditFat = () => {
+    const valueToEdit = lastEditedFat !== null ? lastEditedFat : fat;
+    setTempFat(valueToEdit);
+
+    const index = fats.indexOf(valueToEdit);
+    if (index !== -1 && pickerRef.current?.scrollToIndex) {
+      pickerRef.current.scrollToIndex(index);
+    }
     setModalVisibleFat(true);
   };
   const handleEditSex = () => {
@@ -595,8 +632,7 @@ export default function ProfileScreen({}) {
                       <Text
                         style={{
                           fontSize: tempAge === data ? 40 : 22,
-                          color:
-                            tempAge === data ? colors.clr_brightblue : "#fff",
+                          color:tempAge === data ? colors.clr_brightblue : "#fff",
                           fontWeight: tempAge === data ? "bold" : "normal",
                           textAlign: "center",
                         }}
@@ -695,8 +731,9 @@ export default function ProfileScreen({}) {
                   >
                     <View style={{ width: 240, alignSelf: "center" }}>
                       <HorizontalPicker
+                        ref={pickerRef}
                         data={weights}
-                        renderItem={(item, index) => (
+                        renderItem={(item) => (
                           <View
                             style={{
                               width: 80,
@@ -705,13 +742,9 @@ export default function ProfileScreen({}) {
                             }}
                           >
                             <Text
-                              style={{
-                                fontSize: tempWeight === item ? 40 : 20,
-                                color:
-                                  tempWeight === item
-                                    ? colors.clr_brightblue
-                                    : colors.clr_lightgray,
-                                textAlign: "center",
+                              style={{fontSize: tempWeight === item ? 40 : 20,
+                                      color:tempWeight === item? colors.clr_brightblue: colors.clr_lightgray,
+                                      textAlign: "center",
                               }}
                             >
                               {String(item).padStart(3, " ")}
@@ -719,7 +752,8 @@ export default function ProfileScreen({}) {
                           </View>
                         )}
                         itemWidth={80}
-                        defaultIndex={Math.floor(weights.length / 2)}
+                        // defaultIndex={Math.floor(weights.length -181)}
+                        defaultIndex={weights.indexOf(tempWeight)}
                         animatedScrollToDefaultIndex={true}
                         onChange={setTempWeight}
                       />
@@ -798,16 +832,14 @@ export default function ProfileScreen({}) {
                     ]}
                   >
                     <ScrollPicker
+                      ref={pickerRef}
                       dataSource={heights}
-                      selectedIndex={1}
+                      selectedIndex={heights.indexOf(tempHeight)} 
                       renderItem={(data, index) => (
                         <Text
                           style={{
                             fontSize: tempHeight === data ? 40 : 22,
-                            color:
-                              tempHeight === data
-                                ? colors.clr_brightblue
-                                : "#fff",
+                            color:tempHeight === data? colors.clr_brightblue: "#fff",
                             fontWeight: tempHeight === data ? "bold" : "normal",
                             textAlign: "center",
                           }}
@@ -899,14 +931,14 @@ export default function ProfileScreen({}) {
                     ]}
                   >
                     <ScrollPicker
+                      ref={pickerRef}
                       dataSource={fats}
-                      selectedIndex={1}
-                      renderItem={(data, index) => (
+                      selectedIndex={fats.indexOf(tempFat)}
+                      renderItem={(data) => (
                         <Text
                           style={{
                             fontSize: tempFat === data ? 40 : 22,
-                            color:
-                              tempFat === data ? colors.clr_brightblue : "#fff",
+                            color:tempFat === data ? colors.clr_brightblue : "#fff",
                             fontWeight: tempFat === data ? "bold" : "normal",
                             textAlign: "center",
                           }}
@@ -914,7 +946,7 @@ export default function ProfileScreen({}) {
                           {data}
                         </Text>
                       )}
-                      onValueChange={setTempFat}
+                      onValueChange={setTempFat}s
                       wrapperBackground={"transparent"}
                       itemHeight={50}
                       highlightColor={colors.clr_brightblue}
