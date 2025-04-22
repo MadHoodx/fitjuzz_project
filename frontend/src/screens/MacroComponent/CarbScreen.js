@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView, Text, TextInput, Modal } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView, Text, TextInput, Modal, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../../components/Header';
 import GuideScreenStyle from '../../styles/components/GuideScreenStyle';
 import { useNavigation } from '@react-navigation/native';
 import FoodCategoryList from '../../components/FoodCategoryList';
 import axios from 'axios';
+import { debounce } from 'lodash';
 
 export default function CarbScreen() {
   const navigation = useNavigation();
@@ -13,37 +14,95 @@ export default function CarbScreen() {
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
-  const [sortType, setSortType] = useState('default'); // default, carbHigh, carbLow, proteinHigh, proteinLow, fatHigh, fatLow, caloriesHigh, caloriesLow
+  const [sortType, setSortType] = useState('default');
+  const [allCarbFoods, setAllCarbFoods] = useState([]);
+  const [loadingInitialData, setLoadingInitialData] = useState(true);
   const EXPO_PUBLIC_ENDPOINT_API = process.env.EXPO_PUBLIC_ENDPOINT_API;
 
+  // fetch all carb foods
   useEffect(() => {
-    if (searchQuery.trim()) {
-      searchFoods();
-    } else {
-      setSearching(false);
-      setSearchResults([]);
-    }
-  }, [searchQuery]);
+    fetchAllCarbFoods();
+  }, []);
 
-  const searchFoods = async () => {
-    if (searchQuery.trim().length < 2) return;
+  // fetch all carb foods
+  const fetchAllCarbFoods = async () => {
+    setLoadingInitialData(true);
+    try {
+      const response = await axios.get(`${EXPO_PUBLIC_ENDPOINT_API}/api/user/foodsdirect/carb`);
+      if (response.data && response.data.foods) {
+        setAllCarbFoods(response.data.foods);
+      }
+    } catch (err) {
+      console.error('Error fetching all carb foods:', err);
+      Alert.alert(
+        'ขออภัย',
+        'ไม่สามารถโหลดข้อมูลอาหารประเภทคาร์โบไฮเดรตได้ โปรดลองใหม่อีกครั้ง',
+        [{ text: 'ตกลง' }]
+      );
+    } finally {
+      setLoadingInitialData(false);
+    }
+  };
+
+  // Debounce search to prevent too many operations
+  const debouncedSearch = useCallback(
+    debounce((query) => {
+      if (query.trim().length >= 2) {
+        searchFoodsLocally(query);
+      } else if (query.trim() === '') {
+        setSearching(false);
+        setSearchResults([]);
+        setError(null);
+      }
+    }, 300),
+    [allCarbFoods]
+  );
+
+  useEffect(() => {
+    debouncedSearch(searchQuery);
+    // Cancel debounced call when unmounting
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchQuery, debouncedSearch]);
+
+  // search carb foods locally
+  const searchFoodsLocally = (query) => {
+    if (!query || query.trim().length < 2) return;
     
     setLoading(true);
     setSearching(true);
+    setError(null);
     
     try {
-      const response = await axios.get(
-        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/foods/search?query=${encodeURIComponent(searchQuery)}&minCarbohydrates=30`
-      );
+      const searchLower = query.toLowerCase();
+      const results = allCarbFoods.filter(food => {
+        // search from food name
+        const nameMatch = food.name && food.name.toLowerCase().includes(searchLower);
+        
+        // search from food description
+        const descMatch = food.description && food.description.toLowerCase().includes(searchLower);
+        
+        // search from tags (if exists)
+        const tagMatch = food.tags && Array.isArray(food.tags) && 
+                      food.tags.some(tag => tag.toLowerCase().includes(searchLower));
+        
+        // filter only foods with minimum 30g of carbohydrates
+        const hasSufficientCarbs = food.nutritionPer100g?.carbohydrates >= 30;
+        
+        return (nameMatch || descMatch || tagMatch) && hasSufficientCarbs;
+      });
       
-      if (response.data && response.data.foods) {
-        setSearchResults(response.data.foods);
-      } else {
-        setSearchResults([]);
+      setSearchResults(results);
+      
+      if (results.length === 0) {
+        setError(`ไม่พบอาหารที่ตรงกับคำค้นหา "${query}"`);
       }
     } catch (err) {
-      console.error('Error searching foods:', err);
+      console.error('Error searching foods locally:', err);
+      setError('เกิดข้อผิดพลาดในการค้นหาข้อมูล');
       setSearchResults([]);
     } finally {
       setLoading(false);
@@ -54,6 +113,7 @@ export default function CarbScreen() {
     setSearchQuery('');
     setSearching(false);
     setSearchResults([]);
+    setError(null);
   };
 
   const toggleFilterModal = () => {
@@ -152,8 +212,8 @@ export default function CarbScreen() {
             apiPath="/mock-path" 
             initialFoods={searchResults}
             macroColor="#388E3C"
-            emptyMessage="ไม่พบข้อมูลอาหารที่ตรงกับคำค้นหา"
-            errorMessage="ไม่สามารถค้นหาอาหารได้"
+            emptyMessage={error || "ไม่พบข้อมูลอาหารที่ตรงกับคำค้นหา"}
+            errorMessage={error || "ไม่สามารถค้นหาอาหารได้"}
             loading={loading}
             navigation={navigation}
             disableSearch={true}
@@ -169,6 +229,7 @@ export default function CarbScreen() {
             navigation={navigation}
             disableSearch={true}
             sortType={sortType}
+            loading={loadingInitialData}
           />
         )}
       </View>

@@ -26,8 +26,9 @@ export default function Encyclopedia({ navigation }) {
   const filterCategory = () => {
     // Filter by search query
     if (searchQuery) {
-      const filtered = encyclopediaList.filter((encyclopedia) =>
-        encyclopedia.title.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = storeEncyclopedia.filter((encyclopedia) =>
+        encyclopedia && encyclopedia.name && 
+        encyclopedia.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setEncyclopediaList(filtered);
     } else {
@@ -49,7 +50,7 @@ export default function Encyclopedia({ navigation }) {
       setEncyclopediaList(response.data);
       setStoreEncyclopedia(response.data);
     } catch (error) {
-      console.error("Error fetching steroids:", error);
+      console.error("Error fetching encyclopedia data:", error);
     }
   };
 

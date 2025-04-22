@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView, Text, TextInput, Modal } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView, Text, TextInput, Modal, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../../components/Header';
 import GuideScreenStyle from '../../styles/components/GuideScreenStyle';
 import { useNavigation } from '@react-navigation/native';
 import FoodCategoryList from '../../components/FoodCategoryList';
 import axios from 'axios';
+import { debounce } from 'lodash';
 
 export default function FatScreen() {
   const navigation = useNavigation();
@@ -13,47 +14,106 @@ export default function FatScreen() {
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [sortType, setSortType] = useState('default'); // default, carbHigh, carbLow, proteinHigh, proteinLow, fatHigh, fatLow, caloriesHigh, caloriesLow
+  const [allFatFoods, setAllFatFoods] = useState([]);
+  const [loadingInitialData, setLoadingInitialData] = useState(true);
   const EXPO_PUBLIC_ENDPOINT_API = process.env.EXPO_PUBLIC_ENDPOINT_API;
 
+  // fetch all fat foods
   useEffect(() => {
-    if (searchQuery.trim()) {
-      searchFoods();
-    } else {
-      setSearching(false);
-      setSearchResults([]);
-    }
-  }, [searchQuery]);
+    fetchAllFatFoods();
+  }, []);
 
-  const searchFoods = async () => {
-    if (searchQuery.trim().length < 2) return;
+  // fetch all fat foods
+  const fetchAllFatFoods = async () => {
+    setLoadingInitialData(true);
+    try {
+      const response = await axios.get(`${EXPO_PUBLIC_ENDPOINT_API}/api/user/foodsdirect/fat`);
+      if (response.data && response.data.foods) {
+        setAllFatFoods(response.data.foods);
+      }
+    } catch (err) {
+      console.error('Error fetching all fat foods:', err);
+      Alert.alert(
+        'ขออภัย',
+        'ไม่สามารถโหลดข้อมูลอาหารประเภทไขมันได้ โปรดลองใหม่อีกครั้ง',
+        [{ text: 'ตกลง' }]
+      );
+    } finally {
+      setLoadingInitialData(false);
+    }
+  };
+
+  // Debounce search to prevent too many operations
+  const debouncedSearch = useCallback(
+    debounce((query) => {
+      if (query.trim().length >= 2) {
+        searchFoodsLocally(query);
+      } else if (query.trim() === '') {
+        setSearching(false);
+        setSearchResults([]);
+        setError(null);
+      }
+    }, 300),
+    [allFatFoods]
+  );
+
+  useEffect(() => {
+    debouncedSearch(searchQuery);
+    // Cancel debounced call when unmounting
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchQuery, debouncedSearch]);
+
+  // search fat foods locally
+  const searchFoodsLocally = (query) => {
+    if (!query || query.trim().length < 2) return;
     
     setLoading(true);
     setSearching(true);
+    setError(null);
     
     try {
-      const response = await axios.get(
-        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/foods/search?query=${encodeURIComponent(searchQuery)}&minFat=10`
-      );
+      const searchLower = query.toLowerCase();
+      const results = allFatFoods.filter(food => {
+        // search from food name
+        const nameMatch = food.name && food.name.toLowerCase().includes(searchLower);
+        
+        // search from food description
+        const descMatch = food.description && food.description.toLowerCase().includes(searchLower);
+        
+        // search from tags (if exists)
+        const tagMatch = food.tags && Array.isArray(food.tags) && 
+                      food.tags.some(tag => tag.toLowerCase().includes(searchLower));
+        
+        // filter only foods with minimum 10g of fat
+        const hasSufficientFat = food.nutritionPer100g?.fat >= 10;
+        
+        return (nameMatch || descMatch || tagMatch) && hasSufficientFat;
+      });
       
-      if (response.data && response.data.foods) {
-        setSearchResults(response.data.foods);
-      } else {
-        setSearchResults([]);
+      setSearchResults(results);
+      
+      if (results.length === 0) {
+        setError(`ไม่พบอาหารที่ตรงกับคำค้นหา "${query}"`);
       }
     } catch (err) {
-      console.error('Error searching foods:', err);
+      console.error('Error searching foods locally:', err);
+      setError('เกิดข้อผิดพลาดในการค้นหาข้อมูล');
       setSearchResults([]);
     } finally {
       setLoading(false);
     }
   };
-  
+
   const clearSearch = () => {
     setSearchQuery('');
     setSearching(false);
     setSearchResults([]);
+    setError(null);
   };
 
   const toggleFilterModal = () => {
@@ -63,7 +123,7 @@ export default function FatScreen() {
   const handleSort = (newSortType) => {
     setSortType(newSortType);
     setFilterModalVisible(false);
-    // หากมีผลการค้นหาอยู่แล้ว ให้เรียงลำดับตัวนั้น
+    // if there is a search result, sort it
     if (searching && searchResults.length > 0) {
       const sortedResults = sortFoods([...searchResults], newSortType);
       setSearchResults(sortedResults);
@@ -99,7 +159,7 @@ export default function FatScreen() {
         sortedFoods.sort((a, b) => (a.nutritionPer100g?.calories || 0) - (b.nutritionPer100g?.calories || 0));
         break;
       default:
-        // ค่าเริ่มต้น ไม่ต้องเรียงลำดับ
+        // default, no sorting
         break;
     }
     
@@ -150,11 +210,11 @@ export default function FatScreen() {
         {searching ? (
           <FoodCategoryList
             categoryName="ผลการค้นหา"
-            apiPath="/mock-path" // ไม่ได้ใช้เพราะเราส่งข้อมูลโดยตรง
+            apiPath="/mock-path" 
             initialFoods={searchResults}
             macroColor="#1976D2"
-            emptyMessage="ไม่พบข้อมูลอาหารที่ตรงกับคำค้นหา"
-            errorMessage="ไม่สามารถค้นหาอาหารได้"
+            emptyMessage={error || "ไม่พบข้อมูลอาหารที่ตรงกับคำค้นหา"}
+            errorMessage={error || "ไม่สามารถค้นหาอาหารได้"}
             loading={loading}
             navigation={navigation}
             disableSearch={true}
@@ -170,6 +230,7 @@ export default function FatScreen() {
             navigation={navigation}
             disableSearch={true}
             sortType={sortType}
+            loading={loadingInitialData}
           />
         )}
       </View>
