@@ -19,24 +19,30 @@ const isValidEmail = (email) => {
 const otpController = {
   sentOtp: async (req, res) => {
     const { email } = req.body;
-    console.log(email)
+
     try {
-      
       if (!isValidEmail(email)) {
-        return res.status(400).json({ error: 'Invalid email format' });
+        return res.status(400).json({ error: "Invalid email format" });
       }
-      const user = await userModel.findOne({ userType: 'normal', email });
+      const user = await userModel.findOne({ userType: "normal", email });
 
       if (!user) {
-        return res.status(404).json({ error: 'Email not found' });
+        return res.status(404).json({ error: "Email not found" });
       }
 
       const otp = generateOTP();
 
       console.log(email, otp);
 
+      const existingOtp = otpCache.get(email);
+      if (existingOtp) {
+        otpCache.del(email);
+        console.log("Old OTP cleared before setting new one");
+      }
 
       otpCache.set(email, otp);
+      console.log("New OTP set successfully");
+
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -53,6 +59,7 @@ const otpController = {
       };
 
       transporter.sendMail(mailOptions);
+      console.log("sent opt successful");
 
       res.json({ message: "OTP sent to email" });
     } catch (error) {
@@ -60,27 +67,37 @@ const otpController = {
     }
   },
   verifyOtp: async (req, res) => {
-    const { email } = req.body;
-    const { otp } = req.body;
+    const { email, otp } = req.body;
 
     try {
-      const storedOtp = otpCache.get(email, otp);
-      console.log(email, otp);
+      const storedOtp = otpCache.get(email);
+      
+      // Normalize the provided otp to string
+      const providedOtp = Array.isArray(otp) ? otp.join("") : otp;
+
+      console.log(`Stored: ${storedOtp}, Provided: ${providedOtp}`);
+
       if (!storedOtp) {
-        return res.status(400).json({ error: "Invalid OTP" });
+        return res.status(400).json({ error: "No OTP found or expired" });
       }
 
-      otpCache.del(email, otp);
+      if (storedOtp !== providedOtp) {
+        return res.status(400).json({ error: "Invalid OTP" });
+      }
+      otpCache.del(email);
+      console.log("OTP verified and deleted");
+
       res.json({ message: "OTP verified successfully" });
     } catch (error) {
       console.error("Error verifying OTP:", error);
       res.status(500).json({ error: "Failed to verify OTP" });
     }
   },
+
   passwordReset: async (req, res) => {
     const { email } = req.body;
     const { password } = req.body;
-    console.log(email, password);
+
     try {
       const hashedPassword = await bcrypt.hash(password, 12);
 

@@ -67,15 +67,15 @@ function MyTabs() {
           tabBarIcon: ({ color, size }) => {
             return <Icon name={"menu-book"} size={size} color={color} />;
           },
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerStyle: {
-            backgroundColor: colors.clr_black, // Header background
-          },
-          headerTintColor: "white", // Header text and back button
-          headerTitleStyle: {
-            fontWeight: "bold", // Bold title
-          },
+          // headerShown: true,
+          // headerTitleAlign: "center",
+          // headerStyle: {
+          //   backgroundColor: colors.clr_black, // Header background
+          // },
+          // headerTintColor: "white", // Header text and back button
+          // headerTitleStyle: {
+          //   fontWeight: "bold", // Bold title
+          // },
         }}
       />
 

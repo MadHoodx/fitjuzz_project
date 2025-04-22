@@ -17,13 +17,14 @@ import axios from "axios";
 import { useRef } from "react";
 import InputWithEye from "../components/InputWithEye";
 
-export default function ForgetPasswordScreen({ }) {
+export default function ForgetPasswordScreen({}) {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [isSentOtpVisible, setisSentOtpVisible] = useState(1);
   const [isOtpVisible, setIsOtpVisible] = useState(0);
   const [isPasswordResetVisible, setIsPasswordResetVisible] = useState(0);
-  const [isSuccessfullyResetVisible, setIsSuccessfullyResetVisible] = useState(0);
+  const [isSuccessfullyResetVisible, setIsSuccessfullyResetVisible] =
+    useState(0);
   const [password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -47,9 +48,9 @@ export default function ForgetPasswordScreen({ }) {
 
   const handleSentOtp = async () => {
     if (email == "") {
-      setLoading(1)
-      setError("please enter your email")
-      return
+      setLoading(1);
+      setError("please enter your email");
+      return;
     }
     try {
       await axios.post(
@@ -58,17 +59,16 @@ export default function ForgetPasswordScreen({ }) {
           email,
         }
       );
-
+      setLoading(0);
       setisSentOtpVisible(0);
       setIsOtpVisible(1);
     } catch (error) {
       if (error.status == 405) {
-        setLoading(1)
-        setError('Invalid email format')
-      }
-      else if (error.status == 404) {
-        setLoading(1)
-        setError('Sorry, user not found')
+        setLoading(1);
+        setError("Invalid email format");
+      } else if (error.status == 404) {
+        setLoading(1);
+        setError("Sorry, user not found");
       }
     }
   };
@@ -82,30 +82,45 @@ export default function ForgetPasswordScreen({ }) {
           otp,
         }
       );
-
-
+      setLoading(0);
       setIsOtpVisible(0);
       setIsPasswordResetVisible(1);
     } catch (error) {
       if (error.status == 400) {
-        setLoading(1)
-        setError('Invalid OTP')
+        setLoading(1);
+        setError("Invalid OTP");
       }
     }
   };
+  // Function to validate password
+  const validatePassword = (password) => {
+    if (password.length < 8 || password.length > 16) {
+      return "Password must be 8 - 16 characters long.";
+    }
 
+    return "";
+  };
   const handleChangePassword = async () => {
     if (password !== ConfirmPassword) {
-      setLoading(1)
-      setError('Password do not match each other')
+      setLoading(1);
+      setError("Password do not match each other");
       return;
     }
 
+    const passwordError = validatePassword(password);
+
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
     try {
-      await axios.put(`${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/passwordReset`, {
-        email,
-        password: password,
-      });
+      await axios.put(
+        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/passwordReset`,
+        {
+          email,
+          password: password,
+        }
+      );
 
       setIsPasswordResetVisible(0);
       setIsSuccessfullyResetVisible(1);
@@ -126,17 +141,21 @@ export default function ForgetPasswordScreen({ }) {
               styles.section,
             ]}
           >
-            <Text style={[styles.title, { color: colors.clr_brightblue }]}>Reset password</Text>
+            <Text style={[styles.title, { color: colors.clr_brightblue }]}>
+              Reset password
+            </Text>
             <Text style={styles.sub__title}>
               Please enter your email address that you used to create an account
             </Text>
             <TextInput
-              style={[styles.input__box,]}
+              style={[styles.input__box]}
               placeholder="Enter you email"
               value={email}
               onChangeText={setEmail}
             />
-            {loading ? <Text style={ForgetPasswordScreenStyle.error}>{error}</Text> : null}
+            {loading ? (
+              <Text style={ForgetPasswordScreenStyle.error}>{error}</Text>
+            ) : null}
             <TouchableOpacity style={styles.button} onPress={handleSentOtp}>
               <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
@@ -152,10 +171,14 @@ export default function ForgetPasswordScreen({ }) {
                 styles.section,
               ]}
             >
-              <Text style={[styles.title, { color: colors.clr_brightblue }]}>Check your email</Text>
+              <Text style={[styles.title, { color: colors.clr_brightblue }]}>
+                Check your email
+              </Text>
               <Text style={styles.sub__title}>
                 We sent OTP to your
-                <Text style={{ fontWeight: "bold", color: colors.clr_brightblue }}>
+                <Text
+                  style={{ fontWeight: "bold", color: colors.clr_brightblue }}
+                >
                   {" "}
                   {email}{" "}
                 </Text>
@@ -174,27 +197,35 @@ export default function ForgetPasswordScreen({ }) {
                   ></TextInput>
                 ))}
               </View>
-              {loading ? <Text style={ForgetPasswordScreenStyle.error}>{error}</Text> : null}
+              {loading ? (
+                <Text style={ForgetPasswordScreenStyle.error}>{error}</Text>
+              ) : null}
               <TouchableOpacity style={styles.button} onPress={handleVerifyOtp}>
                 <Text style={styles.buttonText}>Continue</Text>
               </TouchableOpacity>
-
-              <Text style={{ textAlign: "center" }}>
-                Haven't got an email?{" "}
-                <TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  marginTop: 10,
+                }}
+              >
+                <Text style={{ color: colors.clr_white }}>
+                  Haven't got an email?{" "}
+                </Text>
+                <TouchableOpacity onPress={handleSentOtp}>
                   <Text
                     style={{
                       fontWeight: "bold",
                       color: "#648DDB",
-                      textDecorationColor: "red",
                       textDecorationLine: "underline",
                     }}
                   >
                     Resend email
                   </Text>
                 </TouchableOpacity>
-
-              </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -208,7 +239,9 @@ export default function ForgetPasswordScreen({ }) {
               styles.section,
             ]}
           >
-            <Text style={styles.title}>Password reset</Text>
+            <Text style={[styles.title, { color: colors.clr_brightblue }]}>
+              Password reset
+            </Text>
             <Text style={styles.sub__title}>
               create a new password. Ensure it differs from previous one for
               security
@@ -223,7 +256,9 @@ export default function ForgetPasswordScreen({ }) {
               value={ConfirmPassword}
               onChangeText={setConfirmPassword}
             ></InputWithEye>
-            {loading ? <Text style={ForgetPasswordScreenStyle.error}>{error}</Text> : null}
+            {loading ? (
+              <Text style={ForgetPasswordScreenStyle.error}>{error}</Text>
+            ) : null}
             <TouchableOpacity
               style={styles.button}
               onPress={handleChangePassword}
@@ -247,7 +282,9 @@ export default function ForgetPasswordScreen({ }) {
               source={require("../assets/images/successful.png")}
               style={ForgetPasswordScreenStyle.logo}
             ></Image>
-            <Text style={styles.title}>Successful</Text>
+            <Text style={[styles.title, { color: colors.clr_brightblue }]}>
+              Successful
+            </Text>
             <Text style={styles.sub__title}>
               Congratulation! Your password has been changed. Click continue to
               login
