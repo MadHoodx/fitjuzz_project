@@ -25,6 +25,9 @@ import axios from "axios";
 import moment from "moment";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
 import HorizontalPicker from "@vseslav/react-native-horizontal-picker";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
@@ -58,6 +61,7 @@ export default function ProfileScreen({}) {
   const weights = Array.from({ length: 251 }, (_, i) => 0 + i);
   const fats = Array.from({ length: 60 }, (_, i) => 5 + i);
   const pickerRef = useRef(null);
+  
 
   useEffect(() => {
     fetchUser();
@@ -84,7 +88,7 @@ export default function ProfileScreen({}) {
     const userId = allUserToken.userId;
     try {
       const response = await axios.get(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
       );
       const { username, weight, height, fat, picture, updatedAt, sex, age } =
         response.data;
@@ -106,7 +110,7 @@ export default function ProfileScreen({}) {
     const userId = decodedAllUserToken.userId;
     try {
       await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWeight`,
         {
           weight: parseFloat(tempWeight),
         }
@@ -127,7 +131,7 @@ export default function ProfileScreen({}) {
 
     try {
       await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateHeight`,
         {
           height: parseFloat(tempHeight),
         }
@@ -148,7 +152,7 @@ export default function ProfileScreen({}) {
 
     try {
       await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateFat`,
         {
           fat: parseFloat(tempFat),
         }
@@ -168,7 +172,7 @@ export default function ProfileScreen({}) {
 
     try {
       await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateSex`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateSex`,
         {
           sex: tempSex,
         }
@@ -187,7 +191,7 @@ export default function ProfileScreen({}) {
 
     try {
       await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateAge`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateAge`,
         {
           age: parseFloat(tempAge),
         }
@@ -274,7 +278,7 @@ export default function ProfileScreen({}) {
 
     try {
       const response = await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updatePicture`,
         {
           picture: uri,
         }

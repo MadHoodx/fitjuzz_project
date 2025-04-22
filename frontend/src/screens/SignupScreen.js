@@ -17,6 +17,10 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import SocialAuthSection from "../components/SocialAuthSection";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
+
 export default function SignupScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
 
@@ -102,7 +106,7 @@ export default function SignupScreen({ updateActiveScreen }) {
     }
     try {
       const response = await axios.post(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signup`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signup`,
         {
           username,
           email,

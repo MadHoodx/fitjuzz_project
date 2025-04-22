@@ -12,6 +12,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { colors, sizes } from "../../styles/style";
 import GuideScreenStyle from "../../styles/components/GuideScreenStyle";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function Encyclopedia({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,7 +47,7 @@ export default function Encyclopedia({ navigation }) {
   const fetchEncyclopedia = async () => {
     try {
       const response = await axios.get(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/getEncyclopediaDetails`
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/getEncyclopediaDetails`
       );
 
       setEncyclopediaList(response.data);

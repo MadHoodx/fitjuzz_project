@@ -18,6 +18,9 @@ import { jwtDecode } from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import NoteScreenStyle from "../styles/components/NoteScreenStyle";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function HomeScreen({}) {
   const [exercisesHistory, setExercisesHistory] = useState([]);
@@ -57,7 +60,7 @@ export default function HomeScreen({}) {
     const userId = allUserToken.userId;
     try {
       const response = await axios.get(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/getExercisesHistory`
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/getExercisesHistory`
       );
 
       setExercisesHistory(response.data);

@@ -5,11 +5,13 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
+
 export default function FoodCategoryScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { category, title, foods: initialFoods } = route.params || {};
-  const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
+
   
   const [foods, setFoods] = useState(initialFoods || []);
   const [loading, setLoading] = useState(false);

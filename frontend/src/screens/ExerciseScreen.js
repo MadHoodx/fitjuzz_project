@@ -14,6 +14,9 @@ import axios from "axios";
 import Header from "../components/Header";
 import ExerciseScreenStyle from "../styles/components/ExerciseScreenStyle";
 import ExerciseDetailsModal from "../components/ExerciseDetailsModal";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function ExerciseScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,7 +63,7 @@ export default function ExerciseScreen({ navigation }) {
       setLoading(true);
 
       const response = await axios.get(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/getExercises`
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/getExercises`
       );
 
       setExercises(response.data);

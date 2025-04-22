@@ -12,11 +12,14 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { sizes, colors } from "../../styles/style";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function SteroidCategoryScreen({ navigation, route }) {
   const { category } = route.params;
   const [searchQuery, setSearchQuery] = useState("");
-  const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
+
 
   const [steroidList, setSteroidList] = useState([]);
   const [storeSteroid, setStoreSteroid] = useState([]);

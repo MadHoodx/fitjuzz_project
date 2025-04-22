@@ -16,6 +16,9 @@ import axios from "axios";
 
 import { useRef } from "react";
 import InputWithEye from "../components/InputWithEye";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function ForgetPasswordScreen({}) {
   const navigation = useNavigation();
@@ -54,7 +57,7 @@ export default function ForgetPasswordScreen({}) {
     }
     try {
       await axios.post(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/sentOtp`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/sentOtp`,
         {
           email,
         }
@@ -76,7 +79,7 @@ export default function ForgetPasswordScreen({}) {
   const handleVerifyOtp = async () => {
     try {
       await axios.post(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/verifyOtp`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/verifyOtp`,
         {
           email,
           otp,
@@ -115,7 +118,7 @@ export default function ForgetPasswordScreen({}) {
     }
     try {
       await axios.put(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/passwordReset`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/passwordReset`,
         {
           email,
           password: password,

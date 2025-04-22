@@ -18,6 +18,9 @@ import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommun
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import ProfileScreenStyle from "../styles/components/ProfileScreenStyle";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 const MetricScreen = () => {
   const [weight, setWeight] = useState(0);
@@ -55,7 +58,7 @@ const MetricScreen = () => {
     const userId = allUserToken.userId;
     try {
       const response = await axios.get(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/profile`
       );
       const {
         weight,

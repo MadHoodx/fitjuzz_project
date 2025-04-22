@@ -8,6 +8,9 @@ import SearchBox from './SearchBox';
 
 const { width } = Dimensions.get('window');
 const cardWidth = (width - 45) / 2; 
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function FoodCategoryList({ 
   categoryName, 
@@ -23,7 +26,7 @@ export default function FoodCategoryList({
   loading: externalLoading = false,
   sortType = 'default'
 }) {
-  const EXPO_PUBLIC_ENDPOINT_API = process.env.EXPO_PUBLIC_ENDPOINT_API;
+
   const [loading, setLoading] = useState(externalLoading);
   const [error, setError] = useState(null);
   const [foods, setFoods] = useState(initialFoods || []);

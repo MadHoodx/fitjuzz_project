@@ -16,6 +16,9 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
 import { sizes, colors } from "../../styles/style";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function SupplementCategoryScreen({ navigation, route }) {
   const { category } = route.params;
@@ -34,7 +37,7 @@ export default function SupplementCategoryScreen({ navigation, route }) {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API}/api/user/getSupplementDetails`
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/getSupplementDetails`
       );
 
       const filtered = response.data.filter((supplement) =>

@@ -9,6 +9,9 @@ import { useEffect } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SocialAuthSection from "../components/SocialAuthSection";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function SigninScreen({ updateActiveScreen }) {
   const navigation = useNavigation();
@@ -34,7 +37,7 @@ export default function SigninScreen({ updateActiveScreen }) {
     }
     try {
       const response = await axios.post(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
         {
           email,
           password,

@@ -25,6 +25,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CustomCheckbox from "../components/CustomCheckbox";
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function NoteScreen({}) {
   const [error, setError] = useState("");
@@ -71,7 +74,7 @@ export default function NoteScreen({}) {
   const fetchExercise = async () => {
     try {
       const response = await axios.get(
-        `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/getExercises`
+        `${EXPO_PUBLIC_ENDPOINT_API}/api/user/getExercises`
       );
 
       setDatabaseExercises(response.data);
@@ -300,7 +303,7 @@ export default function NoteScreen({}) {
 
       try {
         const response = await axios.post(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/${userId}/updateWorkout`,
           {
             exercises: filteredExercises,
           }

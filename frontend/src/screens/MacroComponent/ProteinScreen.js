@@ -7,6 +7,9 @@ import { useNavigation } from '@react-navigation/native';
 import FoodCategoryList from '../../components/FoodCategoryList';
 import axios from 'axios';
 import { debounce } from 'lodash';
+import Constants from 'expo-constants';
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function ProteinScreen() {
   const navigation = useNavigation();
@@ -19,7 +22,7 @@ export default function ProteinScreen() {
   const [sortType, setSortType] = useState('default'); // default, carbHigh, carbLow, proteinHigh, proteinLow, fatHigh, fatLow, caloriesHigh, caloriesLow
   const [allProteinFoods, setAllProteinFoods] = useState([]);
   const [loadingInitialData, setLoadingInitialData] = useState(true);
-  const EXPO_PUBLIC_ENDPOINT_API = process.env.EXPO_PUBLIC_ENDPOINT_API;
+  
 
   // fetch all protein foods
   useEffect(() => {

@@ -10,6 +10,8 @@ import * as AuthSession from "expo-auth-session";
 
 import Constants from 'expo-constants';
 import { colors } from "../styles/style";
+
+const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 const EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID
 const EXPO_PUBLIC_WEB_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_WEB_CLIENT_ID
 const EXPO_PUBLIC_X_CLIENT_ID = Constants.expoConfig.extra.EXPO_PUBLIC_X_CLIENT_ID
@@ -78,7 +80,7 @@ export default function SocialAuthSection() {
       console.log(user)
       if (user) {
         const response = await axios.post(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
           {
             googleId: user.id,
             name: user.name,
@@ -147,7 +149,7 @@ export default function SocialAuthSection() {
       const userData = userResponse.data;
       if (userData) {
         const response = await axios.post(
-          `${process.env.EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
+          `${EXPO_PUBLIC_ENDPOINT_API}/api/user/signin`,
           {
             xId: userData.data.id,
             name: userData.data.name,
