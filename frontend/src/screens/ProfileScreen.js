@@ -29,14 +29,14 @@ import HorizontalPicker from "@vseslav/react-native-horizontal-picker";
 export default function ProfileScreen({}) {
   const [username, setUsername] = useState("");
   
-  const [weight, setWeight] = useState(75);
+  const [weight, setWeight] = useState(0);
   const [lastEditedWeight, setLastEditedWeight] = useState(null);
   const [previousWeight, setPreviousWeight] = useState(null);
-  const [tempWeight, setTempWeight] = useState(75);
-  const [height, setHeight] = useState(150);
+  const [tempWeight, setTempWeight] = useState(0);
+  const [height, setHeight] = useState(0);
   const [lastEditedHeight, setLastEditedHeight] = useState(null);
   const [previousHeight, setPreviousHeight] = useState(null);
-  const [tempHeight, setTempHeight] = useState(150);
+  const [tempHeight, setTempHeight] = useState(0);
   const [fat, setFat] = useState(0);
   const [lastEditedFat, setLastEditedFat] = useState(null);
   const [previousFat, setPreviousFat] = useState(null); 
