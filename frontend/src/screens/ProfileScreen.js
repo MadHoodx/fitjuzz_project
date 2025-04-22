@@ -671,7 +671,7 @@ export default function ProfileScreen({}) {
           <View
             style={[{ justifyContent: "space-between", flexDirection: "row" }]}
           >
-            <Text style={[ProfileScreenStyle.text__topic]}>Health Metrics</Text>
+            <Text style={[ProfileScreenStyle.text__topic, {color: colors.clr_brightblue}]}>Health Metrics</Text>
             <TouchableOpacity onPress={handleMetric}>
               <Text style={[ProfileScreenStyle.text__seeall]}>See all</Text>
             </TouchableOpacity>
@@ -1062,7 +1062,7 @@ export default function ProfileScreen({}) {
 
             {/* Logout button Section */}
              <View style={[{ gap: 15 }]}>
-              <Text style={[ProfileScreenStyle.texttopic]}>Other</Text>
+              <Text style={[ProfileScreenStyle.texttopic, {color: colors.clr_brightblue}]}>Other</Text>
               {otherButton.map((otherButtons) => (
                 <TouchableOpacity
                   key={otherButtons.id}

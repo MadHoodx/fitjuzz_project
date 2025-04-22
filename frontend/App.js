@@ -17,7 +17,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import IconAntDesign from "react-native-vector-icons/AntDesign";
 import MainScreen from "./src/screens/MainScreen";
 import ForgetPasswordScreen from "./src/screens/ForgetPasswordScreen";
-import ExerciseScreen from "./src/screens/ExerciseScreen";
+import ExerciseScreen from "./src/screens/ExerciseScreenComponent/ExerciseScreen";
 import GuideScreen from "./src/screens/GuideScreen";
 import SteroidsScreen from "./src/screens/SteroidsComponent/SteroidsScreen";
 import MacrosScreen from "./src/screens/MacroComponent/MacrosScreen";
@@ -128,6 +128,7 @@ function MyStack() {
       <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="Note" component={NoteScreen} />
+      <Stack.Screen name="Guide" component={GuideScreen} />
       <Stack.Screen
         name="Encyclopedia"
         component={EncyclopediaScreen}
@@ -235,7 +236,7 @@ function MyStack() {
         }}
       />
 
-      <Stack.Screen name="Guide" component={GuideScreen} />
+      
       <Stack.Screen
         name="Macros"
         component={MacrosScreen}
@@ -281,9 +282,42 @@ function MyStack() {
           },
         }}
       />
-      <Stack.Screen name="Carb" component={CarbScreen} />
-      <Stack.Screen name="Protein" component={ProteinScreen} />
-      <Stack.Screen name="Fat" component={FatScreen} />
+      <Stack.Screen name="Carb" component={CarbScreen} 
+       options={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: colors.clr_black, // Header background
+        },
+        headerTintColor: "white", // Header text and back button
+        headerTitleStyle: {
+          fontWeight: "bold", // Bold title
+        },
+      }}/>
+      <Stack.Screen name="Protein" component={ProteinScreen} 
+       options={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: colors.clr_black, // Header background
+        },
+        headerTintColor: "white", // Header text and back button
+        headerTitleStyle: {
+          fontWeight: "bold", // Bold title
+        },
+      }}/>
+      <Stack.Screen name="Fat" component={FatScreen} 
+       options={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: colors.clr_black, // Header background
+        },
+        headerTintColor: "white", // Header text and back button
+        headerTitleStyle: {
+          fontWeight: "bold", // Bold title
+        },
+      }} />
     </Stack.Navigator>
   );
 }

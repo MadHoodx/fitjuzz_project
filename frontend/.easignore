@@ -1,0 +1,6 @@
+# Exclude node_modules
+node_modules/
+
+# Ignore native directories (if you are using EAS Build)
+/android
+/ios

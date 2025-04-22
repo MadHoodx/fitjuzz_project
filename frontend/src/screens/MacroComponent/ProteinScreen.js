@@ -175,14 +175,14 @@ export default function ProteinScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
-      <Header />
+
       
-      <TouchableOpacity 
+      {/* <TouchableOpacity 
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
         <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       
       <View style={styles.searchContainer}>
         <View style={styles.searchSection}>

@@ -11,7 +11,6 @@ import axios from "axios";
 import Constants from 'expo-constants';
 
 const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
-
 export default function Header({ }) {
   const [username, setUsername] = useState("");
   const [greeting, setGreeting] = useState("");

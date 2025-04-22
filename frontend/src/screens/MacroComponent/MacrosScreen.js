@@ -34,15 +34,15 @@ export default function MacrosScreen() {
   ];
 
   return (
-    <View style={GuideScreenStyle.container}>
-      <Header />
+    <View style={[GuideScreenStyle.container,]}>
+      {/* <Header /> */}
       
       <ScrollView 
         style={GuideScreenStyle.content} 
-        contentContainerStyle={GuideScreenStyle.contentContainer}
+        contentContainerStyle={[GuideScreenStyle.contentContainer ]}
         showsVerticalScrollIndicator={false}
       >
- 
+      
         {macroCategories.map((category) => (
           <TouchableOpacity 
             key={category.id}
@@ -62,6 +62,7 @@ export default function MacrosScreen() {
             </View>
           </TouchableOpacity>
         ))}
+        
       </ScrollView>
     </View>
   );

@@ -11,11 +11,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import Header from "../components/Header";
-import ExerciseScreenStyle from "../styles/components/ExerciseScreenStyle";
-import ExerciseDetailsModal from "../components/ExerciseDetailsModal";
+import Header from "../../components/Header";
+import ExerciseScreenStyle from "../../styles/components/ExerciseScreenStyle";
+import ExerciseDetailsModal from "../../components/ExerciseDetailsModal";
 import Constants from 'expo-constants';
-
+import styles from "../../styles/style";
 const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
 export default function ExerciseScreen({ navigation }) {
@@ -51,12 +51,13 @@ export default function ExerciseScreen({ navigation }) {
   };
 
   useEffect(() => {
-    fetchExercises();
-  }, []);
-
-  useEffect(() => {
     filterExercises();
   }, [selectedCategory, searchQuery, exercises]);
+
+  
+  useEffect(() => {
+    fetchExercises();
+  }, []);
 
   const fetchExercises = async () => {
     try {
@@ -140,7 +141,12 @@ export default function ExerciseScreen({ navigation }) {
 
   return (
     <View style={[ExerciseScreenStyle.container]}>
-      
+          {/* <TouchableOpacity 
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity> */}
       <View style={[ExerciseScreenStyle.content]}>
         <View style={ExerciseScreenStyle.searchSection}>
           <View style={ExerciseScreenStyle.searchBar}>

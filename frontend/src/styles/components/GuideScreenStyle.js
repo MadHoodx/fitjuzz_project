@@ -8,10 +8,12 @@ const GuideScreenStyle = StyleSheet.create({
   },
   content: {
     flex: 1,
+
     paddingHorizontal: 20,
     marginTop: 20
   },
   contentContainer: {
+    
     paddingBottom: 10,
   },
   titleSection: {

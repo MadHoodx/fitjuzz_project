@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Constants from 'expo-constants';
+import Header from '../../components/Header';
 
 const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
@@ -190,7 +191,7 @@ export default function FoodCategoryScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+
       <View style={[styles.header, { backgroundColor: categoryColor }]}>
         <TouchableOpacity
           style={styles.backButton}
