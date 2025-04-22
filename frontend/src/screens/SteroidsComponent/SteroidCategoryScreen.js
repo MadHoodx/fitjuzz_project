@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios
-import Constants from 'expo-constants';
 import {
   View,
   Text,

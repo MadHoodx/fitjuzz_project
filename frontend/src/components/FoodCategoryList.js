@@ -8,7 +8,6 @@ import SearchBox from './SearchBox';
 
 const { width } = Dimensions.get('window');
 const cardWidth = (width - 45) / 2; 
-import Constants from 'expo-constants';
 
 const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 

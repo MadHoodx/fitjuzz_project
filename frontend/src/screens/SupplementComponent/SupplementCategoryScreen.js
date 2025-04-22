@@ -16,7 +16,6 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
 import { sizes, colors } from "../../styles/style";
-import Constants from 'expo-constants';
 
 const EXPO_PUBLIC_ENDPOINT_API = Constants.expoConfig.extra.EXPO_PUBLIC_ENDPOINT_API;
 
