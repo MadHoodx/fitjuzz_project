@@ -1025,8 +1025,7 @@ export default function ProfileScreen({}) {
             {/* Data health Section */}
 
             {/* Logout button Section */}
-
-            <View style={[{ gap: 15 }]}>
+             <View style={[{ gap: 15 }]}>
               <Text style={[ProfileScreenStyle.texttopic]}>Other</Text>
               {otherButton.map((otherButtons) => (
                 <TouchableOpacity
