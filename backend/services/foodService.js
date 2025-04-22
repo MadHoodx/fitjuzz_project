@@ -4,51 +4,6 @@ const FatFood = require('../models/fatModel');
 const fs = require('fs');
 const path = require('path');
 
-const CACHE_DIR = path.join(__dirname, '../cache');
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 
-
-if (!fs.existsSync(CACHE_DIR)) {
-  fs.mkdirSync(CACHE_DIR, { recursive: true });
-}
-
-const readFromCache = (cacheKey) => {
-  const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
-  
-  try {
-    if (fs.existsSync(cachePath)) {
-      const cacheData = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-      const now = new Date().getTime();
-      
-      if (now - cacheData.timestamp < CACHE_DURATION) {
-        console.log(`[CACHE] use data from cache: ${cacheKey}`);
-        return cacheData.data;
-      } else {
-        console.log(`[CACHE] cache expired: ${cacheKey}`);
-      }
-    }
-  } catch (error) {
-    console.error(`[CACHE] error reading cache ${cacheKey}:`, error);
-  }
-  
-  return null;
-};
-
-const writeToCache = (cacheKey, data) => {
-  const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
-  
-  try {
-    const cacheData = {
-      timestamp: new Date().getTime(),
-      data: data
-    };
-    
-    fs.writeFileSync(cachePath, JSON.stringify(cacheData));
-    console.log(`[CACHE] save data to cache: ${cacheKey}`);
-  } catch (error) {
-    console.error(`[CACHE] error writing cache ${cacheKey}:`, error);
-  }
-};
-
 const getFoodModelByType = (type) => {
   let model;
   switch (type.toLowerCase()) {
@@ -254,6 +209,4 @@ module.exports = {
   getFoodByTypeAndId,
   searchFoodsByTypeAndName,
   searchFoodsByTypeAndNutrition,
-  readFromCache,
-  writeToCache
 }; 
