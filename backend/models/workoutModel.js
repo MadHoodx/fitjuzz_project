@@ -15,7 +15,7 @@ const ExerciseSchema = new mongoose.Schema({
 const WorkoutSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "userModel", // <-- Make sure it matches your user model name
+    ref: "userModel", // 
     required: true,
   },
   exercises: [ExerciseSchema], // Array of exercises

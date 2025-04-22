@@ -16,66 +16,13 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../styles/style";
-import axios from "axios";
-import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const ExerciseDetailsModal = ({ visible, exercise, onClose }) => {
-  const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef(null);
-
-  // Render slide items (รูปภาพท่า และ รูปภาพกล้ามเนื้อ)
-  const renderImageItem = ({ item, index }) => {
-    console.log("Rendering image item", index);
-    console.log("Details available:", details ? "Yes" : "No");
-    if (details) {
-      console.log("Picture1:", details.picture1);
-      console.log("Picture2:", details.picture2);
-    }
-
-    return (
-      <View style={[styles.slideItemContainer, { width: width * 0.85 }]}>
-        <Image
-          source={{
-            uri:
-              index === 0
-                ? details?.picture1 ||
-                  exercise?.picture ||
-                  getDefaultImageByCategory()
-                : details?.picture2 || getMuscleImageUrl(),
-          }}
-          style={styles.slideImage}
-          resizeMode="contain"
-        />
-      </View>
-    );
-  };
-
-  // รูปเริ่มต้นสำหรับหน้าแรกตาม category
-  const getDefaultImageByCategory = () => {
-    const defaultImages = {
-      chest: "https://images.unsplash.com/photo-1571019613576-2b22c76fd955",
-      back: "https://images.unsplash.com/photo-1594381898411-846e7d193883",
-      shoulders: "https://images.unsplash.com/photo-1581122584612-713f89daa8eb",
-      arms: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61",
-      legs: "https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a",
-      core: "https://images.unsplash.com/photo-1571019613576-2b22c76fd955",
-    };
-
-    const category = exercise?.category?.toLowerCase() || "chest";
-    return defaultImages[category] || defaultImages["chest"];
-  };
-
-  const handleScroll = (event) => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.round(offsetX / (width * 0.85));
-    setCurrentIndex(index);
-  };
 
   return (
     <Modal
@@ -150,18 +97,7 @@ const ExerciseDetailsModal = ({ visible, exercise, onClose }) => {
                   <View style={styles.muscleColumn}>
                     <Text style={styles.muscleColumnTitle}>Primary</Text>
                     <Text style={styles.muscleText}>{exercise.target}</Text>
-                    {/* {exercise.target.map((muscle, index) => (
-                      <Text key={index} style={styles.muscleText}>
-                        {muscle}
-                      </Text>
-                    ))} */}
-                    {/* {Array.isArray(getMusclesWorked().primary) ? (
-                      getMusclesWorked().primary.map((muscle, index) => (
-                        <Text key={index} style={styles.muscleText}>{muscle}</Text>
-                      ))
-                    ) : (
-                      <Text style={styles.muscleText}>{getMusclesWorked().primary}</Text>
-                    )} */}
+                    
                   </View>
 
                   <View style={styles.muscleColumn}>
@@ -171,13 +107,7 @@ const ExerciseDetailsModal = ({ visible, exercise, onClose }) => {
                         {muscle}
                       </Text>
                     ))}
-                    {/* {Array.isArray(getMusclesWorked().secondary) ? (
-                      exercise.secondaryMuscles.map((muscle, index) => (
-                        <Text key={index} style={styles.muscleText}>{muscle}</Text>
-                      ))
-                    ) : (
-                      <Text style={styles.muscleText}>{getMusclesWorked().secondary}</Text>
-                    )} */}
+                    
                   </View>
                 </View>
               </View>

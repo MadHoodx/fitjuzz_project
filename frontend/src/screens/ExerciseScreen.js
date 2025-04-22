@@ -137,15 +137,7 @@ export default function ExerciseScreen({ navigation }) {
 
   return (
     <View style={[ExerciseScreenStyle.container]}>
-      {/*     
       
-      <TouchableOpacity 
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity>
-       */}
       <View style={[ExerciseScreenStyle.content]}>
         <View style={ExerciseScreenStyle.searchSection}>
           <View style={ExerciseScreenStyle.searchBar}>
