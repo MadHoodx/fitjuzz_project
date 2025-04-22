@@ -326,6 +326,46 @@ gap:5
     justifyContent:'center',
     alignItems:'center'
   },
+  boxleftOther:{
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center',
+    gap:5
+      },
+      buttonOther: {
+        width: "100%",
+        backgroundColor: colors.clr_background_modal,
+        borderRadius: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 4.65,
+        elevation: 8,
+        flexDirection: "row",
+        height: 40,
+        alignItems:'center',
+        paddingHorizontal:5,
+        gap:7,
+        justifyContent:'space-between',
+      },
+      buttonTextOther: {
+        fontSize: sizes.size_xs,
+    
+        textAlign: "center",
+        color: colors.clr_white,
+        color: colors.clr_lightgray,
+      },
+      boxiconOther: {
+        backgroundColor: '#494949',
+        width: 35,
+        height: 35,
+        borderRadius: 100,
+        justifyContent:'center',
+        alignItems:'center'
+      },
 });
 
 export default ProfileScreenStyle;
