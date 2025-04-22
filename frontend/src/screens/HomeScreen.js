@@ -34,7 +34,7 @@ export default function HomeScreen({}) {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [selectedMonth, exercisesHistory]);
 
   const fetchUser = async () => {
     const userToken = await AsyncStorage.getItem("userToken");
