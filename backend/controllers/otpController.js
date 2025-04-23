@@ -104,10 +104,11 @@ const otpController = {
       console.log("Hashed password:", hashedPassword);
 
       const user = await userModel.findOneAndUpdate(
-        {email},
+        { email, userType: "normal" },  // Combined query
         { password: hashedPassword },
         { new: true }
       );
+      
 
       console.log("Success");
 
