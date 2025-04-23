@@ -71,7 +71,7 @@ const otpController = {
 
     try {
       const storedOtp = otpCache.get(email);
-      
+
       // Normalize the provided otp to string
       const providedOtp = Array.isArray(otp) ? otp.join("") : otp;
 
@@ -99,13 +99,18 @@ const otpController = {
     const { password } = req.body;
 
     try {
+      console.log("Hashing password...");
       const hashedPassword = await bcrypt.hash(password, 12);
+      console.log("Hashed password:", hashedPassword);
 
       const user = await userModel.findOneAndUpdate(
-        { email },
+        email,
         { password: hashedPassword },
         { new: true }
       );
+
+      console.log("Success");
+
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
